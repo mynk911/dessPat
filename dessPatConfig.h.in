@@ -1,3 +1,6 @@
 // the configured options and settings for dessPat
 #define dessPat_VERSION_MAJOR @dessPat_VERSION_MAJOR@
 #define dessPat_VERSION_MINOR @dessPat_VERSION_MINOR@
+#cmakedefine GOF
+#cmakedefine HAVE_EXP
+#cmakedefine HAVE_LOG

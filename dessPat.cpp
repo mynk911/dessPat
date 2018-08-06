@@ -2,13 +2,17 @@
  * dessPat.cpp
  *
  *  Created on: 03-Aug-2018
- *      Author: mtree
+ *      Author: mayank
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include "dessPatConfig.h"
+#ifdef GOF
+#include "gof.h"
+#endif
+
 int main (int argc, char *argv[])
 {
     if (argc < 2)
@@ -21,7 +25,11 @@ int main (int argc, char *argv[])
       return 1;
       }
   double inputValue = atof(argv[1]);
+#ifdef GOF
+  double outputValue = mysqrt(inputValue);
+#else
   double outputValue = sqrt(inputValue);
+#endif
   fprintf(stdout,"The square root of %g is %g\n",
           inputValue, outputValue);
   return 0;
