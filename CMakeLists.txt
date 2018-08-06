@@ -23,7 +23,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 #should we use lib GoF ?
 option (GOF "use gang of four" ON)
 
-#add the GoF library ? 
+#add the GoF library ?
 if(GOF)
 include_directories("${PROJECT_SOURCE_DIR}/GoF")
 add_subdirectory (GoF)
@@ -61,7 +61,7 @@ macro (do_test arg result)
   set_tests_properties (dessPatComp${arg}
     PROPERTIES PASS_REGULAR_EXPRESSION ${result})
 endmacro (do_test)
- 
+
 # do a bunch of result based tests
 do_test (25 "25 is 5")
 do_test (-25 "-25 is 0")
