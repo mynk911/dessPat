@@ -20,8 +20,9 @@ configure_file (
 #find dessPatConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-#should we use lib GoF ?
+#optional lib 
 option (GOF "use gang of four" ON)
+option (GFG "use geek" ON)
 
 #add the GoF library ?
 if(GOF)
@@ -29,6 +30,13 @@ include_directories("${PROJECT_SOURCE_DIR}/GoF")
 add_subdirectory (GoF)
 set (EXTRA_LIBS ${EXTRA_LIBS} GoF)
 endif(GOF)
+
+#add the gfg library ?
+if(GFG)
+include_directories("${PROJECT_SOURCE_DIR}/gfg")
+add_subdirectory (gfg)
+set (EXTRA_LIBS ${EXTRA_LIBS} gfg)
+endif(GFG)
 
 #add the executable
 add_executable (dessPat dessPat.cpp)
