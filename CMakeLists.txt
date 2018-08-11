@@ -1,6 +1,9 @@
 cmake_minimum_required (VERSION 2.6)
 project (dessPat)
 
+#use C11 (for gcc)
+set (CMAKE_C_STANDARD 11)
+
 #The Version number
 set (dessPat_VERSION_MAJOR 1)
 set (dessPat_VERSION_MINOR 0)
