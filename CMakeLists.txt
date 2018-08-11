@@ -26,6 +26,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 #optional lib 
 option (GOF "use gang of four" ON)
 option (GFG "use geek" ON)
+option (LCTHW "use hard" ON)
 
 #add the GoF library ?
 if(GOF)
@@ -40,6 +41,13 @@ include_directories("${PROJECT_SOURCE_DIR}/gfg")
 add_subdirectory (gfg)
 set (EXTRA_LIBS ${EXTRA_LIBS} gfg)
 endif(GFG)
+
+#add the lcthw library ?
+if(LCTHW)
+include_directories("${PROJECT_SOURCE_DIR}/lcthw")
+add_subdirectory(lcthw)
+set (EXTRA_LIBS ${EXTRA_LIBS} lcthw)
+endif(LCTHW)
 
 #add the executable
 add_executable (dessPat dessPat.cpp)

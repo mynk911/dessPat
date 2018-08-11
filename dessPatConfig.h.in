@@ -5,3 +5,4 @@
 #cmakedefine HAVE_EXP
 #cmakedefine HAVE_LOG
 #cmakedefine GFG
+#cmakedefine LCTHW
