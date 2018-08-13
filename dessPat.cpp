@@ -15,6 +15,9 @@
 #ifdef GFG
 #include "gfg.h"
 #endif
+#ifdef LCTHW
+#include "lcthw.h"
+#endif
 int main (int argc, char *argv[])
 {
     if (argc < 2)
@@ -27,6 +30,7 @@ int main (int argc, char *argv[])
       return 1;
       }
   double inputValue = atof(argv[1]);
+
 #ifdef GOF
   double outputValue = mysqrt(inputValue);
 #else
@@ -34,6 +38,7 @@ int main (int argc, char *argv[])
 #endif
   fprintf(stdout,"The square root of %g is %g\n",
           inputValue, outputValue);
+
 #ifdef GFG
   //get number of test cases
   int t; scanf("%d", &t);
@@ -48,6 +53,10 @@ int main (int argc, char *argv[])
   }
 #endif // GFG
 
+#ifdef LCTHW
+  //exercise 1
+  mmain(1,"ex1");
+#endif
   return 0;
 }
 

@@ -19,6 +19,12 @@ configure_file (
  "${PROJECT_BINARY_DIR}/dessPatConfig.h"
 )
 
+#configure saple input file
+configure_file (
+ "${PROJECT_SOURCE_DIR}/sampleInput.txt.in"
+ "${PROJECT_BINARY_DIR}/sampleInput.txt"
+ COPYONLY
+)
 #add the binary directory to the search path for include files so that we will
 #find dessPatConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
@@ -26,7 +32,12 @@ include_directories("${PROJECT_BINARY_DIR}")
 #optional lib 
 option (GOF "use gang of four" ON)
 option (GFG "use geek" ON)
+
+if(UNIX)
 option (LCTHW "use hard" ON)
+elseif(WIN32)
+option (LCTHW "use hard" OFF)
+endif(UNIX)
 
 #add the GoF library ?
 if(GOF)
@@ -45,13 +56,16 @@ endif(GFG)
 #add the lcthw library ?
 if(LCTHW)
 include_directories("${PROJECT_SOURCE_DIR}/lcthw")
-add_subdirectory(lcthw)
-set (EXTRA_LIBS ${EXTRA_LIBS} lcthw)
+link_directories("${PROJECT_SOURCE_DIR}/lcthw")
+add_subdirectory("${PROJECT_SOURCE_DIR}/lcthw")
+set (EXTRA_LIBS2 ${EXTRA_LIBS2} lcthw)
 endif(LCTHW)
 
 #add the executable
 add_executable (dessPat dessPat.cpp)
 target_link_libraries (dessPat ${EXTRA_LIBS})
+target_link_libraries (dessPat ${EXTRA_LIBS2})
+add_dependencies(dessPat extern_lib)
 
 #add install targets
 install (TARGETS dessPat DESTINATION bin)
@@ -92,5 +106,3 @@ set(CPACK_RESOURCE_FILE_LICENSE
 set(CPACK_PACKAGE_VERSTON_MAJOR ${dessPat_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${dessPat_VERSION_MINOR})
 include(CPack)
-
-
