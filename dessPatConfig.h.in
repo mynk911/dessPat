@@ -6,3 +6,4 @@
 #cmakedefine HAVE_LOG
 #cmakedefine GFG
 #cmakedefine LCTHW
+#cmakedefine CS180

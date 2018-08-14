@@ -39,6 +39,8 @@ elseif(WIN32)
 option (LCTHW "use hard" OFF)
 endif(UNIX)
 
+option(CS180 "use cs180" ON)
+
 #add the GoF library ?
 if(GOF)
 include_directories("${PROJECT_SOURCE_DIR}/GoF")
@@ -58,13 +60,19 @@ if(LCTHW)
 include_directories("${PROJECT_SOURCE_DIR}/lcthw")
 link_directories("${PROJECT_SOURCE_DIR}/lcthw")
 add_subdirectory("${PROJECT_SOURCE_DIR}/lcthw")
-set (EXTRA_LIBS2 ${EXTRA_LIBS2} lcthw)
+set (EXTRA_LIBS ${EXTRA_LIBS} lcthw)
 endif(LCTHW)
+
+#add the cs180 library ?
+if(CS180)
+include_directories("${PROJECT_SOURCE_DIR}/cs180")
+add_subdirectory (cs180)
+set (EXTRA_LIBS ${EXTRA_LIBS} cs180)
+endif(CS180)
 
 #add the executable
 add_executable (dessPat dessPat.cpp)
 target_link_libraries (dessPat ${EXTRA_LIBS})
-target_link_libraries (dessPat ${EXTRA_LIBS2})
 add_dependencies(dessPat extern_lib)
 
 #add install targets
