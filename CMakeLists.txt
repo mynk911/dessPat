@@ -73,7 +73,9 @@ endif(CS180)
 #add the executable
 add_executable (dessPat dessPat.cpp)
 target_link_libraries (dessPat ${EXTRA_LIBS})
+if(LCTHW)
 add_dependencies(dessPat extern_lib)
+endif(LCTHW)
 
 #add install targets
 install (TARGETS dessPat DESTINATION bin)
