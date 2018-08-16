@@ -21,6 +21,9 @@ target_include_directories(GoF
     ${PROJECT_SOURCE_DIR}/GoF
     )
 
-target_compile_features(GoF PRIVATE cxx_override)
+#target_compile_features(GoF PRIVATE cxx_std_14)
+#target_compile_features(GoF PRIVATE cxx_override)
+set_property(TARGET GoF PROPERTY CXX_STANDARD 11)
+set_property(TARGET GoF PROPERTY CXX_STANDARD_REQUIRED ON)
 
 install (TARGETS GoF DESTINATION bin)

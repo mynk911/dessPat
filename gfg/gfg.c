@@ -1,4 +1,3 @@
-#include "gfg.h"
 #include <limits.h>
 int kadane(int A[], int n)
 {
@@ -12,5 +11,6 @@ int kadane(int A[], int n)
             maxSoFar = maxAtIndex;
         }
     }
+
     return maxSoFar;
 }
