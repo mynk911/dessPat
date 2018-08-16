@@ -2,9 +2,9 @@ CFLAGS=-Wall -g
 
 all: liblcthw.a
 
-lcthw.o: lcthw.c
-	gcc $(CFLAGS) -c lcthw.c
-liblcthw.a: lcthw.o
-	ar rcs liblcthw.a lcthw.o
+ex1.o: ex1.c
+	gcc $(CFLAGS) -c ex1.c
+liblcthw.a: ex1.o
+	ar rcs liblcthw.a ex1.o
 clean:
-	rm -f liblcthw.a lcthw.o
+	rm -f liblcthw.a ex1.o

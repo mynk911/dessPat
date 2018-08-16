@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-int mmain(int, char*);
+int ex1(int, char*);
 
 #ifdef __cplusplus
 }
