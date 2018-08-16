@@ -7,5 +7,4 @@ add_custom_target(
    SOURCES ex1.c ex3.c Makefile
 )
 
-install(FILES lcthw.h DESTINATION include)
 install(FILES liblcthw.a DESTINATION bin)

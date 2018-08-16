@@ -28,7 +28,7 @@ configure_file (
 #add the binary directory to the search path for include files so that we will
 #find dessPatConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
-
+add_subdirectory(include)
 #optional lib 
 option (GOF "use gang of four" ON)
 option (GFG "use geek" ON)
@@ -43,21 +43,18 @@ option(CS180 "use cs180" ON)
 
 #add the GoF library ?
 if(GOF)
-include_directories("${PROJECT_SOURCE_DIR}/GoF")
 add_subdirectory (GoF)
 set (EXTRA_LIBS ${EXTRA_LIBS} GoF)
 endif(GOF)
 
 #add the gfg library ?
 if(GFG)
-include_directories("${PROJECT_SOURCE_DIR}/gfg")
 add_subdirectory (gfg)
 set (EXTRA_LIBS ${EXTRA_LIBS} gfg)
 endif(GFG)
 
 #add the lcthw library ?
 if(LCTHW)
-include_directories("${PROJECT_SOURCE_DIR}/lcthw")
 link_directories("${PROJECT_SOURCE_DIR}/lcthw")
 add_subdirectory("${PROJECT_SOURCE_DIR}/lcthw")
 set (EXTRA_LIBS ${EXTRA_LIBS} lcthw)
@@ -65,7 +62,6 @@ endif(LCTHW)
 
 #add the cs180 library ?
 if(CS180)
-include_directories("${PROJECT_SOURCE_DIR}/cs180")
 add_subdirectory (cs180)
 set (EXTRA_LIBS ${EXTRA_LIBS} cs180)
 endif(CS180)

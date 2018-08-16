@@ -11,7 +11,16 @@ add_custom_command(
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 #add the main library
-add_library (GoF mysqrt.cpp ${CMAKE_CURRENT_BINARY_DIR}/Table.h)
+add_library (GoF mysqrt.cpp ${CMAKE_CURRENT_BINARY_DIR}/Table.h maze.cpp mazegame.cpp)
+
+target_include_directories(GoF
+    PUBLIC
+    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/GoF
+    )
+
+target_compile_features(GoF PRIVATE cxx_override)
 
 install (TARGETS GoF DESTINATION bin)
-install (FILES gof.h DESTINATION include)
