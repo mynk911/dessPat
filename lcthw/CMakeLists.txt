@@ -1,4 +1,6 @@
-#add the main library
+cmake_minimum_required(VERSION 3.5) 
+project(LCTHW VERSION 1.0 LANGUAGES C) 
+
 add_library (lcthw src/ex1.c src/ex3.c)
 
 target_include_directories(lcthw

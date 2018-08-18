@@ -35,7 +35,7 @@ endif(GOF)
 #add the gfg library ?
 if(GFG)
 add_subdirectory (gfg)
-set (EXTRA_LIBS ${EXTRA_LIBS} gfg)
+set (EXTRA_LIBS ${EXTRA_LIBS} GFG::gfg)
 endif(GFG)
 
 #add the lcthw library ?
