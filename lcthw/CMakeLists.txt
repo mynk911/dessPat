@@ -1,10 +1,10 @@
-#add lcthw library
+#add the main library
+add_library (lcthw src/ex1.c src/ex3.c)
 
-add_custom_target(
-   extern_lib
-   COMMAND make
-   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/lcthw
-   SOURCES ex1.c ex3.c Makefile
-)
-
-install(FILES liblcthw.a DESTINATION bin)
+target_include_directories(lcthw
+    PUBLIC
+    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )

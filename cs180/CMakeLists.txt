@@ -1,12 +1,10 @@
 #add library cs180
-add_library(cs180 cs180.cpp)
+add_library(cs180 src/cs180.cpp)
+
 target_include_directories(cs180
     PUBLIC
     $<INSTALL_INTERFACE:include>
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE
-    ${PROJECT_SOURCE_DIR}/cs180
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
-
-#install library
-install(TARGETS cs180 DESTINATION bin)

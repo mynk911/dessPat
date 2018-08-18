@@ -3,15 +3,10 @@ project (dessPat)
 
 #use C11 (for gcc)
 set (CMAKE_C_STANDARD 11)
-
+set (CMAKE_CXX_STANDARD 11)
 #The Version number
 set (dessPat_VERSION_MAJOR 1)
 set (dessPat_VERSION_MINOR 0)
-
-#does the system provide LOG and EXP functions?
-include(CheckCXXSymbolExists)
-check_cxx_symbol_exists(log cmath HAVE_LOG)
-check_cxx_symbol_exists(exp cmath HAVE_EXP)
 
 #configure a header file to pass some of the cmake settings to the source code
 configure_file (
@@ -25,20 +20,11 @@ configure_file (
  "${PROJECT_BINARY_DIR}/sampleInput.txt"
  COPYONLY
 )
-#add the binary directory to the search path for include files so that we will
-#find dessPatConfig.h
-include_directories("${PROJECT_BINARY_DIR}")
-add_subdirectory(include)
+
 #optional lib 
 option (GOF "use gang of four" ON)
 option (GFG "use geek" ON)
-
-if(UNIX)
 option (LCTHW "use hard" ON)
-elseif(WIN32)
-option (LCTHW "use hard" OFF)
-endif(UNIX)
-
 option(CS180 "use cs180" ON)
 
 #add the GoF library ?
@@ -55,8 +41,7 @@ endif(GFG)
 
 #add the lcthw library ?
 if(LCTHW)
-link_directories("${PROJECT_SOURCE_DIR}/lcthw")
-add_subdirectory("${PROJECT_SOURCE_DIR}/lcthw")
+add_subdirectory(lcthw)
 set (EXTRA_LIBS ${EXTRA_LIBS} lcthw)
 endif(LCTHW)
 
@@ -68,47 +53,8 @@ endif(CS180)
 
 #add the executable
 add_executable (dessPat dessPat.cpp)
+#add the binary directory to the search path for include files so that we will
+#find dessPatConfig.h
+target_include_directories(dessPat 
+PRIVATE ${PROJECT_BINARY_DIR})
 target_link_libraries (dessPat ${EXTRA_LIBS})
-if(LCTHW)
-add_dependencies(dessPat extern_lib)
-endif(LCTHW)
-
-#add install targets
-install (TARGETS dessPat DESTINATION bin)
-install (FILES "${PROJECT_BINARY_DIR}/dessPatConfig.h" DESTINATION include)
-
-include (CTest)
-
-#does the application run
-add_test(dessPatRuns dessPat 25)
-#does it square root 25
-add_test(dessPatComp25 dessPat 25)
-set_tests_properties(dessPatComp25 PROPERTIES PASS_REGULAR_EXPRESSION "25 is 5")
-#does it handle negative numbers
-add_test(dessPatNegative dessPat -25)
-set_tests_properties(dessPatNegative PROPERTIES PASS_REGULAR_EXPRESSION "-25 is 0")
-#does it handle small numbers
-add_test(dessPatSmall dessPat 0.0001)
-set_tests_properties(dessPatSmall PROPERTIES PASS_REGULAR_EXPRESSION "0.0001 is 0.01")
-#does the usage message work
-add_test(dessPatUsage dessPat)
-set_tests_properties(dessPatUsage PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*number")
-
-#define a macro to simplify adding tests, then use it
-macro (do_test arg result)
-  add_test (dessPatComp${arg} dessPat ${arg})
-  set_tests_properties (dessPatComp${arg}
-    PROPERTIES PASS_REGULAR_EXPRESSION ${result})
-endmacro (do_test)
-
-# do a bunch of result based tests
-do_test (25 "25 is 5")
-do_test (-25 "-25 is 0")
-
-#build a CPack driven installer package
-include(InstallRequiredSystemLibraries)
-set(CPACK_RESOURCE_FILE_LICENSE
-    ${CMAKE_CURRENT_SOURCE_DIR}/License.txt)
-set(CPACK_PACKAGE_VERSTON_MAJOR ${dessPat_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${dessPat_VERSION_MINOR})
-include(CPack)
