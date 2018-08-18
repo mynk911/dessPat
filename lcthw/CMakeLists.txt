@@ -12,4 +12,4 @@ if(UNIX)
 target_compile_features(lcthw
     PUBLIC c_restrict
     )
-end(UNIX)   
+endif(UNIX)   

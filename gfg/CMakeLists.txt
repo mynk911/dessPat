@@ -15,4 +15,4 @@ if(UNIX)
 target_compile_features(gfg
     PUBLIC c_restrict
     )
-end(UNIX)
+endif(UNIX)
