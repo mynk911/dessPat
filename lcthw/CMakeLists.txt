@@ -8,6 +8,8 @@ target_include_directories(lcthw
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
+if(UNIX)
 target_compile_features(lcthw
     PUBLIC c_restrict
-    )   
+    )
+end(UNIX)   
