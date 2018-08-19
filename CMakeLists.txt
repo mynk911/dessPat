@@ -21,6 +21,16 @@ configure_file (
 )
 
 option(BUILD_SHARED_LIBS "build shared library instead of static" OFF)
+option(BUILD_DOCS "build documentation on" ON )
+
+if(BUILD_DOCS)
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+   message("doxygen found")
+else(DOXYGEN_FOUND)
+   message("doxygen not found")
+endif(DOXYGEN_FOUND)
+endif(BUILD_DOCS)
 
 #optional lib 
 option (GOF "use gang of four" ON)
@@ -31,7 +41,7 @@ option(CS180 "use cs180" ON)
 #add the GoF library ?
 if(GOF)
 add_subdirectory (GoF)
-set (EXTRA_LIBS ${EXTRA_LIBS} GoF)
+set (EXTRA_LIBS ${EXTRA_LIBS} GOF::gof)
 endif(GOF)
 
 #add the gfg library ?
@@ -43,13 +53,13 @@ endif(GFG)
 #add the lcthw library ?
 if(LCTHW)
 add_subdirectory(lcthw)
-set (EXTRA_LIBS ${EXTRA_LIBS} lcthw)
+set (EXTRA_LIBS ${EXTRA_LIBS} LCTHW::lcthw)
 endif(LCTHW)
 
 #add the cs180 library ?
 if(CS180)
 add_subdirectory (cs180)
-set (EXTRA_LIBS ${EXTRA_LIBS} cs180)
+set (EXTRA_LIBS ${EXTRA_LIBS} CS180::cs180)
 endif(CS180)
 
 #add the executable

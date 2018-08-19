@@ -6,7 +6,6 @@
  */
 
 #ifndef GOF_GOF_H_
-double mysqrt(double);
 #define GOF_GOF_H_
 
 

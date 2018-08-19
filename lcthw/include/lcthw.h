@@ -5,7 +5,9 @@
 extern "C" {
 #endif
 
-int ex1(int, char*);
+#include "lcthw_export.h"
+
+int LCTHW_EXPORT ex1(int, char*);
 
 #ifdef __cplusplus
 }
