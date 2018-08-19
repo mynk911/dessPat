@@ -3,10 +3,13 @@ project(GFG VERSION 1.0 LANGUAGES C)
 
 add_library (gfg src/gfg.c)
 add_library (GFG::gfg ALIAS gfg)
+include(GenerateExportHeader)
+generate_export_header(gfg)
 target_include_directories(gfg
     PUBLIC
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/gfg>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/GFG>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
@@ -28,7 +31,7 @@ install(
         GFGTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSRALL_BINDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     )
 
 install(EXPORT GFGTargets
@@ -38,6 +41,10 @@ install(EXPORT GFGTargets
     )
 
 install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GFG
+    )
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gfg_export.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GFG
     )
 

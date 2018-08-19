@@ -1,4 +1,6 @@
 #include <limits.h>
+#include "gfg.h"
+
 int kadane(int A[], int n)
 {
     int maxSoFar = INT_MIN, maxAtIndex = 0, temp = 0;

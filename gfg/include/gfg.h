@@ -3,7 +3,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // !__cplusplus
-    int kadane(int[] , int);
+
+#include "gfg_export.h"
+
+    int GFG_EXPORT kadane(int[] , int);
+
 #ifdef __cplusplus
 }
 #endif // !__cplusplus

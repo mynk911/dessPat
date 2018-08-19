@@ -20,6 +20,8 @@ configure_file (
  COPYONLY
 )
 
+option(BUILD_SHARED_LIBS "build shared library instead of static" OFF)
+
 #optional lib 
 option (GOF "use gang of four" ON)
 option (GFG "use geek" ON)
