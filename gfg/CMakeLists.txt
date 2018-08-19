@@ -67,3 +67,22 @@ install(
      ${CMAKE_CURRENT_BINARY_DIR}/GFGConfigVersion.cmake
      DESTINATION ${INSTALL_CONFIGDIR}
      )
+
+
+option(BUILD_DOCS "build documentation on" ON )
+
+if(BUILD_DOCS)
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in
+    ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY
+)
+
+add_custom_target(gfg_doc_doxygen ALL
+    COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+else(DOXYGEN_FOUND)
+   message("doxygen not found")
+endif(DOXYGEN_FOUND)
+endif(BUILD_DOCS)

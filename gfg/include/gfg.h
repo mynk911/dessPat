@@ -2,13 +2,12 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // !__cplusplus
+#endif
 
 #include "gfg_export.h"
-
     int GFG_EXPORT kadane(int[] , int);
 
 #ifdef __cplusplus
 }
-#endif // !__cplusplus
-#endif // !GFG_GFG_H_
+#endif 
+#endif 
