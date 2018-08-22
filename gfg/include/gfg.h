@@ -15,7 +15,18 @@ extern "C" {
 #endif
 
 #include "gfg_export.h"
-    int GFG_EXPORT kadane(int[] , int);
+/**
+  \brief find the maximum sum contiguous subarray.
+
+  find the maximum sum contiguous subarray in a given array usig the kadane's algorithm
+  which is a O(n) solution to the problem with O(1) auxiliury space.
+  https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane's_algorithm
+
+  \param \c int[] an integer array.
+  \param \c int size of the integer array.
+  \return \c int sum of the maximum sum contiguous subarray.
+*/
+int GFG_EXPORT kadane(int[] , int);
 
 #ifdef __cplusplus
 }
