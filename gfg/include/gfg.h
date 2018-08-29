@@ -35,7 +35,7 @@ extern "C" {
   \return sum of the maximum sum contiguous subarray
 
 */
-int GFG_EXPORT kadane(int[] A, int n);
+int GFG_EXPORT kadane(int A[], int n);
 
 #ifdef __cplusplus
 }
