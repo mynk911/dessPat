@@ -19,14 +19,23 @@ extern "C" {
   \brief find the maximum sum contiguous subarray.
 
   find the maximum sum contiguous subarray in a given array usig the kadane's algorithm
-  which is a O(n) solution to the problem with O(1) auxiliury space.
+  which is an O(n) solution to the problem with O(1) auxiliury space.
   https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane's_algorithm
+  
+  Usage : 
 
-  \param \c int[] an integer array.
-  \param \c int size of the integer array.
-  \return \c int sum of the maximum sum contiguous subarray.
+  \code
+  int array[] = {1, 2, 3, -6, 8};
+  int res = kadane(array, 5);
+  printf("res : %d", res); // res : 8
+  \endcode
+ 
+  \param A array of integers.
+  \param n size of the integer array.
+  \return sum of the maximum sum contiguous subarray
+
 */
-int GFG_EXPORT kadane(int[] , int);
+int GFG_EXPORT kadane(int[] A, int n);
 
 #ifdef __cplusplus
 }
