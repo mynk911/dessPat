@@ -1,11 +1,14 @@
 /**
   \file gfg.h
-  \author mayank bansal
 
-  \brief this file contains solutions to some coding problems I am working on.
+  \brief this file contains interfaces to functions solvingproblems I am working
+  on.
 
   I am putting together this file to keep track of problems I have solved as
-  well as a reference when I need a quick brush up of common topics.
+  well as a reference when I need a quick brush up of common topics. In this
+  file I try to explain the purpose and usage of each function.
+
+  \author mayank bansal
   */
 
 #ifndef GFG_GFG_H_
@@ -18,10 +21,9 @@ extern "C" {
 /**
   \brief find the maximum sum contiguous subarray.
 
-  find the maximum sum contiguous subarray in a given array usig the kadane's algorithm
-  which is an O(n) solution to the problem with O(1) auxiliury space.
-  https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane's_algorithm
-  
+  find the maximum sum contiguous subarray in a given array with a
+  O(n) time complexity and with O(1) auxiliury space.
+
   Usage : 
 
   \code

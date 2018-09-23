@@ -1,6 +1,17 @@
+///
+/// \file ex1.c
+/// \brief first exercise implementation
+///
+/// solution for first exercise.
+///
+/// \author Mayank Bansal
+///
 #include <stdio.h>
+#include "lcthw.h"
 
-/* This is a comment. */
+///
+/// this is a typical hello world program.
+///
 int ex1(int argc, char *argv[])
 {
     int distance = 100;

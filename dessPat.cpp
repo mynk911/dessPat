@@ -44,7 +44,7 @@ int main (int argc, char *argv[])
 
 #ifdef LCTHW
   //exercise 1
-  ex1(1,"ex1");
+  ex1(argc,argv);
 #endif
   return 0;
 }

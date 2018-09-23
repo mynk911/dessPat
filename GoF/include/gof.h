@@ -1,8 +1,10 @@
-/*
- * gof.h
- *
- *  Created on: 06-Aug-2018
- *      Author: mayank
+/**
+  \file gof.h
+  \brief gang of four main header
+
+  main header for gang of four.
+
+  \author Mayank Bansal
  */
 
 #ifndef GOF_GOF_H_
