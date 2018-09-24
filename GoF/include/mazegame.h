@@ -12,6 +12,11 @@
 
 #include "gof_export.h"
 
+/*!
+ * \brief forward declaration of class Maze \link maze.h
+ */
+class Maze;
+
 ///
 /// \brief The MazeGame class
 /// this class can be used to create a Maze Game.
@@ -27,7 +32,7 @@ public:
     /**
      * \brief Creates a maze game
      */
-    void CreateMaze();
+    Maze* CreateMaze();
 };
 
 #endif

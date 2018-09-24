@@ -15,7 +15,12 @@
  * \brief The Direction enum
  * Specifies possible directions as North, West, East or South
  */
-enum class Direction;
+enum class Direction {
+    North,
+    South,
+    East,
+    West
+};
 
 /*!
  * \brief The MapSite class
@@ -49,6 +54,12 @@ public:
      * \return returns reference to MapSite in specified direction
      */
     MapSite* GetSide(Direction d) const;
+
+    /*!
+     * \brief Get RoomNo
+     * \return room numbers
+     */
+    int GetRoomNo() const;
 
     /*!
      * \brief Set one of the four Sides of room
@@ -139,6 +150,11 @@ public:
      * \brief Maze constructor
      */
     Maze();
+
+    /*!
+     * \brief Maze destructor
+     */
+    ~Maze();
 
     /*!
      * \brief Add Room to maze

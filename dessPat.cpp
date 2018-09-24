@@ -11,6 +11,7 @@
 #include "dessPatConfig.h"
 #ifdef GOF
 #include "gof.h"
+#include "mazegame.h"
 #endif
 #ifdef GFG
 #include "gfg.h"
@@ -20,12 +21,14 @@
 #endif
 int main (int argc, char *argv[])
 {
-      fprintf(stdout,"%s Version %d.%d\n",
+    fprintf(stdout,"%s Version %d.%d\n",
               argv[0],
               dessPat_VERSION_MAJOR,
               dessPat_VERSION_MINOR);
 
 #ifdef GOF
+    MazeGame* mg = new MazeGame;
+    Maze* mz = mg->CreateMaze();
 #endif
 
 #ifdef GFG
