@@ -15,7 +15,7 @@
 /// algorithm which is an O(n) solution to the problem with O(1) auxiliury space.
 /// https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane's_algorithm
 ///
-int kadane(int A[], int n)
+int maximum_subarray(int A[], int n)
 {
     int maxSoFar = INT_MIN, maxAtIndex = 0, temp = 0;
     for (int index = 0; index<n; index++) {
@@ -29,4 +29,22 @@ int kadane(int A[], int n)
     }
 
     return maxSoFar;
+}
+
+
+/// uses property of XOR to find missing number.
+int find_missing_number(int A[], int n)
+{
+    /// Calculate X = XOR of first n+1 natural numbers
+    int X = 0;
+    for(int i = 1; i <= n+1; i++)
+        X ^= i;
+
+    /// Calculate Y = XOR of all numbers in array
+    int Y = 0;
+    for(int i = 0;i < n; i++)
+        Y ^= A[i];
+
+    /// return X^Y = missing number
+    return X^Y;
 }

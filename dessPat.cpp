@@ -30,15 +30,27 @@ int main (int argc, char *argv[])
 
 #ifdef GFG
   //get number of test cases
-  int t; scanf("%d", &t);
+  int t;
   int A[1010];
+  printf("maximum_subarray : \n");
+  scanf("%d", &t);
   while (t--) {
       //get the size of array
       int n; scanf("%d", &n);
       //get array entries
       for (int i = 0; i < n; i++)
           scanf("%d", &A[i]);
-      printf("%d\n", kadane(A, n));
+      printf("%d\n", maximum_subarray(A, n));
+  }
+  printf("find_missing_number : \n");
+  scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scanf("%d", &A[i]);
+      printf("%d\n", find_missing_number(A, n));
   }
 #endif // GFG
 
