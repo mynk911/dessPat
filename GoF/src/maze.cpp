@@ -8,13 +8,31 @@
 #include <iostream>
 #include "maze.h"
 
+#define LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+
 MapSite::~MapSite()
-{}
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying MapSite" << std::endl;
+#endif
+}
 
 Room::Room(int roomNo)
     :_roomNumber(roomNo),
       _sides{nullptr,nullptr,nullptr,nullptr}
-{}
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Constructing Room " << _roomNumber << std::endl;
+#endif
+}
+
+Room::~Room()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying Room " << _roomNumber << std::endl;
+#endif
+}
+
 
 MapSite* Room::GetSide(Direction d) const
 {
@@ -43,7 +61,18 @@ void Room::enter()
 }
 
 Wall::Wall()
-{}
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Constructing Wall" << std::endl;
+#endif
+}
+
+Wall::~Wall()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying Wall" << std::endl;
+#endif
+}
 
 ///
 /// for now the implementation simply prints message as we are only interested
@@ -59,7 +88,20 @@ Door::Door(Room *r1, Room *r2)
     :_room1(r1),
      _room2(r2),
      _isOpen(true)
-{}
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Constructing Door " << _room1->GetRoomNo() << " "
+              << _room2->GetRoomNo() << std::endl;
+#endif
+}
+
+Door::~Door()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying Door " << _room1->GetRoomNo() << " "
+              << _room2->GetRoomNo() << std::endl;
+#endif
+}
 
 Room* Door::OtherSideFrom(Room* r)
 {
@@ -85,7 +127,11 @@ void Door::enter()
 }
 
 Maze::Maze()
-{}
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Constructing Maze" << std::endl;
+#endif
+}
 
 Maze::~Maze()
 {}
@@ -93,8 +139,7 @@ Maze::~Maze()
 void Maze::AddRoom(Room* r)
 {
     auto rn = static_cast<std::vector<Room*>::size_type>(r->GetRoomNo());
-    if(_maze.size() < rn)
-        _maze.reserve(rn);
+    if(_maze.size() < rn) _maze.resize(rn+1);
     _maze[rn] = r;
 }
 

@@ -49,6 +49,11 @@ public:
     Room(int roomNo);
 
     /*!
+      \brief Room destructor
+     */
+    ~Room();
+
+    /*!
      * \brief Access one of the four Sides of room
      * \param d specify direction
      * \return returns reference to MapSite in specified direction
@@ -96,6 +101,11 @@ public:
     Wall();
 
     /*!
+      \brief Wall destructor
+     */
+    ~Wall();
+
+    /*!
      * \brief entry behaviour of wall
      */
     void enter() override;
@@ -113,6 +123,11 @@ public:
      * \param r2 room two
      */
     Door(Room* r1= nullptr, Room* r2= nullptr);
+
+    /*!
+      \brief Door destructor
+     */
+    ~Door();
     /*!
      * \brief entry behaviour of door
      */
