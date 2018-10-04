@@ -1,8 +1,8 @@
 cmake_minimum_required (VERSION 3.5)
 project (dessPat)
 
-#use C11 (for gcc)
-set (CMAKE_CXX_STANDARD 11)
+#use CXX 14 (for gcc)
+set (CMAKE_CXX_STANDARD 14)
 #The Version number
 set (dessPat_VERSION_MAJOR 1)
 set (dessPat_VERSION_MINOR 0)

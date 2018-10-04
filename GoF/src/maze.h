@@ -11,6 +11,8 @@
 
 #include <vector>
 
+#define LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+
 /*!
  * \brief The Direction enum
  * Specifies possible directions as North, West, East or South
@@ -184,7 +186,7 @@ public:
      */
     Room* RoomNo(int rn) const;
 private:
-    std::vector<Room*> _maze;
+    std::vector<Room*> _rooms;
 };
 
 #endif

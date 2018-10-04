@@ -10,6 +10,7 @@
 #ifndef _GOF_MAZEGAME_H_
 #define _GOF_MAZEGAME_H_
 
+#include <memory>
 #include "gof_export.h"
 
 /*!
@@ -29,10 +30,47 @@ public:
      */
     MazeGame();
 
+    /*!
+     * \brief MazeGame move constructor
+     * \param rhs reference to mazegame object
+     */
+    MazeGame(MazeGame&& rhs);
+
+    /*!
+     * \brief move assignment operator
+     * \param rhs reference to mazeegame object
+     * \return MazeGame reference
+     */
+    MazeGame& operator=(MazeGame&& rhs);
+
+    /*!
+     * \brief MazeGame copy constructor
+     * \param rhs reference to mazegame object
+     */
+    MazeGame(const MazeGame& rhs);
+
+    /*!
+     * \brief copy assignment operator
+     * \param rhs refernce to mazegame object
+     * \return reference to MazeGame object
+     */
+    MazeGame& operator=(const MazeGame& rhs);
+
+    /*!
+      \brief MazeGame Destructor
+     */
+    ~MazeGame();
+
+
     /**
      * \brief Creates a maze game
      */
-    Maze* CreateMaze();
+    void CreateMaze();
+private:
+    /*!
+     * \brief pointer to maze
+     */
+    std::unique_ptr<Maze> _maze;
 };
 
 #endif

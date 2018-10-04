@@ -1,10 +1,3 @@
-/*
- * dessPat.cpp
- *
- *  Created on: 03-Aug-2018
- *      Author: mayank
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -27,8 +20,8 @@ int main (int argc, char *argv[])
               dessPat_VERSION_MINOR);
 
 #ifdef GOF
-    MazeGame* mg = new MazeGame;
-    Maze* mz = mg->CreateMaze();
+    auto mg = std::make_unique<MazeGame>();
+    mg->CreateMaze();
 #endif
 
 #ifdef GFG
@@ -51,6 +44,3 @@ int main (int argc, char *argv[])
 #endif
   return 0;
 }
-
-
-

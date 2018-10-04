@@ -6,9 +6,9 @@
 /// \author Mayank Bansal
 
 #include <iostream>
-#include "maze.h"
+#include <stdexcept>
 
-#define LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+#include "maze.h"
 
 MapSite::~MapSite()
 {
@@ -22,7 +22,7 @@ Room::Room(int roomNo)
       _sides{nullptr,nullptr,nullptr,nullptr}
 {
 #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Constructing Room " << _roomNumber << std::endl;
+    std::cout << "Creating Room " << _roomNumber << std::endl;
 #endif
 }
 
@@ -63,7 +63,7 @@ void Room::enter()
 Wall::Wall()
 {
 #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Constructing Wall" << std::endl;
+    std::cout << "Creating Wall" << std::endl;
 #endif
 }
 
@@ -90,7 +90,7 @@ Door::Door(Room *r1, Room *r2)
      _isOpen(true)
 {
 #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Constructing Door " << _room1->GetRoomNo() << " "
+    std::cout << "Creating Door " << _room1->GetRoomNo() << " "
               << _room2->GetRoomNo() << std::endl;
 #endif
 }
@@ -129,21 +129,33 @@ void Door::enter()
 Maze::Maze()
 {
 #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Constructing Maze" << std::endl;
+    std::cout << "Creating Maze" << std::endl;
 #endif
 }
 
 Maze::~Maze()
-{}
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying Maze" << std::endl;
+#endif
+}
 
 void Maze::AddRoom(Room* r)
 {
     auto rn = static_cast<std::vector<Room*>::size_type>(r->GetRoomNo());
-    if(_maze.size() < rn) _maze.resize(rn+1);
-    _maze[rn] = r;
+    if(rn > 0 && _rooms.size() == rn-1)
+        _rooms.push_back(r);
+    else
+        throw std::invalid_argument("Room numbers should be added in increaing"
+                                    " order of positive room numbers starting"
+                                    " at Room no 1");
 }
 
 Room* Maze::RoomNo(int rn) const
 {
-    return _maze[static_cast<std::vector<Room*>::size_type>(rn)];
+    auto rno = static_cast<std::vector<Room*>::size_type>(rn);
+    if(rn > 0 && _rooms.size() >= rno)
+        return _rooms[rno];
+    else
+        throw std::invalid_argument("Room numbers should be in valid range");
 }
