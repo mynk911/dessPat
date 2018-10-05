@@ -42,27 +42,29 @@ MazeGame& MazeGame::operator=(const MazeGame& rhs)
 void MazeGame::CreateMaze()
 {
     _maze = std::make_unique<Maze>();
-    Room *r1, *r2;
+
+    auto r1 = std::make_shared<Room>(1);
+    auto r2 = std::make_shared<Room>(2);
+
+    auto theDoor = std::make_shared<Door>(r1, r2);
+
     try {
-        r1 = new Room(1);
-        r2 = new Room(2);
+        _maze->AddRoom(r1);
+        _maze->AddRoom(r2);
     } catch (std::invalid_argument& e) {
         std::cout << e.what() << std::endl;
     }
 
-    Door* theDoor = new Door(r1, r2);
+    auto w = std::make_shared<Wall>();
 
-    _maze->AddRoom(r1);
-    _maze->AddRoom(r2);
-
-    r1->SetSide(Direction::North, new Wall);
+    r1->SetSide(Direction::North, w);
     r1->SetSide(Direction::East, theDoor);
-    r1->SetSide(Direction::South, new Wall);
-    r1->SetSide(Direction::West, new Wall);
+    r1->SetSide(Direction::South, w);
+    r1->SetSide(Direction::West, w);
 
-    r2->SetSide(Direction::North, new Wall);
-    r2->SetSide(Direction::East, new Wall);
-    r2->SetSide(Direction::South, new Wall);
+    r2->SetSide(Direction::North, w);
+    r2->SetSide(Direction::East, w);
+    r2->SetSide(Direction::South, w);
     r2->SetSide(Direction::West, theDoor);
 
 }

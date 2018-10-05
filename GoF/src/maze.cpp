@@ -34,7 +34,7 @@ Room::~Room()
 }
 
 
-MapSite* Room::GetSide(Direction d) const
+std::shared_ptr<MapSite> Room::GetSide(Direction d) const
 {
     return _sides[static_cast<int>(d)];
 }
@@ -44,9 +44,12 @@ int Room::GetRoomNo() const
     return _roomNumber;
 }
 
-void Room::SetSide(Direction d, MapSite* ms)
+void Room::SetSide(Direction d, std::shared_ptr<MapSite> ms)
 {
-    _sides[static_cast<int>(d)] = ms;
+    auto mapsite = dynamic_cast<Room *>(ms.get());
+    if(mapsite == nullptr)
+        _sides[static_cast<int>(d)] = ms;
+    else throw std::invalid_argument("rooms cannot contain other rooms");
 }
 
 ///
@@ -84,31 +87,46 @@ void Wall::enter()
     std::cout << "!!you've hit a wall!!" << std::endl;
 }
 
-Door::Door(Room *r1, Room *r2)
+Door::Door(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2)
     :_room1(r1),
      _room2(r2),
      _isOpen(true)
 {
 #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Door " << _room1->GetRoomNo() << " "
-              << _room2->GetRoomNo() << std::endl;
+    auto tr1 = _room1.lock();
+    auto tr2 = _room2.lock();
+    if(tr1 != nullptr && tr2 != nullptr)
+    std::cout << "Creating Door " << tr1->GetRoomNo() << " "
+              << tr2->GetRoomNo() << std::endl;
+    else
+        throw std::runtime_error("Door Constructor: Rooms do not exist!!");
 #endif
 }
 
 Door::~Door()
 {
 #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying Door " << _room1->GetRoomNo() << " "
-              << _room2->GetRoomNo() << std::endl;
+    auto tr1 = _room1.lock();
+    auto tr2 = _room2.lock();
+    if(tr1 != nullptr && tr2 != nullptr)
+    std::cout << "Destroying Door " << tr1->GetRoomNo() << " "
+              << tr2->GetRoomNo() << std::endl;
+    else
+        std::cout << "Destroying Door" << std::endl;
 #endif
 }
 
-Room* Door::OtherSideFrom(Room* r)
+std::shared_ptr<Room> Door::OtherSideFrom(std::shared_ptr<Room> r)
 {
-    if(r->GetRoomNo() == _room1->GetRoomNo())
-        return _room2;
-    else if(r->GetRoomNo() == _room2->GetRoomNo())
-        return _room1;
+    auto tr1 = _room1.lock();
+    auto tr2 = _room2.lock();
+    if(tr1 != nullptr && tr2 != nullptr)
+    {
+        if(r->GetRoomNo() == tr1->GetRoomNo())
+            return tr1;
+        else if(r->GetRoomNo() == tr2->GetRoomNo())
+            return tr2;
+    }
     return nullptr;
 }
 
@@ -140,18 +158,19 @@ Maze::~Maze()
 #endif
 }
 
-void Maze::AddRoom(Room* r)
+void Maze::AddRoom(std::shared_ptr<Room> r)
 {
     auto rn = static_cast<std::vector<Room*>::size_type>(r->GetRoomNo());
     if(rn > 0 && _rooms.size() == rn-1)
         _rooms.push_back(r);
     else
-        throw std::invalid_argument("Room numbers should be added in increaing"
+        throw std::invalid_argument("MazeGame : Failed to add Room\n"
+                                    "Room numbers should be added in increaing"
                                     " order of positive room numbers starting"
                                     " at Room no 1");
 }
 
-Room* Maze::RoomNo(int rn) const
+std::shared_ptr<Room> Maze::RoomNo(int rn) const
 {
     auto rno = static_cast<std::vector<Room*>::size_type>(rn);
     if(rn > 0 && _rooms.size() >= rno)

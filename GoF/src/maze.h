@@ -10,6 +10,7 @@
 #define GOF_MAZE_H_
 
 #include <vector>
+#include <memory>
 
 #define LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
 
@@ -60,7 +61,7 @@ public:
      * \param d specify direction
      * \return returns reference to MapSite in specified direction
      */
-    MapSite* GetSide(Direction d) const;
+    std::shared_ptr<MapSite> GetSide(Direction d) const;
 
     /*!
      * \brief Get RoomNo
@@ -73,7 +74,7 @@ public:
      * \param d specify direction
      * \param ms refernce to a mapsite
      */
-    void SetSide(Direction d, MapSite* ms);
+    void SetSide(Direction d, std::shared_ptr<MapSite> ms);
 
     /*!
      * \brief entry behaviour of a room
@@ -87,7 +88,7 @@ private:
     /*!
      * \brief _sides holds four sides of a room
      */
-    MapSite* _sides[4];
+    std::shared_ptr<MapSite> _sides[4];
 };
 
 /*!
@@ -124,7 +125,7 @@ public:
      * \param r1 room one
      * \param r2 room two
      */
-    Door(Room* r1= nullptr, Room* r2= nullptr);
+    Door(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2);
 
     /*!
       \brief Door destructor
@@ -140,16 +141,16 @@ public:
      * \param r One of the room door opens to
      * \return Other room door opens to
      */
-    Room* OtherSideFrom(Room* r);
+    std::shared_ptr<Room> OtherSideFrom(std::shared_ptr<Room> r);
 private:
     /*!
      * \brief _room1 room connected by door
      */
-    Room* _room1;
+    std::weak_ptr<Room> _room1;
     /*!
      * \brief _room2 room connected by door
      */
-    Room* _room2;
+    std::weak_ptr<Room> _room2;
     /*!
      * \brief _isOpen wether the room is locked
      */
@@ -177,16 +178,16 @@ public:
      * \brief Add Room to maze
      * \param r reference to a room
      */
-    void AddRoom(Room* r);
+    void AddRoom(std::shared_ptr<Room> r);
 
     /*!
      * \brief returns room with specified Room No
      * \param rn room no
      * \return refernce to room
      */
-    Room* RoomNo(int rn) const;
+    std::shared_ptr<Room> RoomNo(int rn) const;
 private:
-    std::vector<Room*> _rooms;
+    std::vector<std::shared_ptr<Room>> _rooms;
 };
 
 #endif
