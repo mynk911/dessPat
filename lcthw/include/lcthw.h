@@ -24,6 +24,22 @@ extern "C" {
  */
 int LCTHW_EXPORT ex1(int argc, char* argv[]);
 
+/*!
+ * \brief second exercise prints and variables
+ * \param argc number of arguments
+ * \param argv string arguments
+ * \return 0 for success, otherwise any other number
+ */
+int LCTHW_EXPORT ex3(int argc, char* argv[]);
+
+/*!
+ * \brief seventh exercise data types
+ * \param argc number of aarguments
+ * \param argv string argumentd
+ * \return 0 for success, otherwise any other number
+ */
+int LCTHW_EXPORT ex7(int argc, char* argv[]);
+
 #ifdef __cplusplus
 }
 #endif
