@@ -27,21 +27,37 @@ int main (int argc, char *argv[])
 
 #ifdef GFG
   //get number of test cases
-  int t; scanf("%d", &t);
+  int t, scn;;
   int A[1010];
+  printf("maximum_subarray : \n");
+  scn = scanf("%d", &t);
   while (t--) {
       //get the size of array
-      int n; scanf("%d", &n);
+      int n; scn = scanf("%d", &n);
       //get array entries
       for (int i = 0; i < n; i++)
-          scanf("%d", &A[i]);
-      printf("%d\n", kadane(A, n));
+          scn = scanf("%d", &A[i]);
+      printf("%d\n", maximum_subarray(A, n));
+  }
+  printf("find_missing_number : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      printf("%d\n", find_missing_number(A, n));
   }
 #endif // GFG
 
 #ifdef LCTHW
-  //exercise 1
+  printf("Exercise 1:\n");
   ex1(argc,argv);
+  printf("Exercise 3:\n");
+  ex3(argc, argv);
+  printf("Exercise 7:\n");
+  ex7(argc, argv);
 #endif
   return 0;
 }
