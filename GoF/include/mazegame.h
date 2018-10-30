@@ -13,6 +13,8 @@
 #include <memory>
 #include "gof_export.h"
 
+#include "mazefactory.h"
+
 /*!
  * \brief forward declaration of class Maze \link maze.h
  */
@@ -30,31 +32,10 @@ public:
      */
     MazeGame();
 
-    /*!
-     * \brief MazeGame move constructor
-     * \param rhs reference to mazegame object
-     */
     MazeGame(MazeGame&& rhs);
-
-    /*!
-     * \brief move assignment operator
-     * \param rhs reference to mazeegame object
-     * \return MazeGame reference
-     */
     MazeGame& operator=(MazeGame&& rhs);
-
-    /*!
-     * \brief MazeGame copy constructor
-     * \param rhs reference to mazegame object
-     */
-    MazeGame(const MazeGame& rhs);
-
-    /*!
-     * \brief copy assignment operator
-     * \param rhs refernce to mazegame object
-     * \return reference to MazeGame object
-     */
-    MazeGame& operator=(const MazeGame& rhs);
+    MazeGame(const MazeGame& rhs) = delete;
+    MazeGame& operator=(const MazeGame& rhs) = delete;
 
     /*!
       \brief MazeGame Destructor
@@ -66,6 +47,7 @@ public:
      * \brief Creates a maze game
      */
     void CreateMaze();
+    void CreateMaze(std::shared_ptr<Mazefactory> mf);
 private:
     /*!
      * \brief pointer to maze
