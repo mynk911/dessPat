@@ -178,3 +178,75 @@ std::shared_ptr<Room> Maze::RoomNo(int rn) const
     else
         throw std::invalid_argument("Room numbers should be in valid range");
 }
+
+/*! \brief Spell constructor
+ *
+ *  create a spell object
+ */
+Spell::Spell(std::string q,std::string a)
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "creating a spell!!" << std::endl;
+#endif
+}
+
+/*! \brief Spell destructor
+ *
+ *  destroys a spell object
+ */
+Spell::~Spell()
+{
+    #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "destroy a spell" << std::endl;
+    #endif
+}
+
+/*! \brief dispell this spell
+ *
+ *  if provided string is correct the spell is dispelled
+ *
+ * \param s answer string
+ * \return true if s == answer
+ *         false otherwise
+ */
+bool Spell::dispell(std::string s) {
+    return s == this->a;
+}
+/*! \brief Enchanted room consructor *
+ *  create an enchanted room.Enchanted rooms need a spell to be broken.
+ *
+ * \param n room number
+ * \param s spell
+ */
+EnchantedRoom::EnchantedRoom(int n, std::unique_ptr<Spell> s)
+    : Room(n),
+      _spell(std::move(s))
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout<<"Creating enchanted room" << n << std::endl;
+#endif
+}
+
+/*! \brief Enchanted Room destructor
+ *
+ *  destroys an enchanted room
+ */
+EnchantedRoom::~EnchantedRoom()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying enchanted Room" << this->GetRoomNo() << std::endl;
+#endif
+}
+
+/*! \brief enter this room
+ *
+ *  currently tells if the spell answer is right or wrong.
+ *  \todo on adding player class enter only if spell broken
+ *
+ */
+void EnchantedRoom::enter() {
+    if(_spell->dispell("test"))
+        std::cout << "Spell broken!! location:" << std::endl;
+    else
+        std::cout << "Spell not broken!! location:" << std::endl;
+}

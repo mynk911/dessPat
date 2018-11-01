@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 
 #define LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
 
@@ -190,4 +191,29 @@ private:
     std::vector<std::shared_ptr<Room>> _rooms;
 };
 
+/* \brief spell class
+ *
+ * create a spell object with a question and answer string.
+ */
+class Spell
+{
+public:
+    Spell (std::string q, std::string a);
+    virtual ~Spell ();
+    bool dispell(std::string s);
+private:
+    std::string q;
+    std::string a;
+};
+
+class EnchantedRoom : public Room
+{
+public:
+    EnchantedRoom(int n, std::unique_ptr<Spell> s);
+    virtual ~EnchantedRoom();
+    void enter() override;
+
+private:
+    std::unique_ptr<Spell> _spell;
+};
 #endif

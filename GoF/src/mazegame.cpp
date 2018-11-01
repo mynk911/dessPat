@@ -83,4 +83,6 @@ void MazeGame::CreateMaze(std::shared_ptr<Mazefactory> mf)
     r2->SetSide(Direction::East, w);
     r2->SetSide(Direction::South, w);
     r2->SetSide(Direction::West, theDoor);
+
+    r2->enter();
 }
