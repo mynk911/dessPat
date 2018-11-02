@@ -184,6 +184,8 @@ std::shared_ptr<Room> Maze::RoomNo(int rn) const
  *  create a spell object
  */
 Spell::Spell(std::string q,std::string a)
+    : q(q),
+      a(a)
 {
 #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
     std::cout << "creating a spell!!" << std::endl;
@@ -246,7 +248,7 @@ EnchantedRoom::~EnchantedRoom()
  */
 void EnchantedRoom::enter() {
     if(_spell->dispell("test"))
-        std::cout << "Spell broken!! location:" << std::endl;
+        std::cout << "Spell broken!! location:" << this->GetRoomNo() << std::endl;
     else
-        std::cout << "Spell not broken!! location:" << std::endl;
+        std::cout << "Spell not broken!! location:" << this->GetRoomNo() << std::endl;
 }

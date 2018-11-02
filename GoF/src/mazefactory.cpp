@@ -68,4 +68,48 @@ std::unique_ptr<Wall> Mazefactory::MakeWall() const
 }
 #endif /* ifndef _GOF_MAZEFACTORY_CPP_ */
 
+/*! \brief Enchanted Maze factory constructor
+ *
+ *  creates maze components with a spell on them
+ */
+EnchantedMazefactory::EnchantedMazefactory()
+    :Mazefactory()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "creating enchanted maze factory" << std::endl; 
+#endif
+}
 
+/*! \brief Enchanted Maze factory destructor
+ *
+ *  destroys an enchanted maze factory
+ */
+EnchantedMazefactory::~EnchantedMazefactory()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "destroying enchanted maze factory" << std::endl;
+#endif
+}
+
+/*! \brief MakeRoom
+ *
+ *  Make an enchanted room
+ *
+ * \param rn room number
+ * \return unique ptr to room
+ */
+std::unique_ptr<Room> EnchantedMazefactory::MakeRoom(int rn) const
+{
+    return std::make_unique<EnchantedRoom>(rn, CastSpell());
+}
+
+/*! \brief Cast Spell
+ *
+ *  creates and returns a spell object
+ *
+ * \return spell unique pointer
+ */
+std::unique_ptr<Spell> EnchantedMazefactory::CastSpell() const
+{
+    return std::make_unique<Spell>("qwer","test");
+}

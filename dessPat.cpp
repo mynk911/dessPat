@@ -22,7 +22,7 @@ int main (int argc, char *argv[])
 
 #ifdef GOF
     auto mg = std::make_unique<MazeGame>();
-    mg->CreateMaze(std::make_shared<Mazefactory>());
+    mg->CreateMaze(std::make_shared<EnchantedMazefactory>());
 #endif
 
 #ifdef GFG
