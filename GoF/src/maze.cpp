@@ -252,3 +252,86 @@ void EnchantedRoom::enter() {
     else
         std::cout << "Spell not broken!! location:" << this->GetRoomNo() << std::endl;
 }
+
+/*!
+ * \brief Bomb constructor
+ *
+ * \param n time bomb goes off
+ */
+Bomb::Bomb(int n)
+    :_time(n)
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Creating Bomb!! time:" << this->_time << std::endl;
+#endif
+}
+
+/*!
+ * \brief Bomb destructor
+ */
+Bomb::~Bomb()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying Bomb!!" << std::endl;
+#endif
+}
+
+/*!
+ * \brief Get Detonation Time
+ * \return detonation time
+ */
+int Bomb::GetDetonationTime()
+{
+    return _time;
+}
+
+/*!
+ * \brief Create Room With A Bomb
+ * \param n room no
+ * \param b bomb
+ */
+RoomWithABomb::RoomWithABomb(int n, std::unique_ptr<Bomb> b)
+    : Room(n),
+      _bomb(std::move(b))
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Creating Room with a bomb!!" << this->GetRoomNo() << std::endl;
+#endif
+}
+
+/*!
+ * \brief Destroy Room With A Bomb
+ */
+RoomWithABomb::~RoomWithABomb()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying Room with a bomb!!" << std::endl;
+#endif
+}
+
+/*!
+ * \brief enter behaviour of bombed room
+ */
+void RoomWithABomb::enter()
+{
+    std::cout << "location : time" << this->GetRoomNo() <<" : " << _bomb->GetDetonationTime() << std::endl;
+}
+
+BombedWall::BombedWall()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Creating bombed Wall" << std::endl;
+#endif
+}
+
+BombedWall::~BombedWall()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying bombed Wall" << std::endl;
+#endif
+}
+
+void BombedWall::enter()
+{
+    std::cout << "!!you've hit a bombed wall!!" << std::endl;
+}

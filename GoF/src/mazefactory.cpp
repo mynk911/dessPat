@@ -113,3 +113,65 @@ std::unique_ptr<Spell> EnchantedMazefactory::CastSpell() const
 {
     return std::make_unique<Spell>("qwer","test");
 }
+
+/*! \brief Bombed Maze factory constructor
+ *
+ *  creates maze components with a spell on them
+ */
+BombedMazeFactory::BombedMazeFactory()
+    :Mazefactory()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "creating bombed maze factory" << std::endl;
+#endif
+}
+
+/*! \brief Bombed Maze factory destructor
+ *
+ *  destroys an Bombed maze factory
+ */
+BombedMazeFactory::~BombedMazeFactory()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "destroying Bombed maze factory" << std::endl;
+#endif
+}
+
+/*!
+ * \brief MakeRoom
+ *
+ * make a bombed room
+ *
+ * \param n room no
+ *
+ * \return reference to room
+ */
+std::unique_ptr<Room> BombedMazeFactory::MakeRoom(int n) const
+{
+    return std::make_unique<RoomWithABomb>(n, MakeBomb(n));
+}
+
+/*!
+ * \brief MakeWall
+ *
+ * make a bombed wall
+ *
+ * \return reference to wall
+ */
+std::unique_ptr<Wall> BombedMazeFactory::MakeWall() const
+{
+    return std::make_unique<BombedWall>();
+}
+
+/*!
+ * \brief MakeBomb
+ *
+ * make a bomb
+ *
+ * \return reference to bomb
+ */
+std::unique_ptr<Bomb> BombedMazeFactory::MakeBomb(int n) const
+{
+    return std::make_unique<Bomb>(n);
+}
+

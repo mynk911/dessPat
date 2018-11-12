@@ -19,6 +19,7 @@ class Room;
 class Door;
 class Wall;
 class Spell;
+class Bomb;
 
 class GOF_EXPORT Mazefactory
 {
@@ -39,6 +40,17 @@ public:
     virtual std::unique_ptr<Room> MakeRoom(int rn) const override;
 protected:
     std::unique_ptr<Spell> CastSpell() const;
+};
+
+class GOF_EXPORT BombedMazeFactory : public Mazefactory
+{
+public:
+    BombedMazeFactory();
+    virtual ~BombedMazeFactory();
+    virtual std::unique_ptr<Room> MakeRoom(int rn) const override;
+    virtual std::unique_ptr<Wall> MakeWall() const override;
+protected:
+    std::unique_ptr<Bomb> MakeBomb(int n) const;
 };
 #endif /* ifndef _GOF_MAZEFACTORY_H_ */
 

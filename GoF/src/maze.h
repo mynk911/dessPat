@@ -206,14 +206,55 @@ private:
     std::string a;
 };
 
+/*!
+ *  \brief room with a spell on it
+ */
 class EnchantedRoom : public Room
 {
 public:
     EnchantedRoom(int n, std::unique_ptr<Spell> s);
-    virtual ~EnchantedRoom();
+    ~EnchantedRoom() override;
     void enter() override;
 
 private:
     std::unique_ptr<Spell> _spell;
+};
+
+/*!
+ * \brief Bomb class
+ */
+class Bomb
+{
+public:
+    Bomb (int n);
+    virtual ~Bomb ();
+    int GetDetonationTime();
+private:
+    int _time;
+};
+
+/*!
+ * \brief Room With A Bomb
+ */
+class RoomWithABomb : public Room
+{
+public:
+    RoomWithABomb (int n, std::unique_ptr<Bomb> b);
+    ~RoomWithABomb () override;
+    void enter() override;
+
+private:
+    std::unique_ptr<Bomb> _bomb;
+};
+
+/*!
+ * \brief Bombed Wall class
+ */
+class BombedWall : public Wall
+{
+public:
+    BombedWall ();
+    ~BombedWall () override;
+    void enter() override;
 };
 #endif
