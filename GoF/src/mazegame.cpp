@@ -5,9 +5,12 @@
 
 /// \author Mayank Bansal
 
-#include "mazegame.h"
-#include "maze.h"
 #include <iostream>
+
+#include "maze.h"
+#include "mazegame.h"
+#include "mazefactory.h"
+#include "mazebuilder.h"
 
 MazeGame::MazeGame()
     :_maze(nullptr)
@@ -85,4 +88,14 @@ void MazeGame::CreateMaze(std::shared_ptr<Mazefactory> mf)
     r2->SetSide(Direction::West, theDoor);
 
     r2->enter();
+}
+
+void MazeGame::CreateMaze(std::shared_ptr<MazeBuilder> mb)
+{
+    mb->BuildMaze();
+    mb->BuildRoom(1);
+    mb->BuildRoom(2);
+    mb->BuildDoor(1,2);
+
+    _maze = mb->GetMaze();
 }

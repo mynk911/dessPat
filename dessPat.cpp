@@ -6,6 +6,7 @@
 #include "gof.h"
 #include "mazegame.h"
 #include "mazefactory.h"
+#include "mazebuilder.h"
 #endif
 #ifdef GFG
 #include "gfg.h"
@@ -22,7 +23,7 @@ int main (int argc, char *argv[])
 
 #ifdef GOF
     auto mg = std::make_unique<MazeGame>();
-    mg->CreateMaze(std::make_shared<BombedMazeFactory>());
+    mg->CreateMaze(std::make_shared<StandardMazeBuilder>());
 #endif
 
 #ifdef GFG

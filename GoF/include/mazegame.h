@@ -11,14 +11,19 @@
 #define _GOF_MAZEGAME_H_
 
 #include <memory>
-#include "gof_export.h"
 
-#include "mazefactory.h"
+#include "gof_export.h"
 
 /*!
  * \brief forward declaration of class Maze \link maze.h
  */
 class Maze;
+
+/*!
+ * \brief forward declaration of class Maze \link mazebuilder.h
+ */
+class Mazefactory;
+class MazeBuilder;
 
 ///
 /// \brief The MazeGame class
@@ -48,6 +53,7 @@ public:
      */
     void CreateMaze();
     void CreateMaze(std::shared_ptr<Mazefactory> mf);
+    void CreateMaze(std::shared_ptr<MazeBuilder> mb);
 private:
     /*!
      * \brief pointer to maze
