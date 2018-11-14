@@ -98,4 +98,12 @@ void MazeGame::CreateMaze(std::shared_ptr<MazeBuilder> mb)
     mb->BuildDoor(1,2);
 
     _maze = mb->GetMaze();
+
+    auto cmb = std::dynamic_pointer_cast<CountingMazeBuilder>(mb);
+    if(cmb != nullptr)
+    {
+        int rooms = 0 , doors = 0;
+        cmb->GetCounts(rooms, doors);
+        std::cout << "room count" << rooms << "door count" << doors << std::endl;
+    }
 }

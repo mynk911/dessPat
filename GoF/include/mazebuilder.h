@@ -33,7 +33,7 @@ class StandardMazeBuilder : public MazeBuilder
 {
 public:
     StandardMazeBuilder();
-    ~StandardMazeBuilder();
+    ~StandardMazeBuilder() override;
     void BuildMaze() override;
     void BuildRoom(int rno) override;
     void BuildDoor(int r1, int r2) override;
@@ -42,4 +42,18 @@ protected:
     Direction CommonWall(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2);
     std::unique_ptr<Maze> _maze;
 };
+
+class CountingMazeBuilder : public MazeBuilder
+{
+public:
+    CountingMazeBuilder();
+    ~CountingMazeBuilder() override;
+    void BuildRoom(int rno) override;
+    void BuildDoor(int r1, int r2) override;
+    void GetCounts(int& rooms, int& doors) const;
+private:
+    int _rooms;
+    int _doors;
+};
+
 #endif

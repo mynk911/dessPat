@@ -117,3 +117,50 @@ Direction StandardMazeBuilder::CommonWall(std::shared_ptr<Room> r1, std::shared_
     if(r1->GetRoomNo() == 1) return Direction::East;
     else return Direction::West;
 }
+
+/*!
+ * \brief CountingMazeBuilder constructor
+ */
+CountingMazeBuilder::CountingMazeBuilder()
+    :_rooms(0),
+      _doors(0)
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Creating Counting Maze Builder" << std::endl;
+#endif
+}
+
+/*!
+ * \brief CountingMazeBuilder Destructor
+ */
+CountingMazeBuilder::~CountingMazeBuilder()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying Counting Maze Builder" << std::endl;
+#endif
+}
+
+/*!
+ * \brief CountingMazeBuilder::BuildRoom count rooms
+ * \param rno
+ */
+void CountingMazeBuilder::BuildRoom(int rno)
+{
+    _rooms++;
+}
+
+/*!
+ * \brief CountingMazeBuilder::BuildDoor count doors
+ * \param r1
+ * \param r2
+ */
+void CountingMazeBuilder::BuildDoor(int r1, int r2)
+{
+    _doors++;
+}
+
+void CountingMazeBuilder::GetCounts(int& rooms, int& doors) const
+{
+    rooms = _rooms;
+    doors = _doors;
+}
