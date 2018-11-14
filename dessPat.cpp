@@ -23,7 +23,8 @@ int main (int argc, char *argv[])
 
 #ifdef GOF
     auto mg = std::make_unique<MazeGame>();
-    mg->CreateMaze(std::make_shared<StandardMazeBuilder>());
+    auto mb = std::make_shared<StandardMazeBuilder>();
+    mg->CreateMaze(mb);
 #endif
 
 #ifdef GFG

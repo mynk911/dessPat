@@ -174,7 +174,7 @@ std::shared_ptr<Room> Maze::RoomNo(int rn) const
 {
     auto rno = static_cast<std::vector<Room*>::size_type>(rn);
     if(rn > 0 && _rooms.size() >= rno)
-        return _rooms[rno];
+        return _rooms[rno-1];
     else
         throw std::invalid_argument("Room numbers should be in valid range");
 }
