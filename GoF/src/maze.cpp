@@ -26,6 +26,15 @@ Room::Room(int roomNo)
 #endif
 }
 
+Room::Room()
+    :_roomNumber(0),
+      _sides{nullptr,nullptr,nullptr,nullptr}
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "default Creating Room " << std::endl;
+#endif
+}
+
 Room::~Room()
 {
 #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
@@ -50,6 +59,16 @@ void Room::SetSide(Direction d, std::shared_ptr<MapSite> ms)
     if(mapsite == nullptr)
         _sides[static_cast<int>(d)] = ms;
     else throw std::invalid_argument("rooms cannot contain other rooms");
+}
+
+std::unique_ptr<Room> Room::Clone() const
+{
+    return std::make_unique<Room>(*this);
+}
+
+void Room::Initialize(int rno)
+{
+    _roomNumber = rno;
 }
 
 ///
@@ -77,6 +96,10 @@ Wall::~Wall()
 #endif
 }
 
+std::unique_ptr<Wall> Wall::Clone() const
+{
+    return std::make_unique<Wall>(*this);
+}
 ///
 /// for now the implementation simply prints message as we are only interested
 /// creation of mazes
@@ -101,6 +124,34 @@ Door::Door(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2)
     else
         throw std::runtime_error("Door Constructor: Rooms do not exist!!");
 #endif
+}
+Door::Door()
+    :_room1(std::weak_ptr<Room>()),
+      _room2(std::weak_ptr<Room>())
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Creating Door!!" << std::endl;
+#endif
+}
+
+Door::Door(const Door& d)
+    :_room1(d._room1),
+      _room2(d._room2)
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Copy Construction of Door!!" << std::endl;
+#endif
+}
+
+std::unique_ptr<Door> Door::Clone() const
+{
+    return std::make_unique<Door>(*this);
+}
+
+void Door::Initialize(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2)
+{
+    _room1 = r1;
+    _room2 = r2;
 }
 
 Door::~Door()
@@ -156,6 +207,11 @@ Maze::~Maze()
 #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
     std::cout << "Destroying Maze" << std::endl;
 #endif
+}
+
+std::unique_ptr<Maze> Maze::Clone() const
+{
+    return std::make_unique<Maze>(*this);
 }
 
 void Maze::AddRoom(std::shared_ptr<Room> r)

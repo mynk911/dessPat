@@ -22,9 +22,10 @@ int main (int argc, char *argv[])
               dessPat_VERSION_MINOR);
 
 #ifdef GOF
-    auto mg = std::make_unique<MazeGame>();
-    auto mb = std::make_shared<CountingMazeBuilder>();
-    mg->CreateMaze(mb);
+    {
+        auto mg = std::make_unique<MazeGame>();
+        mg->CreateMaze(mg->MakePrototypeFactory());
+    }
 #endif
 
 #ifdef GFG

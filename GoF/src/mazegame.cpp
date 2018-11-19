@@ -30,7 +30,6 @@ MazeGame::~MazeGame()
 #endif
 }
 
-/// \todo make it a unique pointer instead of simple pointer
 void MazeGame::CreateMaze()
 {
     _maze = std::make_unique<Maze>();
@@ -106,4 +105,136 @@ void MazeGame::CreateMaze(std::shared_ptr<MazeBuilder> mb)
         cmb->GetCounts(rooms, doors);
         std::cout << "room count" << rooms << "door count" << doors << std::endl;
     }
+}
+
+/*! \name Factory Methods
+ * factory methods to create maze and it's components
+ */
+///\{
+/*!
+ * \brief MazeGame::MakeMaze create a maze
+ * \return pointer to maze
+ */
+std::unique_ptr<Maze> MazeGame::MakeMaze() const
+{
+    return std::make_unique<Maze>();
+}
+
+/*!
+ * \brief MazeGame::MakeRoom create a room
+ * \param rno
+ * \return pointer to room
+ */
+std::unique_ptr<Room> MazeGame::MakeRoom(int rno) const
+{
+    return std::make_unique<Room>(rno);
+}
+
+/*!
+ * \brief MazeGame::MakeDoor create a door
+ * \param r1
+ * \param r2
+ * \return pointer to door
+ */
+std::unique_ptr<Door> MazeGame::MakeDoor(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2) const
+{
+    return std::make_unique<Door>(r1, r2);
+}
+
+/*!
+ * \brief MazeGame::MakeWall create a wall
+ * \return pointer to wall
+ */
+std::unique_ptr<Wall> MazeGame::MakeWall() const
+{
+    return std::make_unique<Wall>();
+}
+///\}
+
+void MazeGame::CreateMazebyFactoryMethods()
+{
+    _maze = MakeMaze();
+
+    std::shared_ptr<Room> r1 = MakeRoom(1);
+    std::shared_ptr<Room> r2 = MakeRoom(2);
+
+    std::shared_ptr<Door> theDoor = MakeDoor(r1, r2);
+
+    try {
+        _maze->AddRoom(r1);
+        _maze->AddRoom(r2);
+    } catch (std::invalid_argument& e) {
+        std::cout << e.what() << std::endl;
+    }
+
+    std::shared_ptr<Wall> w = MakeWall();
+
+    r1->SetSide(Direction::North, w);
+    r1->SetSide(Direction::East, theDoor);
+    r1->SetSide(Direction::South, w);
+    r1->SetSide(Direction::West, w);
+
+    r2->SetSide(Direction::North, w);
+    r2->SetSide(Direction::East, w);
+    r2->SetSide(Direction::South, w);
+    r2->SetSide(Direction::West, theDoor);
+}
+
+BombedMazeGame::BombedMazeGame()
+    : MazeGame ()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Creating Bombed Maze Game" << std::endl;
+#endif
+}
+
+BombedMazeGame::~BombedMazeGame()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying Bombed Maze Game" << std::endl;
+#endif
+}
+
+std::unique_ptr<Room> BombedMazeGame::MakeRoom(int rno) const
+{
+    return std::make_unique<RoomWithABomb>(rno, std::make_unique<Bomb>(rno));
+}
+std::unique_ptr<Wall> BombedMazeGame::MakeDoor() const
+{
+    return std::make_unique<BombedWall>();
+}
+
+EnchantedMazeGame::EnchantedMazeGame()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Creating Enchanted Maze Game" << std::endl;
+#endif
+}
+EnchantedMazeGame::~EnchantedMazeGame()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying Enchanted Maze Game" << std::endl;
+#endif
+}
+
+std::unique_ptr<Room> EnchantedMazeGame::MakeRoom(int rno) const
+{
+    return std::make_unique<EnchantedRoom>(rno, CastSpell());
+}
+
+std::unique_ptr<Spell> EnchantedMazeGame::CastSpell() const
+{
+    return std::make_unique<Spell>("test","ans");
+}
+
+std::unique_ptr<MazePrototypeFactory> MazeGame::MakePrototypeFactory()
+{
+    auto maze = std::make_unique<Maze>();
+    auto room = std::make_unique<Room>();
+    auto door = std::make_unique<Door>();
+    auto wall = std::make_unique<Wall>();
+    return std::make_unique<MazePrototypeFactory>(std::move(maze),
+                                                  std::move(room),
+                                                  std::move(door),
+                                                  std::move(wall));
 }
