@@ -26,6 +26,15 @@ Room::Room(int roomNo)
 #endif
 }
 
+Room::Room()
+    :_roomNumber(0),
+      _sides{nullptr,nullptr,nullptr,nullptr}
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "default Creating Room " << std::endl;
+#endif
+}
+
 Room::~Room()
 {
 #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
@@ -50,6 +59,16 @@ void Room::SetSide(Direction d, std::shared_ptr<MapSite> ms)
     if(mapsite == nullptr)
         _sides[static_cast<int>(d)] = ms;
     else throw std::invalid_argument("rooms cannot contain other rooms");
+}
+
+std::unique_ptr<Room> Room::Clone() const
+{
+    return std::make_unique<Room>(*this);
+}
+
+void Room::Initialize(int rno)
+{
+    _roomNumber = rno;
 }
 
 ///
@@ -77,6 +96,10 @@ Wall::~Wall()
 #endif
 }
 
+std::unique_ptr<Wall> Wall::Clone() const
+{
+    return std::make_unique<Wall>(*this);
+}
 ///
 /// for now the implementation simply prints message as we are only interested
 /// creation of mazes
@@ -101,6 +124,34 @@ Door::Door(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2)
     else
         throw std::runtime_error("Door Constructor: Rooms do not exist!!");
 #endif
+}
+Door::Door()
+    :_room1(std::weak_ptr<Room>()),
+      _room2(std::weak_ptr<Room>())
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Creating Door!!" << std::endl;
+#endif
+}
+
+Door::Door(const Door& d)
+    :_room1(d._room1),
+      _room2(d._room2)
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Copy Construction of Door!!" << std::endl;
+#endif
+}
+
+std::unique_ptr<Door> Door::Clone() const
+{
+    return std::make_unique<Door>(*this);
+}
+
+void Door::Initialize(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2)
+{
+    _room1 = r1;
+    _room2 = r2;
 }
 
 Door::~Door()
@@ -158,6 +209,11 @@ Maze::~Maze()
 #endif
 }
 
+std::unique_ptr<Maze> Maze::Clone() const
+{
+    return std::make_unique<Maze>(*this);
+}
+
 void Maze::AddRoom(std::shared_ptr<Room> r)
 {
     auto rn = static_cast<std::vector<Room*>::size_type>(r->GetRoomNo());
@@ -174,7 +230,7 @@ std::shared_ptr<Room> Maze::RoomNo(int rn) const
 {
     auto rno = static_cast<std::vector<Room*>::size_type>(rn);
     if(rn > 0 && _rooms.size() >= rno)
-        return _rooms[rno];
+        return _rooms[rno-1];
     else
         throw std::invalid_argument("Room numbers should be in valid range");
 }
@@ -251,4 +307,87 @@ void EnchantedRoom::enter() {
         std::cout << "Spell broken!! location:" << this->GetRoomNo() << std::endl;
     else
         std::cout << "Spell not broken!! location:" << this->GetRoomNo() << std::endl;
+}
+
+/*!
+ * \brief Bomb constructor
+ *
+ * \param n time bomb goes off
+ */
+Bomb::Bomb(int n)
+    :_time(n)
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Creating Bomb!! time:" << this->_time << std::endl;
+#endif
+}
+
+/*!
+ * \brief Bomb destructor
+ */
+Bomb::~Bomb()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying Bomb!!" << std::endl;
+#endif
+}
+
+/*!
+ * \brief Get Detonation Time
+ * \return detonation time
+ */
+int Bomb::GetDetonationTime()
+{
+    return _time;
+}
+
+/*!
+ * \brief Create Room With A Bomb
+ * \param n room no
+ * \param b bomb
+ */
+RoomWithABomb::RoomWithABomb(int n, std::unique_ptr<Bomb> b)
+    : Room(n),
+      _bomb(std::move(b))
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Creating Room with a bomb!!" << this->GetRoomNo() << std::endl;
+#endif
+}
+
+/*!
+ * \brief Destroy Room With A Bomb
+ */
+RoomWithABomb::~RoomWithABomb()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying Room with a bomb!!" << std::endl;
+#endif
+}
+
+/*!
+ * \brief enter behaviour of bombed room
+ */
+void RoomWithABomb::enter()
+{
+    std::cout << "location : time" << this->GetRoomNo() <<" : " << _bomb->GetDetonationTime() << std::endl;
+}
+
+BombedWall::BombedWall()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Creating bombed Wall" << std::endl;
+#endif
+}
+
+BombedWall::~BombedWall()
+{
+#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
+    std::cout << "Destroying bombed Wall" << std::endl;
+#endif
+}
+
+void BombedWall::enter()
+{
+    std::cout << "!!you've hit a bombed wall!!" << std::endl;
 }

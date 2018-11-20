@@ -7,6 +7,7 @@
 #include "gof.h"
 #include "mazegame.h"
 #include "mazefactory.h"
+#include "mazebuilder.h"
 #endif
 
 #ifdef GFG
@@ -25,8 +26,10 @@ int main (int argc, char *argv[])
               dessPat_VERSION_MINOR);
 
 #ifdef GOF
-    auto mg = std::make_unique<MazeGame>();
-    mg->CreateMaze(std::make_shared<EnchantedMazefactory>());
+    {
+        auto mg = std::make_unique<MazeGame>();
+        mg->CreateMaze(mg->MakePrototypeFactory());
+    }
 #endif
 
 #ifdef GFG

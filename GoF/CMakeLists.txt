@@ -3,7 +3,8 @@ project(GOF VERSION 1.0 LANGUAGES CXX)
 
 add_library (gof src/maze.cpp 
                  src/mazegame.cpp
-                 src/mazefactory.cpp)
+                 src/mazefactory.cpp
+                 src/mazebuilder.cpp)
 
 add_library (GOF::gof ALIAS gof)
 include(GenerateExportHeader)

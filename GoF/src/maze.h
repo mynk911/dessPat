@@ -51,7 +51,7 @@ public:
      * \param roomNo to uniquely identify a room
      */
     Room(int roomNo);
-
+    Room();
     /*!
       \brief Room destructor
      */
@@ -81,6 +81,8 @@ public:
      * \brief entry behaviour of a room
      */
     void enter() override;
+    virtual std::unique_ptr<Room> Clone() const;
+    virtual void Initialize(int rno);
 private:
     /*!
      * \brief _roomNumber identifies room
@@ -113,6 +115,7 @@ public:
      * \brief entry behaviour of wall
      */
     void enter() override;
+    virtual std::unique_ptr<Wall> Clone() const;
 };
 
 /*!
@@ -127,7 +130,8 @@ public:
      * \param r2 room two
      */
     Door(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2);
-
+    Door();
+    Door(const Door& d);
     /*!
       \brief Door destructor
      */
@@ -136,7 +140,8 @@ public:
      * \brief entry behaviour of door
      */
     void enter() override;
-
+    virtual void Initialize(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2);
+    virtual std::unique_ptr<Door> Clone() const;
     /*!
      * \brief Other Side From door
      * \param r One of the room door opens to
@@ -187,6 +192,7 @@ public:
      * \return refernce to room
      */
     std::shared_ptr<Room> RoomNo(int rn) const;
+    virtual std::unique_ptr<Maze> Clone() const;
 private:
     std::vector<std::shared_ptr<Room>> _rooms;
 };
@@ -206,14 +212,55 @@ private:
     std::string a;
 };
 
+/*!
+ *  \brief room with a spell on it
+ */
 class EnchantedRoom : public Room
 {
 public:
     EnchantedRoom(int n, std::unique_ptr<Spell> s);
-    virtual ~EnchantedRoom();
+    ~EnchantedRoom() override;
     void enter() override;
 
 private:
     std::unique_ptr<Spell> _spell;
+};
+
+/*!
+ * \brief Bomb class
+ */
+class Bomb
+{
+public:
+    Bomb (int n);
+    virtual ~Bomb ();
+    int GetDetonationTime();
+private:
+    int _time;
+};
+
+/*!
+ * \brief Room With A Bomb
+ */
+class RoomWithABomb : public Room
+{
+public:
+    RoomWithABomb (int n, std::unique_ptr<Bomb> b);
+    ~RoomWithABomb () override;
+    void enter() override;
+
+private:
+    std::unique_ptr<Bomb> _bomb;
+};
+
+/*!
+ * \brief Bombed Wall class
+ */
+class BombedWall : public Wall
+{
+public:
+    BombedWall ();
+    ~BombedWall () override;
+    void enter() override;
 };
 #endif
