@@ -2,17 +2,21 @@
 #include <stdlib.h>
 #include <math.h>
 #include "dessPatConfig.h"
+
 #ifdef GOF
 #include "gof.h"
 #include "mazegame.h"
 #include "mazefactory.h"
 #endif
+
 #ifdef GFG
 #include "gfg.h"
 #endif
+
 #ifdef LCTHW
 #include "lcthw.h"
 #endif
+
 int main (int argc, char *argv[])
 {
     fprintf(stdout,"%s Version %d.%d\n",
@@ -58,6 +62,20 @@ int main (int argc, char *argv[])
   ex3(argc, argv);
   printf("Exercise 7:\n");
   ex7(argc, argv);
+  printf("Exercise 8:\n");
+  ex8(argc, argv);
+  printf("Exercise 9:\n");
+  ex9(argc, argv);
+  printf("Exercise 10:\n");
+  ex10(argc, argv);
+  printf("Exercise 11:\n");
+  ex11(argc, argv);
+  printf("Exercise 12:\n");
+  ex12(argc, argv);
+  printf("Exercise 13:\n");
+  ex13(argc, argv);
+  printf("Exercise 14:\n");
+  ex14(argc, argv);
 #endif
   return 0;
 }

@@ -39,7 +39,13 @@ int LCTHW_EXPORT ex3(int argc, char* argv[]);
  * \return 0 for success, otherwise any other number
  */
 int LCTHW_EXPORT ex7(int argc, char* argv[]);
-
+int LCTHW_EXPORT ex8(int argc, char *argv[]);
+int LCTHW_EXPORT ex9(int argc, char *argv[]);
+int LCTHW_EXPORT ex10(int argc, char *argv[]);
+int LCTHW_EXPORT ex11(int argc, char *argv[]);
+int LCTHW_EXPORT ex12(int argc, char *argv[]);
+int LCTHW_EXPORT ex13(int argc, char *argv[]);
+int LCTHW_EXPORT ex14(int argc, char *argv[]);
 #ifdef __cplusplus
 }
 #endif
