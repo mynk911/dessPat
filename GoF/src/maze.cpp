@@ -1,5 +1,6 @@
 /// \file maze.cpp
-/// \brief contains implementations for map sites and maze used in a a maze game.
+/// \brief contains implementations for map sites and maze used in a a maze
+//  game.
 ///
 /// this file contains a class hierarchy for different MapSites used
 /// in a MazeGame.
@@ -72,8 +73,8 @@ void Room::Initialize(int rno)
 }
 
 ///
-/// for now the implementation simply prints _roomNumber as we are only interested
-/// creation of mazes
+/// for now the implementation simply prints _roomNumber as we are only
+//  interested in creation of mazes
 /// \todo add player class and make enter take it as argument to change location
 /// on entering room
 ///
