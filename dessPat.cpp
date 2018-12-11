@@ -56,6 +56,17 @@ int main (int argc, char *argv[])
           scn = scanf("%d", &A[i]);
       printf("%d\n", find_missing_number(A, n));
   }
+  printf("subarry_with_given_sum : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      int s; scn = scanf("%d", &s);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      subarry_with_given_sum(A, n, s);
+  }
 #endif // GFG
 
 #ifdef LCTHW

@@ -55,6 +55,7 @@ int GFG_EXPORT maximum_subarray(int A[], int n);
  * \return missing number in array
  */
 int GFG_EXPORT find_missing_number(int A[], int n);
+void GFG_EXPORT subarry_with_given_sum(int A[], int n, int s);
 
 #ifdef __cplusplus
 }

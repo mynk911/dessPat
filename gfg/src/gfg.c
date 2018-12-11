@@ -8,6 +8,7 @@
 /// relevent references.
 
 #include <limits.h>
+#include <stdio.h>
 #include "gfg.h"
 
 ///
@@ -47,4 +48,24 @@ int find_missing_number(int A[], int n)
 
     /// return X^Y = missing number
     return X^Y;
+}
+
+/*!
+ * \brief subarry_with_given_sum
+ * \param A
+ * \param n
+ * \param s
+ * \return
+ */
+void subarry_with_given_sum(int A[], int n, int s)
+{
+    int start=0, end=0, curr = 0;
+    while(start<n)
+    {
+        if(curr == s) break;
+        else if(curr < s && end<n) curr+=A[end++];
+        else curr-=A[start++];
+    }
+    if(curr == s) printf("%d %d\n",start+1,end);
+    else printf("-1\n");
 }
