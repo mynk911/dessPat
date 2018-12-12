@@ -94,7 +94,7 @@ int ex8(int argc, char *argv[])
  */
 int ex9(int argc, char *argv[])
 {
-    int i;
+    int i = 0;
     while (i < 25) {
         printf("%d\n", i);
         i++;
@@ -281,13 +281,11 @@ int ex13(int argc, char *argv[])
         "Washington", "Texas"
     };
 
-    states[4] = argv[1];
-    argv[2] = states[3];
-    int num_states = 5;
+    int num_states = 4;
 
     // go through each string in argv
     // why am I skipping argv[0]?
-    for (i = 0; i < argc+1; i++) {
+    for (i = 0; i < argc; i++) {
         printf("arg %d: %s\n", i, argv[i]);
     }
 
@@ -329,7 +327,8 @@ void print_letters(char arg[], int n)
 
 int can_print_it(char ch)
 {
-    return isalpha(ch) || isblank(ch);
+    return isalpha((unsigned char)ch) ||
+		   isblank((unsigned char)ch);
 }
 
 /*!
@@ -343,6 +342,54 @@ int can_print_it(char ch)
 int ex14(int argc, char *argv[])
 {
     print_arguments(argc, argv);
+    return 0;
+}
+
+int ex15(int argc, char *argv[])
+{
+	    // create two arrays we care about
+    int ages[] = { 23, 43, 12, 89, 2 };
+    char *names[] = {
+        "Alan", "Frank",
+        "Mary", "John", "Lisa"
+    };
+
+    // safely get the size of ages
+    int count = sizeof(ages) / sizeof(int);
+    int i = 0;
+
+    // first way using indexing
+    for (i = 0; i < count; i++) {
+        printf("%s has %d years alive.\n", names[i], ages[i]);
+    }
+
+    printf("---\n");
+
+    // setup the pointers to the start of the arrays
+    int *cur_age = (int *)names;
+    char **cur_name = names;
+
+    // second way using pointers
+    for (i = 0; i < count; i++) {
+        printf("%s is %d years old.\n",
+                *(cur_name + i), *(cur_age + i));
+    }
+
+    printf("---\n");
+
+    // third way, pointers are just arrays
+    for (i = 0; i < count; i++) {
+        printf("%s is %d years old again.\n", cur_name[i], cur_age[i]);
+    }
+
+    printf("---\n");
+
+    // fourth way with pointers in a stupid complex way
+    for (cur_name = names, cur_age = ages;
+            (cur_age - ages) < count; cur_name++, cur_age++) {
+        printf("%s lived %d years so far.\n", *cur_name, *cur_age);
+    }
+
     return 0;
 }
 
