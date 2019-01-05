@@ -8,3 +8,8 @@
  */
 
 #include "cs180.h"
+#include <iostream>
+void stable_matching()
+{
+    std::cout << "to be implemented" << std::endl;
+}
