@@ -1,5 +1,5 @@
 ///
-/// \file ex7.c
+/// \file ex16.c
 /// \brief  exercise 16 structs and pointers
 /// \author Mayank Bansal
 ///

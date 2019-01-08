@@ -94,6 +94,8 @@ int main (int argc, char *argv[])
   ex15(argc, argv);
   printf("Exercise 16:\n");
   ex16(argc, argv);
+  printf("Exercise 17:\n");
+  ex17(argc, argv);
 #endif
   return 0;
 }
