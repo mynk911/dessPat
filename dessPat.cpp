@@ -200,7 +200,11 @@ int main (int argc, char *argv[])
   printf("Exercise 16:\n");
   ex16(argc, argv);
   printf("Exercise 17:\n");
-  ex17(argc, argv);
+  //ex17(argc, argv);
+  printf("Exercise 18:\n");
+  ex18(argc, argv);
+  printf("Exercise 19:\n");
+  ex19(argc, argv);
 #endif
   return 0;
 }
