@@ -35,7 +35,7 @@ int main (int argc, char *argv[])
 #ifdef GFG
   //get number of test cases
   int t, scn;;
-  int A[1010];
+  int A[1010]; int B[1010];
   printf("maximum_subarray : \n");
   scn = scanf("%d", &t);
   while (t--) {
@@ -66,6 +66,111 @@ int main (int argc, char *argv[])
       for (int i = 0; i < n; i++)
           scn = scanf("%d", &A[i]);
       subarry_with_given_sum(A, n, s);
+  }
+  printf("sort 0 1 2 : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      sort_012(A, n);
+  }
+  printf("equilibrium point : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      equilibrium_point(A, n);
+  }
+  printf("maximum sum increasing subsequence : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      maximum_sum_increasing_subsequence(A, n);
+  }
+  printf("leaders in an array : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      leaders_in_an_array(A, n);
+  }
+  printf("no of platforms : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &B[i]);
+      minimum_platforms(A, B, n);
+  }
+  printf("maximums_of_subarray_size_k : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      int k; scn = scanf("%d", &k);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      maximums_of_subarray_size_k(A, n, k);
+  }
+  printf("reverse_array_in_groups : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      int k; scn = scanf("%d", &k);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      reverse_array_in_groups(A, n, k);
+  }
+  printf("kth_smallest_element : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      int k; scn = scanf("%d", &k);
+      kth_smallest_element(A, n, k);
+  }
+  printf("trapping_rainwater : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      trapping_rainwater(A, n);
+  }
+  printf("pythagorean_triplet : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      pythagorean_triplet(A, n);
   }
 #endif // GFG
 

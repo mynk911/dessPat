@@ -56,7 +56,16 @@ int GFG_EXPORT maximum_subarray(int A[], int n);
  */
 int GFG_EXPORT find_missing_number(int A[], int n);
 void GFG_EXPORT subarry_with_given_sum(int A[], int n, int s);
-
+void GFG_EXPORT sort_012(int A[], int n);
+void GFG_EXPORT equilibrium_point(int A[], int n);
+void GFG_EXPORT maximum_sum_increasing_subsequence(int A[], int n);
+void GFG_EXPORT leaders_in_an_array(int A[], int n);
+void GFG_EXPORT minimum_platforms(int A[],int B[], int n);
+void GFG_EXPORT maximums_of_subarray_size_k(int A[], int n, int k);
+void GFG_EXPORT reverse_array_in_groups(int A[], int n, int k);
+void GFG_EXPORT kth_smallest_element(int A[], int n, int k);
+void GFG_EXPORT trapping_rainwater(int A[], int n);
+void GFG_EXPORT pythagorean_triplet(int A[], int n);
 #ifdef __cplusplus
 }
 #endif 
