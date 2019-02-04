@@ -28,7 +28,7 @@ int main (int argc, char *argv[])
 #ifdef GOF
     {
         auto mg = std::make_unique<MazeGame>();
-        mg->CreateMaze(mg->MakePrototypeFactory());
+        mg->CreateMaze(Mazefactory::Instance());
     }
 #endif
 

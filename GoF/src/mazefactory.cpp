@@ -7,9 +7,27 @@
 #define _GOF_MAZEFACTORY_CPP_
 
 #include <iostream>
-
+#include <cstring>
 #include "mazefactory.h"
 #include "maze.h"
+
+std::unique_ptr<Mazefactory> Mazefactory::_instance = nullptr;
+
+std::unique_ptr<Mazefactory> Mazefactory::Instance()
+{
+    if(_instance == nullptr)
+    {
+        const char* mazestyle = getenv("MAZESTYLE");
+        if(mazestyle == nullptr) mazestyle = "default";
+        if(strcmp(mazestyle, "bombed") == 0)
+            _instance = std::unique_ptr<BombedMazeFactory>(new BombedMazeFactory);
+        else if(strcmp(mazestyle, "enchanted") == 0)
+            _instance = std::unique_ptr<EnchantedMazefactory>(new EnchantedMazefactory);
+        else
+            _instance = std::unique_ptr<Mazefactory>(new Mazefactory);
+    }
+    return std::move(_instance);
+}
 
 /// \brief constructor for MazeFactory
 Mazefactory::Mazefactory()

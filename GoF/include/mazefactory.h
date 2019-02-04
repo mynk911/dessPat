@@ -24,12 +24,16 @@ class Bomb;
 class GOF_EXPORT Mazefactory
 {
 public:
-    Mazefactory();
     virtual ~Mazefactory();
+    static std::unique_ptr<Mazefactory> Instance();
     virtual std::unique_ptr<Maze> MakeMaze() const;
     virtual std::unique_ptr<Room> MakeRoom(int rn) const;
     virtual std::unique_ptr<Door> MakeDoor(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2) const;
     virtual std::unique_ptr<Wall> MakeWall() const;
+protected:
+    Mazefactory();
+private:
+    static std::unique_ptr<Mazefactory> _instance;
 };
 
 class GOF_EXPORT EnchantedMazefactory : public Mazefactory
