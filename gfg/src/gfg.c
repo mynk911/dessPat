@@ -309,3 +309,18 @@ void pythagorean_triplet(int A[], int n)
     if (flag == 1) printf("Yes\n");
     else printf("No\n");
 }
+
+void chocolate_distribution(int A[], int n, int m)
+{
+    qsort(A, n, sizeof(int), cmp);
+
+    int l = 0, r = m - 1;
+    int mindiff = INT_MAX;
+    while (r < n)
+    {
+        if (A[r] - A[l] < mindiff)
+            mindiff = A[r] - A[l];
+        l++, r++;
+    }
+    printf("%d\n", mindiff);
+}

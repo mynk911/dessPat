@@ -172,6 +172,17 @@ int main (int argc, char *argv[])
           scn = scanf("%d", &A[i]);
       pythagorean_triplet(A, n);
   }
+  printf("chocolate_distribution : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      int m; scn = scanf("%d", &m);
+      chocolate_distribution(A, n, m);
+  }
 #endif // GFG
 
 #ifdef LCTHW

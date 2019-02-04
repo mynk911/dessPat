@@ -66,6 +66,7 @@ void GFG_EXPORT reverse_array_in_groups(int A[], int n, int k);
 void GFG_EXPORT kth_smallest_element(int A[], int n, int k);
 void GFG_EXPORT trapping_rainwater(int A[], int n);
 void GFG_EXPORT pythagorean_triplet(int A[], int n);
+void GFG_EXPORT chocolate_distribution(int A[], int n, int m);
 #ifdef __cplusplus
 }
 #endif 
