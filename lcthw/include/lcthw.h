@@ -51,6 +51,7 @@ int LCTHW_EXPORT ex16(int argc, char *argv[]);
 int LCTHW_EXPORT ex17(int argc, char *argv[]);
 int LCTHW_EXPORT ex18(int argc, char *argv[]);
 int LCTHW_EXPORT ex19(int argc, char *argv[]);
+int LCTHW_EXPORT ex22(int argc, char* argv[]);
 #ifdef __cplusplus
 }
 #endif
