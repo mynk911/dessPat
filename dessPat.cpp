@@ -183,6 +183,57 @@ int main (int argc, char *argv[])
       int m; scn = scanf("%d", &m);
       chocolate_distribution(A, n, m);
   }
+  printf("stock_buy_and_sell : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      stock_buy_and_sell(A, n);
+  }
+  printf("elements_with_left_side_smaller_and_right_side_greater : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      elements_with_left_side_smaller_and_right_side_greater(A, n);
+  }
+  printf("convert_array_into_zigzag_fashion : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      convert_array_into_zigzag_fashion(A, n);
+  }
+  printf("find_the_element_that_appears_once_in_sorted_array : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      find_the_element_that_appears_once_in_sorted_array(A, n);
+  }
+  printf("kth_largest_element_in_a_stream : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int k; scn = scanf("%d", &k);
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      kth_largest_element_in_a_stream(A, n,k);
+  }
 #endif // GFG
 
 #ifdef LCTHW

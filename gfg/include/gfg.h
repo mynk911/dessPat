@@ -67,6 +67,11 @@ void GFG_EXPORT kth_smallest_element(int A[], int n, int k);
 void GFG_EXPORT trapping_rainwater(int A[], int n);
 void GFG_EXPORT pythagorean_triplet(int A[], int n);
 void GFG_EXPORT chocolate_distribution(int A[], int n, int m);
+void GFG_EXPORT stock_buy_and_sell(int A[], int n);
+void GFG_EXPORT elements_with_left_side_smaller_and_right_side_greater(int A[], int n);
+void GFG_EXPORT convert_array_into_zigzag_fashion(int A[], int argc);
+void GFG_EXPORT find_the_element_that_appears_once_in_sorted_array(int A[], int n);
+void  GFG_EXPORT kth_largest_element_in_a_stream(int A[], int n, int k);
 #ifdef __cplusplus
 }
 #endif 

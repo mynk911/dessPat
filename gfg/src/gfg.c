@@ -123,27 +123,27 @@ void equilibrium_point(int A[], int n)
     if (i == n && n != 1) printf("-1\n");
 }
 
-int dp[1010];
+int aux[1010];
 
 void maximum_sum_increasing_subsequence(int A[], int n)
 {
     for (int i = 0; i < n; i++)
     {
-        dp[i] = A[i];
+        aux[i] = A[i];
         for (int j = 0; j < i; j++)
         {
-            if (A[j] < A[i] && dp[i] < dp[j] + A[i])
+            if (A[j] < A[i] && aux[i] < aux[j] + A[i])
             {
-                dp[i] = dp[j] + A[i];
+                aux[i] = aux[j] + A[i];
             }
         }
     }
-    int max_sum = dp[0];
+    int max_sum = aux[0];
     for (int i = 1; i < n; i++)
     {
-        if (dp[i] > max_sum)
+        if (aux[i] > max_sum)
         {
-            max_sum = dp[i];
+            max_sum = aux[i];
         }
     }
     printf("%d\n", max_sum);
@@ -152,18 +152,18 @@ void maximum_sum_increasing_subsequence(int A[], int n)
 void leaders_in_an_array(int A[], int n)
 {
     int i = 0;
-    dp[i] = n - 1;
+    aux[i] = n - 1;
     for (int j = n - 2; j >= 0; j--)
     {
-        if (A[j] >= A[dp[i]])
+        if (A[j] >= A[aux[i]])
         {
             i++;
-            dp[i] = j;
+            aux[i] = j;
         }
     }
     while (i > -1)
     {
-        printf("%d " , A[dp[i]]);
+        printf("%d " , A[aux[i]]);
         i--;
     }
     printf("\n");
@@ -323,4 +323,186 @@ void chocolate_distribution(int A[], int n, int m)
         l++, r++;
     }
     printf("%d\n", mindiff);
+}
+
+struct iv {
+    int buy;
+    int sell;
+};
+void stock_buy_and_sell(int A[], int n)
+{
+    struct iv res[505];
+    int count = 0, i = 0;
+    while (i < n) {
+        while (i < n - 1 && A[i + 1] <= A[i]) i++;
+        if (i == n - 1) break;
+        res[count].buy = i++;
+        while (i < n && A[i] >= A[i - 1]) i++;
+        res[count].sell = i - 1;
+        count++;
+    }
+    if (count == 0) printf("No Profit\n");
+    else {
+        for (int i = 0; i < count; i++)
+            printf("(%d %d) ", res[i].buy, res[i].sell);
+        printf("\n");
+    }
+}
+
+void elements_with_left_side_smaller_and_right_side_greater(int A[], int n)
+{
+    int min_right = INT_MAX;
+    for (int i = n - 1; i >= 0; i--)
+    {
+        if (A[i] < min_right)
+            min_right = A[i];
+        aux[i] = min_right;
+    }
+    int i, max_left = 0;
+    for (i = 0; i < n; i++)
+    {
+        if (A[i] > max_left)
+            max_left = A[i];
+        if (i != 0 && i != n - 1 && max_left == A[i] && A[i] == aux[i])
+        {
+            printf("%d\n", max_left);
+            break;
+        }
+    }
+    if (i == n)
+        printf("%d\n", -1);
+}
+
+void convert_array_into_zigzag_fashion(int A[], int n)
+{
+    int flag = 0; int temp;
+    for (int i = 0; i < n - 1; i++)
+    {
+        if (flag == 0)
+        {
+            if (A[i] > A[i + 1])
+            {
+                temp = A[i];
+                A[i] = A[i + 1];
+                A[i + 1] = temp;
+            }
+        }
+        else if (flag == 1)
+        {
+            if (A[i] < A[i + 1])
+            {
+                temp = A[i];
+                A[i] = A[i + 1];
+                A[i + 1] = temp;
+            }
+        }
+        flag = (flag == 0) ? 1 : 0;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        printf("%d ", A[i]);
+    }
+    printf("\n");
+}
+
+void find_the_element_that_appears_once_in_sorted_array(int A[], int n)
+{
+    int i;
+    for (i = 0; i < n - 1; i = i + 2)
+    {
+        if (A[i] != A[i + 1])
+        {
+            printf("%d\n", A[i]);
+            break;
+        }
+    }
+    if (i == n - 1)
+    {
+        printf("%d\n", A[i]);
+    }
+    /*
+        int l= 0, mid = 0, r = n-1;
+        while(l<r)
+        {
+            mid = (l+r)/2;
+            if(A[mid] == A[mid-1])
+            {
+                if((mid-l+1) % 2 == 0 )
+                    l = mid+1;
+                else
+                    r = mid-2;
+            }
+            else if(A[mid] == A[mid+1])
+            {
+                if((r-mid+1) % 2 == 0 )
+                    r = mid - 1;
+                else
+                    l = mid + 2;
+            }
+            else break;
+        }
+        if(r<=l)
+        printf("%lld\n", A[l]);
+        else
+        printf("%lld\n",A[mid]);
+    */
+}
+
+void heapify(int i, int k)
+{
+    int l, r, min;
+    while (1)
+    {
+        l = 2 * i + 1; r = 2 * i + 2;
+        min = i;
+        if (l < k)
+            min = aux[l] < aux[min] ? l : min;
+        if (r < k)
+            min = aux[r] < aux[min] ? r : min;
+        if (min == i) break;
+        else
+        {
+            int temp = aux[i];
+            aux[i] = aux[min];
+            aux[min] = temp;
+            i = min;
+        }
+    }
+    //for(int i=0;i<k;i++)
+     //printf("%d ",A[i]);
+    //printf("\n");
+}
+
+void kth_largest_element_in_a_stream(int A[], int n, int k)
+{
+    int in = 0;
+    for (int i = 0; i < n; i++)
+    {
+        in = A[i];
+        if (i < k - 1) {
+            aux[i] = in;
+            printf("%d ", -1);
+        }
+        else if (i == k - 1)
+        {
+            aux[i] = in;
+            int x = (k - 1) / 2;
+            while (x >= 0)
+            {
+                heapify(x, k);
+                --x;
+            }
+            printf("%d ", aux[0]);
+        }
+        else
+        {
+            if (in > aux[0])
+            {
+                aux[0] = in;
+                heapify(0, k);
+            }
+            printf("%d ", aux[0]);
+        }
+    }
+    printf("\n");
 }
