@@ -10,37 +10,30 @@
 #include <stdexcept>
 
 #include "maze.h"
+#include "dbg.h"
 
 MapSite::~MapSite()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying MapSite" << std::endl;
-#endif
+    debug("Destroying MapSite");
 }
 
 Room::Room(int roomNo)
     :_roomNumber(roomNo),
       _sides{nullptr,nullptr,nullptr,nullptr}
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Room " << _roomNumber << std::endl;
-#endif
+    debug("Creating Room ");
 }
 
 Room::Room()
     :_roomNumber(0),
       _sides{nullptr,nullptr,nullptr,nullptr}
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "default Creating Room " << std::endl;
-#endif
+    debug("default Creating Room ");
 }
 
 Room::~Room()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying Room " << _roomNumber << std::endl;
-#endif
+    debug("Destroying Room ");
 }
 
 
@@ -85,16 +78,12 @@ void Room::enter()
 
 Wall::Wall()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Wall" << std::endl;
-#endif
+    debug("Creating Wall");
 }
 
 Wall::~Wall()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying Wall" << std::endl;
-#endif
+    debug("Destroying Wall");
 }
 
 std::unique_ptr<Wall> Wall::Clone() const
@@ -130,18 +119,14 @@ Door::Door()
     :_room1(std::weak_ptr<Room>()),
       _room2(std::weak_ptr<Room>())
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Door!!" << std::endl;
-#endif
+    debug("Creating Door!!");
 }
 
 Door::Door(const Door& d)
     :_room1(d._room1),
       _room2(d._room2)
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Copy Construction of Door!!" << std::endl;
-#endif
+    debug("Copy Construction of Door!!");
 }
 
 std::unique_ptr<Door> Door::Clone() const
@@ -157,15 +142,12 @@ void Door::Initialize(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2)
 
 Door::~Door()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
     auto tr1 = _room1.lock();
     auto tr2 = _room2.lock();
     if(tr1 != nullptr && tr2 != nullptr)
-    std::cout << "Destroying Door " << tr1->GetRoomNo() << " "
-              << tr2->GetRoomNo() << std::endl;
+    debug("Destroying Door %d  %d", tr1->GetRoomNo(), tr2->GetRoomNo());
     else
-        std::cout << "Destroying Door" << std::endl;
-#endif
+    debug("Destroying Door");
 }
 
 std::shared_ptr<Room> Door::OtherSideFrom(std::shared_ptr<Room> r)
@@ -198,16 +180,12 @@ void Door::enter()
 
 Maze::Maze()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Maze" << std::endl;
-#endif
+    debug("Creating Maze");
 }
 
 Maze::~Maze()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying Maze" << std::endl;
-#endif
+    debug("Destroying Maze");
 }
 
 std::unique_ptr<Maze> Maze::Clone() const
@@ -244,9 +222,7 @@ Spell::Spell(std::string q,std::string a)
     : q(q),
       a(a)
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "creating a spell!!" << std::endl;
-#endif
+    debug("creating a spell!!");
 }
 
 /*! \brief Spell destructor
@@ -255,9 +231,7 @@ Spell::Spell(std::string q,std::string a)
  */
 Spell::~Spell()
 {
-    #ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "destroy a spell" << std::endl;
-    #endif
+    debug("destroy a spell");
 }
 
 /*! \brief dispell this spell
@@ -281,9 +255,7 @@ EnchantedRoom::EnchantedRoom(int n, std::unique_ptr<Spell> s)
     : Room(n),
       _spell(std::move(s))
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout<<"Creating enchanted room" << n << std::endl;
-#endif
+    debug("Creating enchanted room");
 }
 
 /*! \brief Enchanted Room destructor
@@ -292,9 +264,7 @@ EnchantedRoom::EnchantedRoom(int n, std::unique_ptr<Spell> s)
  */
 EnchantedRoom::~EnchantedRoom()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying enchanted Room" << this->GetRoomNo() << std::endl;
-#endif
+    debug("Destroying enchanted Room %d", this->GetRoomNo());
 }
 
 /*! \brief enter this room
@@ -318,9 +288,7 @@ void EnchantedRoom::enter() {
 Bomb::Bomb(int n)
     :_time(n)
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Bomb!! time:" << this->_time << std::endl;
-#endif
+    debug("Creating Bomb!! time: %d", this->_time);
 }
 
 /*!
@@ -328,9 +296,7 @@ Bomb::Bomb(int n)
  */
 Bomb::~Bomb()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying Bomb!!" << std::endl;
-#endif
+    debug("Destroying Bomb!!");
 }
 
 /*!
@@ -351,9 +317,7 @@ RoomWithABomb::RoomWithABomb(int n, std::unique_ptr<Bomb> b)
     : Room(n),
       _bomb(std::move(b))
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Room with a bomb!!" << this->GetRoomNo() << std::endl;
-#endif
+    debug("Creating Room with a bomb!!, %d", this->GetRoomNo());
 }
 
 /*!
@@ -361,9 +325,7 @@ RoomWithABomb::RoomWithABomb(int n, std::unique_ptr<Bomb> b)
  */
 RoomWithABomb::~RoomWithABomb()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying Room with a bomb!!" << std::endl;
-#endif
+    debug("Destroying Room with a bomb!!");
 }
 
 /*!
@@ -376,16 +338,12 @@ void RoomWithABomb::enter()
 
 BombedWall::BombedWall()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating bombed Wall" << std::endl;
-#endif
+    debug("Creating bombed Wall");
 }
 
 BombedWall::~BombedWall()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying bombed Wall" << std::endl;
-#endif
+    debug("Destroying bombed Wall");
 }
 
 void BombedWall::enter()

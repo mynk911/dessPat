@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <cstring>
+
+#include "dbg.h"
 #include "mazefactory.h"
 #include "maze.h"
 
@@ -32,15 +34,11 @@ std::unique_ptr<Mazefactory> Mazefactory::Instance()
 /// \brief constructor for MazeFactory
 Mazefactory::Mazefactory()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout<<"creating MazeFactory"<<std::endl;
-#endif
+    debug("creating MazeFactory");
 }
 Mazefactory::~Mazefactory()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout<<"destroying MazeFactory"<<std::endl;
-#endif
+    debug("destroying MazeFactory");
 
 }
 
@@ -93,9 +91,7 @@ std::unique_ptr<Wall> Mazefactory::MakeWall() const
 EnchantedMazefactory::EnchantedMazefactory()
     :Mazefactory()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "creating enchanted maze factory" << std::endl; 
-#endif
+    debug("creating enchanted maze factory");
 }
 
 /*! \brief Enchanted Maze factory destructor
@@ -104,9 +100,7 @@ EnchantedMazefactory::EnchantedMazefactory()
  */
 EnchantedMazefactory::~EnchantedMazefactory()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "destroying enchanted maze factory" << std::endl;
-#endif
+   debug("destroying enchanted maze factory");
 }
 
 /*! \brief MakeRoom
@@ -139,9 +133,7 @@ std::unique_ptr<Spell> EnchantedMazefactory::CastSpell() const
 BombedMazeFactory::BombedMazeFactory()
     :Mazefactory()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "creating bombed maze factory" << std::endl;
-#endif
+    debug("creating bombed maze factory");
 }
 
 /*! \brief Bombed Maze factory destructor
@@ -150,9 +142,7 @@ BombedMazeFactory::BombedMazeFactory()
  */
 BombedMazeFactory::~BombedMazeFactory()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "destroying Bombed maze factory" << std::endl;
-#endif
+    debug("destroying Bombed maze factory");
 }
 
 /*!
@@ -208,9 +198,7 @@ MazePrototypeFactory::MazePrototypeFactory(std::unique_ptr<Maze> m, std::unique_
       _prototypeDoor(std::move(d)),
       _prototypeWall(std::move(w))
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating maze prototype factory" << std::endl;
-#endif
+    debug("Creating maze prototype factory");
 }
 
 /*!
@@ -218,9 +206,7 @@ MazePrototypeFactory::MazePrototypeFactory(std::unique_ptr<Maze> m, std::unique_
  */
 MazePrototypeFactory::~MazePrototypeFactory()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying maze prototype factory" << std::endl;
-#endif
+    debug("Destroying maze prototype factory");
 }
 
 /*!

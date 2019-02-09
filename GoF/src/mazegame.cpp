@@ -7,6 +7,7 @@
 
 #include <iostream>
 
+#include "dbg.h"
 #include "maze.h"
 #include "mazegame.h"
 #include "mazefactory.h"
@@ -15,9 +16,7 @@
 MazeGame::MazeGame()
     :_maze(nullptr)
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating MazeGame" << std::endl;
-#endif
+    debug("Creating MazeGame");
 }
 
 MazeGame::MazeGame(MazeGame&& rhs) = default;
@@ -25,9 +24,7 @@ MazeGame& MazeGame::operator=(MazeGame&& rhs) = default;
 
 MazeGame::~MazeGame()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "destroying MazeGame" << std::endl;
-#endif
+    debug("destroying MazeGame");
 }
 
 void MazeGame::CreateMaze()
@@ -183,16 +180,12 @@ void MazeGame::CreateMazebyFactoryMethods()
 BombedMazeGame::BombedMazeGame()
     : MazeGame ()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Bombed Maze Game" << std::endl;
-#endif
+    debug("Creating Bombed Maze Game");
 }
 
 BombedMazeGame::~BombedMazeGame()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying Bombed Maze Game" << std::endl;
-#endif
+    debug("Destroying Bombed Maze Game");
 }
 
 std::unique_ptr<Room> BombedMazeGame::MakeRoom(int rno) const
@@ -206,15 +199,11 @@ std::unique_ptr<Wall> BombedMazeGame::MakeDoor() const
 
 EnchantedMazeGame::EnchantedMazeGame()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Enchanted Maze Game" << std::endl;
-#endif
+    debug("Creating Enchanted Maze Game");
 }
 EnchantedMazeGame::~EnchantedMazeGame()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying Enchanted Maze Game" << std::endl;
-#endif
+    debug("Destroying Enchanted Maze Game");
 }
 
 std::unique_ptr<Room> EnchantedMazeGame::MakeRoom(int rno) const
