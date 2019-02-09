@@ -8,21 +8,18 @@
 
 #include <iostream>
 
+#include "dbg.h"
 #include "mazebuilder.h"
 #include "maze.h"
 
 MazeBuilder::MazeBuilder()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Maze Builder" << std::endl;
-#endif
+    debug("Creating Maze Builder");
 }
 
 MazeBuilder::~MazeBuilder()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying Maze Builder" << std::endl;
-#endif
+    debug("Destroying Maze Builder");
 }
 
 std::unique_ptr<Maze> MazeBuilder::GetMaze()
@@ -37,9 +34,7 @@ StandardMazeBuilder::StandardMazeBuilder()
     :MazeBuilder (),
       _maze(nullptr)
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Standard Maze builder" << std::endl;
-#endif
+    debug("Creating Standard Maze builder");
 }
 
 /*!
@@ -47,9 +42,7 @@ StandardMazeBuilder::StandardMazeBuilder()
  */
 StandardMazeBuilder::~StandardMazeBuilder()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying Standard Maze Builder" << std::endl;
-#endif
+    debug("Destroying Standard Maze Builder");
 }
 
 /*!
@@ -125,9 +118,7 @@ CountingMazeBuilder::CountingMazeBuilder()
     :_rooms(0),
       _doors(0)
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Creating Counting Maze Builder" << std::endl;
-#endif
+    debug("Creating Counting Maze Builder");
 }
 
 /*!
@@ -135,9 +126,7 @@ CountingMazeBuilder::CountingMazeBuilder()
  */
 CountingMazeBuilder::~CountingMazeBuilder()
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-    std::cout << "Destroying Counting Maze Builder" << std::endl;
-#endif
+    debug("Destroying Counting Maze Builder");
 }
 
 /*!

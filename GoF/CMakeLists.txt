@@ -4,18 +4,24 @@ project(GOF VERSION 1.0 LANGUAGES CXX)
 add_library (gof src/maze.cpp 
                  src/mazegame.cpp
                  src/mazefactory.cpp
-                 src/mazebuilder.cpp)
+                 src/mazebuilder.cpp
+                 src/shape.cpp
+                 src/textview.cpp)
 
 add_library (GOF::gof ALIAS gof)
 include(GenerateExportHeader)
 generate_export_header(gof)
+
+find_package(Boost REQUIRED)
 target_include_directories(gof
     PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/GOF>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/common/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${Boost_INCLUDE_DIRS}
     )
 
 target_compile_features(gof

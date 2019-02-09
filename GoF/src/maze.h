@@ -13,8 +13,6 @@
 #include <memory>
 #include <string>
 
-#define LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
-
 /*!
  * \brief The Direction enum
  * Specifies possible directions as North, West, East or South

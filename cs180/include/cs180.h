@@ -11,5 +11,5 @@
 
 #include "cs180_export.h"
 
-void CS180_EXPORT stable_matching();
+int CS180_EXPORT stable_matching();
 #endif

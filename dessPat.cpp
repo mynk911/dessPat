@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <iostream>
 #include "dessPatConfig.h"
 
 #ifdef GOF
@@ -18,6 +19,10 @@
 #include "lcthw.h"
 #endif
 
+#ifdef CS180
+#include "cs180.h"
+#endif
+
 int main (int argc, char *argv[])
 {
     fprintf(stdout,"%s Version %d.%d\n",
@@ -32,6 +37,12 @@ int main (int argc, char *argv[])
     }
 #endif
 
+#ifdef CS180
+    {
+        std::cout << "stable matching algo :" << std::endl;
+        stable_matching();
+    }
+#endif
 #ifdef GFG
   //get number of test cases
   int t, scn;;
