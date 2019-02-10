@@ -19,7 +19,7 @@
 #include <unordered_set>
 #include <list>
 
-#define debugPrints
+//#define debugPrints
 void populatePreferenceList(int* pref,
         std::vector < std::string >& preferer,
         std::vector < std::string >& preferee)
@@ -114,19 +114,27 @@ int stable_matching()
         std::cout << i << " ";
     std::cout << std::endl;
 #endif
-    int menPref[n*n], womenPref[n*n];
+#ifdef WIN32
+    int* menPref = new int[n*n];
+    int* womenPref = new int[n*n];
+    int* ranking = new int[n*n];
+    int* next = new int[n];
+    int* current = new int[n];
+#else
+    int menPref[n*n], womenPref[n*n], ranking[n*n], next[n], current[n];
+#endif
     populatePreferenceList(menPref, men, women);
     populatePreferenceList(womenPref, women, men);
 #ifdef debugPrints
     printPreferenceList(menPref, men , women);
     printPreferenceList(womenPref, women, men);
 #endif
-    int ranking[n*n];
+
     calculateRankings(ranking, womenPref, n);
     std::list<int> freeProposers(n);
     std::iota(freeProposers.begin(), freeProposers.end(), 0);
-    int next[n]; std::fill_n(next, n, 0);
-    int current[n]; std::fill_n(current, n , -1);
+    std::fill_n(next, n, 0);
+    std::fill_n(current, n , -1);
 
     while (!freeProposers.empty())
     {
@@ -140,7 +148,7 @@ int stable_matching()
         }
         else{
             int mo = current[w];
-            if(ranking[m] < ranking[mo])
+            if(ranking[w*n + m] < ranking[w*n + mo])
             {
                 current[w] = m;
                 freeProposers.pop_front();
@@ -155,5 +163,15 @@ int stable_matching()
     {
         std::cout << women[i] << " " << men[current[i]] << std::endl;
     }
+    if (menPref != nullptr)
+        delete[] menPref;
+    if (womenPref != nullptr)
+        delete[] womenPref;
+    if (ranking != nullptr)
+        delete[] ranking;
+    if (next != nullptr)
+        delete[] next;
+    if (current != nullptr)
+        delete[] current;
     return 0;
 }
