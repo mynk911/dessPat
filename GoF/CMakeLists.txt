@@ -1,12 +1,20 @@
 cmake_minimum_required(VERSION 3.5) 
 project(GOF VERSION 1.0 LANGUAGES CXX)
 
-add_library (gof src/maze.cpp 
+add_library (gof src/maze.cpp
+				 src/maze.h
                  src/mazegame.cpp
+				 include/mazegame.h
                  src/mazefactory.cpp
+				 include/mazefactory.h
                  src/mazebuilder.cpp
+				 include/mazebuilder.h
                  src/shape.cpp
-                 src/textview.cpp)
+				 include/shape.h
+                 src/textview.cpp
+				 include/textview.h
+				 src/textshape.cpp
+				 include/textshape.h)
 
 add_library (GOF::gof ALIAS gof)
 include(GenerateExportHeader)
