@@ -295,6 +295,8 @@ int main (int argc, char *argv[])
   ex22(argc, argv);
   printf("Exercise 23:\n");
   ex23(argc, argv);
+  printf("Exercise 24:\n");
+  ex24(argc, argv);
 #endif
   return 0;
 }
