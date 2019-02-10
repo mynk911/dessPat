@@ -72,6 +72,7 @@ void GFG_EXPORT elements_with_left_side_smaller_and_right_side_greater(int A[], 
 void GFG_EXPORT convert_array_into_zigzag_fashion(int A[], int argc);
 void GFG_EXPORT find_the_element_that_appears_once_in_sorted_array(int A[], int n);
 void  GFG_EXPORT kth_largest_element_in_a_stream(int A[], int n, int k);
+void GFG_EXPORT relative_sorting(int A[], int B[], int n, int m);
 #ifdef __cplusplus
 }
 #endif 

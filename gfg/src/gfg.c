@@ -506,3 +506,39 @@ void kth_largest_element_in_a_stream(int A[], int n, int k)
     }
     printf("\n");
 }
+
+int lb(int *A, int n, int val)
+{
+    int l = 0, r = n - 1;
+    int mid;
+    while (l < r)
+    {
+        mid = (l + r) / 2;
+        if (A[mid] < val)
+            l = mid + 1;
+        else
+            r = mid;
+    }
+    return l;
+}
+
+void relative_sorting(int A[], int B[], int n, int m)
+{
+    for(int i=0;i<n; i++)
+        aux[i] = 0;
+    qsort(A, n, sizeof(int), cmp);
+    int k;
+    for (int i = 0; i < m; i++)
+    {
+        k = B[i];
+        int l = lb(A, n, k);
+        while (A[l] == k) {
+            printf("%d ", k);
+            aux[l] = 1;
+            l++;
+        }
+    }
+    for (int i = 0; i < n; i++)
+        if (aux[i] == 0) printf("%d ", A[i]);
+    printf("\n");
+}

@@ -245,6 +245,19 @@ int main (int argc, char *argv[])
           scn = scanf("%d", &A[i]);
       kth_largest_element_in_a_stream(A, n,k);
   }
+  printf("relative_sorting : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      int m; scn = scanf("%d", &m);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%d", &A[i]);
+      for (int i = 0; i < m; i++)
+          scn = scanf("%d", &B[i]);
+      relative_sorting(A, B, n, m);
+  }
 #endif // GFG
 
 #ifdef LCTHW
