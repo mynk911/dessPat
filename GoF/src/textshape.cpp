@@ -31,8 +31,10 @@ void TextShape::BoundingBox(Point& bottomLeft, Point& topRight) const
     Coord bottom, left, width, height;
     GetOrigin(bottom, left);
     GetExtent(width, height);
-    bottomLeft = Point(bottom, left);
-    topRight = Point(bottom + height, left + width);
+    Point p1(bottom, left);
+    bottomLeft = p1;
+    Point p2(bottom + height, left + width);
+    topRight = p2;
 }
 
 bool TextShape::IsEmpty() const

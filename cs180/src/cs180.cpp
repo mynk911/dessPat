@@ -114,15 +114,12 @@ int stable_matching()
         std::cout << i << " ";
     std::cout << std::endl;
 #endif
-#ifdef WIN32
     int* menPref = new int[n*n];
     int* womenPref = new int[n*n];
     int* ranking = new int[n*n];
     int* next = new int[n];
     int* current = new int[n];
-#else
-    int menPref[n*n], womenPref[n*n], ranking[n*n], next[n], current[n];
-#endif
+
     populatePreferenceList(menPref, men, women);
     populatePreferenceList(womenPref, women, men);
 #ifdef debugPrints

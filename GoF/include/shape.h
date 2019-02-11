@@ -10,7 +10,7 @@ class Point
 public:
     Point(double x, double y);
     virtual ~Point();
-    Point& Point::operator=(Point& other);
+    Point& operator=(Point& other);
     void set(double x, double y);
     double getX();
     double getY();
