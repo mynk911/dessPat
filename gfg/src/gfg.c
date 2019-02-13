@@ -11,6 +11,35 @@
 #include <stdio.h>
 #include "gfg.h"
 
+int loc[1010];
+int aux[1010];
+
+int cmp(const void* a, const void* b)
+{
+    return *(int*)a - *(int*)b;
+}
+
+int rev_cmp(const void* a, const void* b)
+{
+    return *(int*)b - *(int*)a;
+}
+int cus_cmp(const void* a, const void* b)
+{
+    const int x = *((const int *)a);
+    const int y = *((const int *)b);
+    if (aux[x] == aux[y])
+        return x - y;
+    else
+        return aux[y] - aux[x];
+}
+
+swap(int A[], int a, int b)
+{
+    int temp = A[a];
+    A[a] = A[b];
+    A[b] = temp;
+}
+
 ///
 /// find the maximum sum contiguous subarray in a given array using the kadane's
 /// algorithm which is an O(n) solution to the problem with O(1) auxiliury space.
@@ -70,13 +99,6 @@ void subarry_with_given_sum(int A[], int n, int s)
     else printf("-1\n");
 }
 
-swap(int A[], int a, int b)
-{
-    int temp = A[a];
-    A[a] = A[b];
-    A[b] = temp;
-}
-
 void sort_012(int A[], int n)
 {
     int b = 0, m = 0, e = n;
@@ -123,8 +145,6 @@ void equilibrium_point(int A[], int n)
     if (i == n && n != 1) printf("-1\n");
 }
 
-int aux[1010];
-
 void maximum_sum_increasing_subsequence(int A[], int n)
 {
     for (int i = 0; i < n; i++)
@@ -167,16 +187,6 @@ void leaders_in_an_array(int A[], int n)
         i--;
     }
     printf("\n");
-}
-
-int cmp(const void* a, const void* b)
-{
-    return *(int*)a - *(int*)b;
-}
-
-int rev_cmp(const void* a, const void* b)
-{
-    return *(int*)b - *(int*)a;
 }
 
 void minimum_platforms(int A[], int B[], int n)
@@ -540,5 +550,48 @@ void relative_sorting(int A[], int B[], int n, int m)
     }
     for (int i = 0; i < n; i++)
         if (aux[i] == 0) printf("%d ", A[i]);
+    printf("\n");
+}
+
+void spirally_traversing_a_matrix(int A[], int m, int n)
+{
+    int l = 0, t = 0;
+    int r = n - 1, b = m - 1;
+    while (l <= r && t <= b)
+    {
+        for (int i = l; i <= r; i++)
+            printf("%d ", A[t*n + i]);
+        for (int i = t + 1; i <= b; i++)
+            printf("%d ", A[i*n + r]);
+        if (t != b) {
+            for (int i = r - 1; i >= l; i--)
+                printf("%d ", A[b*n + i]);
+        }
+        if (l != r) {
+            for (int i = b - 1; i > t; i--)
+                printf("%d ", A[i*n + l]);
+        }
+        l++; r--; t++; b--;
+    }
+    printf("\n");
+}
+
+void sorting_array_elements_by_frequency(int A[], int n)
+{
+    int k;
+    int j = 0;
+    for (int i = 0; i < n; i++)
+    {
+        k = A[i];
+        if (aux[k] == 0)
+            loc[j++] = k;
+        aux[k]++;
+    }
+    qsort(loc, j, sizeof(int), cus_cmp);
+    for (int i = 0; i < j; i++)
+        while (aux[loc[i]]) {
+            printf("%d ", loc[i]);
+            aux[loc[i]]--;
+        }
     printf("\n");
 }

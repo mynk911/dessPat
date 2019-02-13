@@ -73,6 +73,8 @@ void GFG_EXPORT convert_array_into_zigzag_fashion(int A[], int argc);
 void GFG_EXPORT find_the_element_that_appears_once_in_sorted_array(int A[], int n);
 void  GFG_EXPORT kth_largest_element_in_a_stream(int A[], int n, int k);
 void GFG_EXPORT relative_sorting(int A[], int B[], int n, int m);
+void GFG_EXPORT spirally_traversing_a_matrix(int A[], int m, int n);
+void GFG_EXPORT sorting_array_elements_by_frequency(int A[], int n);
 #ifdef __cplusplus
 }
 #endif 

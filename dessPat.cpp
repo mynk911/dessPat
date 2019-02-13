@@ -258,6 +258,28 @@ int main (int argc, char *argv[])
           scn = scanf("%d", &B[i]);
       relative_sorting(A, B, n, m);
   }
+  printf("spirally_traversing_a_matrix : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int m; scn = scanf("%d", &m);
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < m; i++)
+          for(int j = 0; j < n; j++)
+          scn = scanf("%d", &A[n*i + j]);
+      spirally_traversing_a_matrix(A, m, n);
+  }
+  printf("sorting_array_elements_by_frequency : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+              scn = scanf("%d", &A[i]);
+      sorting_array_elements_by_frequency(A, n);
+  }
 #endif // GFG
 
 #ifdef LCTHW
@@ -297,6 +319,8 @@ int main (int argc, char *argv[])
   ex23(argc, argv);
   printf("Exercise 24:\n");
   ex24(argc, argv);
+  printf("Exercise 25:\n");
+  ex25(argc, argv);
 #endif
   return 0;
 }
