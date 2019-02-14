@@ -54,6 +54,11 @@ int GFG_EXPORT maximum_subarray(int A[], int n);
  * \param n size of array A
  * \return missing number in array
  */
+
+struct arr {
+    char a[10];
+};
+
 int GFG_EXPORT find_missing_number(int A[], int n);
 void GFG_EXPORT subarry_with_given_sum(int A[], int n, int s);
 void GFG_EXPORT sort_012(int A[], int n);
@@ -75,6 +80,7 @@ void  GFG_EXPORT kth_largest_element_in_a_stream(int A[], int n, int k);
 void GFG_EXPORT relative_sorting(int A[], int B[], int n, int m);
 void GFG_EXPORT spirally_traversing_a_matrix(int A[], int m, int n);
 void GFG_EXPORT sorting_array_elements_by_frequency(int A[], int n);
+int GFG_EXPORT largest_number_formed_by_array(struct arr As[], int n);
 #ifdef __cplusplus
 }
 #endif 

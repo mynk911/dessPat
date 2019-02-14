@@ -280,6 +280,17 @@ int main (int argc, char *argv[])
               scn = scanf("%d", &A[i]);
       sorting_array_elements_by_frequency(A, n);
   }
+  struct arr As[105];
+  printf("largest_number_formed_by_array : \n");
+  scn = scanf("%d", &t);
+  while (t--) {
+      //get the size of array
+      int n; scn = scanf("%d", &n);
+      //get array entries
+      for (int i = 0; i < n; i++)
+          scn = scanf("%s", As[i].a);
+      largest_number_formed_by_array(As, n);
+  }
 #endif // GFG
 
 #ifdef LCTHW

@@ -9,6 +9,7 @@
 
 #include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "gfg.h"
 
 int loc[1010];
@@ -594,4 +595,25 @@ void sorting_array_elements_by_frequency(int A[], int n)
             aux[loc[i]]--;
         }
     printf("\n");
+}
+
+int cus_cmp2(const void* a, const void* b)
+{
+    char buf1[10], buf2[10];
+    const struct arr* ia = (const struct arr *)a;
+    const struct arr* ib = (const struct arr *)b;
+    strcpy(buf1, ia->a);
+    strcat(buf1, ib->a);
+    strcpy(buf2, ib->a);
+    strcat(buf2, ia->a);
+    return strcmp(buf2, buf1);
+}
+
+int largest_number_formed_by_array(struct arr As[], int n)
+{
+    //get number of test cases
+    qsort(As, n, sizeof(struct arr), cus_cmp2);
+    for (int i = 0; i < n; i++) printf("%s", As[i].a);
+    printf("\n");
+    return 0;
 }
