@@ -12,6 +12,36 @@
 #include "maze.h"
 #include "dbg.h"
 
+namespace gof {
+namespace creational {
+
+MapSite::MapSite()
+{
+    debug("Creating Mapsite");
+}
+
+MapSite::MapSite(MapSite&& other)
+{
+    debug("Creating MapSite : move");
+}
+
+MapSite& MapSite::operator=(MapSite&& other)
+{
+    debug("assigning MapSite : move");
+    return *this;
+}
+
+MapSite::MapSite(const MapSite& other)
+{
+    debug("Creating MapSite : copy");
+}
+
+MapSite& MapSite::operator=(const MapSite& other)
+{
+    debug("assigning MapSite : copy");
+    return *this;
+}
+
 MapSite::~MapSite()
 {
     debug("Destroying MapSite");
@@ -29,6 +59,40 @@ Room::Room()
       _sides{nullptr,nullptr,nullptr,nullptr}
 {
     debug("default Creating Room ");
+}
+
+Room::Room(Room&& other)
+    :MapSite (std::move(other)),
+      _roomNumber(std::move(other._roomNumber)),
+      _sides(std::move(other._sides))
+{
+    debug("Creating Room : move");
+}
+
+Room& Room::operator=(Room&& other)
+{
+    MapSite::operator=(std::move(other));
+    _roomNumber = std::move(other._roomNumber);
+    _sides = std::move(other._sides);
+    debug("assigning Room : move");
+    return *this;
+}
+
+Room::Room(const Room& other)
+    :MapSite (other),
+      _roomNumber(other._roomNumber),
+      _sides{nullptr,nullptr,nullptr,nullptr}
+{
+    debug("Creating Room : copy");
+}
+
+Room& Room::operator=(const Room& other)
+{
+    MapSite::operator=(other);
+    _roomNumber = other._roomNumber;
+    _sides = {nullptr,nullptr,nullptr,nullptr};
+    debug("assigning Room : copy");
+    return *this;
 }
 
 Room::~Room()
@@ -81,6 +145,32 @@ Wall::Wall()
     debug("Creating Wall");
 }
 
+Wall::Wall(Wall&& other)
+    :MapSite (std::move(other))
+{
+    debug("Creating Wall : move");
+}
+
+Wall& Wall::operator=(Wall&& other)
+{
+    MapSite::operator=(std::move(other));
+    debug("assigning Wall : move");
+    return *this;
+}
+
+Wall::Wall(const Wall& other)
+    :MapSite (std::move(other))
+{
+    debug("Creating Wall : copy");
+}
+
+Wall& Wall::operator=(const Wall& other)
+{
+    MapSite::operator=(other);
+    debug("assigning Wall : copy");
+    return *this;
+}
+
 Wall::~Wall()
 {
     debug("Destroying Wall");
@@ -105,29 +195,57 @@ Door::Door(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2)
      _room2(r2),
      _isOpen(true)
 {
-#ifdef LOG_CONSTRUCTOR_DESTRUCTOR_CALLS
     auto tr1 = _room1.lock();
     auto tr2 = _room2.lock();
     if(tr1 != nullptr && tr2 != nullptr)
-    std::cout << "Creating Door " << tr1->GetRoomNo() << " "
-              << tr2->GetRoomNo() << std::endl;
+        debug("Creating Door %d %d", tr1->GetRoomNo(), tr2->GetRoomNo());
     else
         throw std::runtime_error("Door Constructor: Rooms do not exist!!");
-#endif
 }
 Door::Door()
     :_room1(std::weak_ptr<Room>()),
-      _room2(std::weak_ptr<Room>())
+      _room2(std::weak_ptr<Room>()),
+      _isOpen(false)
 {
     debug("Creating Door!!");
 }
 
-Door::Door(const Door& d)
-    :_room1(d._room1),
-      _room2(d._room2)
+
+Door::Door(Door&& other)
+    :MapSite (std::move(other)),
+      _room1(std::move(other._room1)),
+    _room2(std::move(other._room2))
 {
-    debug("Copy Construction of Door!!");
+    debug("Creating door : move");
 }
+
+Door& Door::operator=(Door&& other)
+{
+    MapSite::operator=(std::move(other));
+    _room1 = std::move(other._room1);
+    _room2 = std::move(other._room2);
+    debug("assigning Wall : move");
+    return *this;
+}
+
+Door::Door(const Door& other)
+    :MapSite (other),
+      _room1(std::weak_ptr<Room>()),
+    _room2(std::weak_ptr<Room>())
+{
+    debug("Creating door : copy");
+}
+
+Door& Door::operator=(const Door& other)
+{
+    MapSite::operator=(other);
+    _room1 = std::weak_ptr<Room>();
+    _room2 = std::weak_ptr<Room>();
+    debug("assigning door : copy");
+    return *this;
+}
+
+
 
 std::unique_ptr<Door> Door::Clone() const
 {
@@ -181,6 +299,30 @@ void Door::enter()
 Maze::Maze()
 {
     debug("Creating Maze");
+}
+
+Maze::Maze(Maze&& other)
+    : _rooms(std::move(other._rooms))
+{
+    debug("Creating Maze : move");
+}
+
+Maze& Maze::operator=(Maze&& other)
+{
+    _rooms = std::move(other._rooms);
+    debug("assigning Maze : move");
+    return *this;
+}
+
+Maze::Maze(const Maze& other)
+{
+    debug("Creating Maze : copy");
+}
+
+Maze& Maze::operator=(const Maze& other)
+{
+    debug("assigning Maze : copy");
+    return *this;
 }
 
 Maze::~Maze()
@@ -350,3 +492,4 @@ void BombedWall::enter()
 {
     std::cout << "!!you've hit a bombed wall!!" << std::endl;
 }
+}}

@@ -13,6 +13,8 @@
 
 #include <memory>
 #include "gof_export.h"
+namespace gof {
+namespace creational {
 
 class Maze;
 class Room;
@@ -25,7 +27,7 @@ class GOF_EXPORT Mazefactory
 {
 public:
     virtual ~Mazefactory();
-    static std::unique_ptr<Mazefactory> Instance();
+    static Mazefactory* Instance();
     virtual std::unique_ptr<Maze> MakeMaze() const;
     virtual std::unique_ptr<Room> MakeRoom(int rn) const;
     virtual std::unique_ptr<Door> MakeDoor(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2) const;
@@ -40,7 +42,7 @@ class GOF_EXPORT EnchantedMazefactory : public Mazefactory
 {
 public:
     EnchantedMazefactory();
-    ~EnchantedMazefactory();
+    ~EnchantedMazefactory() override;
     std::unique_ptr<Room> MakeRoom(int rn) const override;
 protected:
     std::unique_ptr<Spell> CastSpell() const;
@@ -50,7 +52,7 @@ class GOF_EXPORT BombedMazeFactory : public Mazefactory
 {
 public:
     BombedMazeFactory();
-    ~BombedMazeFactory();
+    ~BombedMazeFactory() override;
     std::unique_ptr<Room> MakeRoom(int rn) const override;
     std::unique_ptr<Wall> MakeWall() const override;
 protected:
@@ -74,6 +76,7 @@ private:
     std::unique_ptr<Wall> _prototypeWall;
 };
 
-#endif /* ifndef _GOF_MAZEFACTORY_H_ */
+}}
 
+#endif /* ifndef _GOF_MAZEFACTORY_H_ */
 

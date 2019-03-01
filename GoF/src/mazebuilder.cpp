@@ -12,6 +12,9 @@
 #include "mazebuilder.h"
 #include "maze.h"
 
+namespace gof {
+namespace creational {
+
 MazeBuilder::MazeBuilder()
 {
     debug("Creating Maze Builder");
@@ -153,3 +156,5 @@ void CountingMazeBuilder::GetCounts(int& rooms, int& doors) const
     rooms = _rooms;
     doors = _doors;
 }
+
+}}

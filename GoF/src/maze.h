@@ -12,6 +12,8 @@
 #include <vector>
 #include <memory>
 #include <string>
+namespace gof {
+namespace creational {
 
 /*!
  * \brief The Direction enum
@@ -35,7 +37,12 @@ public:
      * \brief controls entry behaviour for a mapsite
      */
     virtual void enter() = 0;
-    virtual ~MapSite() = 0;
+    virtual ~MapSite();
+    MapSite();
+    MapSite(MapSite&& other);
+    MapSite& operator=(MapSite&& other);
+    MapSite(const MapSite& other);
+    MapSite& operator=(const MapSite& other);
 };
 
 /*!
@@ -50,10 +57,16 @@ public:
      */
     Room(int roomNo);
     Room();
+    Room(Room&& other);
+    Room& operator=(Room&& other);
+    Room(const Room& other);
+    Room& operator=(const Room& other);
+
+
     /*!
       \brief Room destructor
      */
-    ~Room();
+    ~Room() override;
 
     /*!
      * \brief Access one of the four Sides of room
@@ -89,7 +102,7 @@ private:
     /*!
      * \brief _sides holds four sides of a room
      */
-    std::shared_ptr<MapSite> _sides[4];
+    std::vector<std::shared_ptr<MapSite>> _sides;
 };
 
 /*!
@@ -103,11 +116,15 @@ public:
      * \brief Wall constructor
      */
     Wall();
+    Wall(Wall&& other);
+    Wall& operator=(Wall&& other);
+    Wall(const Wall& other);
+    Wall& operator=(const Wall& other);
 
     /*!
       \brief Wall destructor
      */
-    ~Wall();
+    ~Wall() override;
 
     /*!
      * \brief entry behaviour of wall
@@ -129,11 +146,14 @@ public:
      */
     Door(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2);
     Door();
-    Door(const Door& d);
+    Door(Door&& other);
+    Door& operator=(Door&& other);
+    Door(const Door& other);
+    Door& operator=(const Door& other);
     /*!
       \brief Door destructor
      */
-    ~Door();
+    ~Door() override;
     /*!
      * \brief entry behaviour of door
      */
@@ -172,11 +192,14 @@ public:
      * \brief Maze constructor
      */
     Maze();
-
+    Maze(Maze&& other);
+    Maze& operator=(Maze&& other);
+    Maze(const Maze& other);
+    Maze& operator=(const Maze& other);
     /*!
      * \brief Maze destructor
      */
-    ~Maze();
+    virtual ~Maze();
 
     /*!
      * \brief Add Room to maze
@@ -261,4 +284,6 @@ public:
     ~BombedWall () override;
     void enter() override;
 };
+}}
+
 #endif

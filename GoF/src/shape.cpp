@@ -3,14 +3,20 @@
 #include "dbg.h"
 #include "shape.h"
 
+namespace gof {
+namespace structural {
+
 namespace bg = boost::geometry;
 
 struct Point::pImpl {
     bg::model::point<double, 2, bg::cs::cartesian> point;
+    pImpl(double x, double y) : point(x, y) {
+        debug("create pImpl -> boost::geometry::model::point");
+    }
 };
 
 Point::Point(double x, double y)
-    : pimpl(std::move(std::make_unique<pImpl>()))
+    : pimpl(std::make_unique<pImpl>(x, y))
 {
     debug("making a point");
 }
@@ -20,7 +26,7 @@ Point::~Point()
     debug("deleting a point");
 }
 
-Point& Point::operator=(Point& other)
+Point& Point::operator=(const Point& other)
 {
     *pimpl = *other.pimpl;
     return *this;
@@ -56,7 +62,9 @@ void Manipulator::manipulate()
 
 }
 
-Shape::Shape()
+Shape::Shape(double left, double bottom, double right, double top)
+    : bLeft(left, bottom),
+      tRight(right, top)
 {
     debug("creating shape");
 }
@@ -66,12 +74,16 @@ Shape::~Shape()
     debug("destroying shape");
 }
 
-void Shape::BoundingBox(Point& bottomLeft, Point& topRight) const
+void Shape::BoundingBox(Point *bottomLeft, Point *topRight) const
 {
-
+    *bottomLeft = bLeft;
+    *topRight = tRight;
 }
 
-Manipulator* Shape::CreateManipulator() const
+std::unique_ptr<Manipulator> Shape::CreateManipulator() const
 {
-    return new Manipulator(*this);
+    return std::make_unique<Manipulator>(*this);
 }
+
+}}
+

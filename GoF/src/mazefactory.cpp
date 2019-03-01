@@ -13,9 +13,12 @@
 #include "mazefactory.h"
 #include "maze.h"
 
+namespace gof {
+namespace creational {
+
 std::unique_ptr<Mazefactory> Mazefactory::_instance = nullptr;
 
-std::unique_ptr<Mazefactory> Mazefactory::Instance()
+Mazefactory* Mazefactory::Instance()
 {
     if(_instance == nullptr)
     {
@@ -28,7 +31,7 @@ std::unique_ptr<Mazefactory> Mazefactory::Instance()
         else
             _instance = std::unique_ptr<Mazefactory>(new Mazefactory);
     }
-    return std::move(_instance);
+    return _instance.get();
 }
 
 /// \brief constructor for MazeFactory
@@ -251,3 +254,5 @@ std::unique_ptr<Wall> MazePrototypeFactory::MakeWall() const
 {
     return _prototypeWall->Clone();
 }
+
+}}

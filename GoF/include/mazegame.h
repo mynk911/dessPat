@@ -14,6 +14,9 @@
 
 #include "gof_export.h"
 
+namespace gof {
+namespace creational {
+
 /*!
  * \brief forward declaration of class Maze \link maze.h
  */
@@ -49,7 +52,7 @@ public:
     /*!
       \brief MazeGame Destructor
      */
-    ~MazeGame();
+    virtual ~MazeGame();
 
     virtual std::unique_ptr<Maze> MakeMaze() const;
     virtual std::unique_ptr<Room> MakeRoom(int rno) const;
@@ -60,7 +63,7 @@ public:
      * \brief Creates a maze game
      */
     void CreateMaze();
-    void CreateMaze(std::shared_ptr<Mazefactory> mf);
+    void CreateMaze(Mazefactory* mf);
     void CreateMaze(std::shared_ptr<MazeBuilder> mb);
     void CreateMazebyFactoryMethods();
     std::unique_ptr<MazePrototypeFactory> MakePrototypeFactory();
@@ -75,18 +78,20 @@ class GOF_EXPORT BombedMazeGame : public MazeGame
 {
 public:
     BombedMazeGame();
-    ~BombedMazeGame();
-    std::unique_ptr<Room> MakeRoom(int rno) const;
-    std::unique_ptr<Wall> MakeDoor() const;
+    ~BombedMazeGame() override;
+    std::unique_ptr<Room> MakeRoom(int rno) const override;
+    std::unique_ptr<Wall> MakeWall() const override;
 };
 
 class GOF_EXPORT EnchantedMazeGame : public MazeGame
 {
 public:
     EnchantedMazeGame();
-    ~EnchantedMazeGame();
-    std::unique_ptr<Room> MakeRoom(int rno) const;
+    ~EnchantedMazeGame() override;
+    std::unique_ptr<Room> MakeRoom(int rno) const override;
 protected:
     std::unique_ptr<Spell> CastSpell() const;
 };
+
+}}
 #endif

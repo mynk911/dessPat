@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.5) 
 project(CS180 VERSION 1.0 LANGUAGES CXX) 
 
-add_library (cs180 src/cs180.cpp)
+add_library (cs180  include/cs180.h
+                    src/cs180.cpp)
 add_library (CS180::cs180 ALIAS cs180)
 include(GenerateExportHeader)
 generate_export_header(cs180)
@@ -9,6 +10,7 @@ target_include_directories(cs180
     PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/CS180>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/common/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src

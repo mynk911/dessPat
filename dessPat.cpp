@@ -3,12 +3,14 @@
 #include <math.h>
 #include <iostream>
 #include "dessPatConfig.h"
+#include "dbg.h"
 
 #ifdef GOF
 #include "gof.h"
 #include "mazegame.h"
 #include "mazefactory.h"
 #include "mazebuilder.h"
+#include "textshape.h"
 #endif
 
 #ifdef GFG
@@ -32,15 +34,23 @@ int main (int argc, char *argv[])
 
 #ifdef GOF
     {
-        auto mg = std::make_unique<MazeGame>();
-        mg->CreateMaze(Mazefactory::Instance());
+        auto mg = std::make_shared<gof::creational::MazeGame>();
+        mg->CreateMaze(gof::creational::Mazefactory::Instance());
+
+        auto sp = std::make_unique<gof::structural::Shape>(1,2,4,5);
+        gof::structural::Point a(0,0), b(0,0);
+        sp->BoundingBox(&a,&b);
+        debug("sp a:%f %f,b:%f %f",a.getX(),a.getY(), b.getX(), b.getY());
+        auto mp = sp->CreateManipulator();
+        auto tv = std::make_unique<gof::structural::Textview>(1,3,4,7);
+        auto tsp = std::make_unique<gof::structural::TextShape>(1,2,4,5);
     }
 #endif
 
 #ifdef CS180
     {
         std::cout << "stable matching algo :" << std::endl;
-        stable_matching();
+        cs180::stable_matching();
     }
 #endif
 #ifdef GFG

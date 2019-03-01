@@ -13,6 +13,9 @@
 #include "mazefactory.h"
 #include "mazebuilder.h"
 
+namespace gof {
+namespace creational {
+
 MazeGame::MazeGame()
     :_maze(nullptr)
 {
@@ -57,7 +60,7 @@ void MazeGame::CreateMaze()
 
 }
 
-void MazeGame::CreateMaze(std::shared_ptr<Mazefactory> mf)
+void MazeGame::CreateMaze(Mazefactory* mf)
 {
     _maze = mf->MakeMaze();
     std::shared_ptr<Room> r1 = mf->MakeRoom(1);
@@ -192,7 +195,7 @@ std::unique_ptr<Room> BombedMazeGame::MakeRoom(int rno) const
 {
     return std::make_unique<RoomWithABomb>(rno, std::make_unique<Bomb>(rno));
 }
-std::unique_ptr<Wall> BombedMazeGame::MakeDoor() const
+std::unique_ptr<Wall> BombedMazeGame::MakeWall() const
 {
     return std::make_unique<BombedWall>();
 }
@@ -227,3 +230,5 @@ std::unique_ptr<MazePrototypeFactory> MazeGame::MakePrototypeFactory()
                                                   std::move(door),
                                                   std::move(wall));
 }
+
+}}

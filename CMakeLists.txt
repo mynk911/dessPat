@@ -66,6 +66,9 @@ endif(CS180)
 add_executable (dessPat dessPat.cpp)
 #add the binary directory to the search path for include files so that we will
 #find dessPatConfig.h
-target_include_directories(dessPat 
-PRIVATE ${PROJECT_BINARY_DIR})
+target_include_directories(dessPat
+    PUBLIC
+    ${CMAKE_SOURCE_DIR}/common/include
+    PRIVATE
+    ${PROJECT_BINARY_DIR})
 target_link_libraries (dessPat ${EXTRA_LIBS})

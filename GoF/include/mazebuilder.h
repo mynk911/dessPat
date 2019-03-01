@@ -11,6 +11,9 @@
 
 #include <memory>
 
+namespace gof {
+namespace creational {
+
 class Maze;
 class Room;
 enum class Direction;
@@ -56,4 +59,5 @@ private:
     int _doors;
 };
 
+}}
 #endif

@@ -7,51 +7,53 @@
  * \author Mayank Bansal
  */
 
+#include "dbg.h"
 #include "cs180.h"
 
 #include <iostream>
 #include <algorithm>
 #include <numeric>
 #include <cassert>
-
+#include <limits>
 #include <vector>
 #include <string>
 #include <unordered_set>
 #include <list>
 
+namespace cs180 {
+using sizeType = std::vector<std::string>::size_type;
 //#define debugPrints
-void populatePreferenceList(int* pref,
+void populatePreferenceList(sizeType* pref,
         std::vector < std::string >& preferer,
         std::vector < std::string >& preferee)
 {
     std::string name;
-    int n = preferer.size();
-    for(int i = 0; i < n; i++)
+    sizeType n = preferer.size();
+    for(sizeType i = 0; i < n; i++)
     {
-        int idx;
         std::cin >> name;
         auto itr = std::lower_bound(preferer.begin(), preferer.end(), name);
-        idx = itr - preferer.begin();
+        auto idx =static_cast<sizeType>(itr - preferer.begin());
 
-        for(int j = 0; j < n; j++)
+        for(sizeType j = 0; j < n; j++)
         {
             std::cin >> name;
             itr = std::lower_bound(preferee.begin(), preferee.end(), name);
-            pref[idx * n + j] = itr - preferee.begin();
+            pref[idx * n + j] = static_cast<sizeType>(itr - preferee.begin());
         }
     }
 }
 
-void printPreferenceList(int *pref,
+void printPreferenceList(sizeType *pref,
         std::vector < std::string>& preferer,
         std::vector < std::string>& preferee)
 {
     std::cout << "Preference list:" << std::endl;
-    int n = preferer.size();
-    for(int i = 0; i < n; i++)
+    auto n = preferer.size();
+    for(auto i = 0ul; i < n; i++)
     {
         std::cout << preferer.at(i) << " ";
-        for(int j = 0; j < n; j++)
+        for(auto j = 0ul; j < n; j++)
         {
             std::cout << preferee.at(pref[i*n+j]) << " ";
         }
@@ -72,11 +74,11 @@ bool checkForUniqueNames(std::vector< std::string> vec)
     return true;
 }
 
-void calculateRankings(int* r, const int* p, int n)
+void calculateRankings(sizeType* r, const sizeType* p, sizeType n)
 {
-    for(int i = 0; i < n; i++)
+    for(sizeType i = 0; i < n; i++)
     {
-        for(int j = 0; j < n; j++)
+        for(sizeType j = 0; j < n; j++)
         {
             r[n*i + p[n*i + j] ]= j;
         }
@@ -85,17 +87,17 @@ void calculateRankings(int* r, const int* p, int n)
 
 int stable_matching()
 {
-    int n;
+    sizeType n;
     std::cin >> n;
     std::vector< std::string > men, women;
     std::string name;
-    for(int i = 0; i < n; i++)
+    for(sizeType i = 0; i < n; i++)
     {
         std::cin >> name;
         men.push_back(name);
     }
     if(!checkForUniqueNames(men)) return -1;
-    for(int i = 0; i < n; i++)
+    for(sizeType i = 0; i < n; i++)
     {
         std::cin >> name;
         women.push_back(name);
@@ -114,11 +116,11 @@ int stable_matching()
         std::cout << i << " ";
     std::cout << std::endl;
 #endif
-    int* menPref = new int[n*n];
-    int* womenPref = new int[n*n];
-    int* ranking = new int[n*n];
-    int* next = new int[n];
-    int* current = new int[n];
+    auto* menPref = new sizeType[n*n];
+    auto* womenPref = new sizeType[n*n];
+    auto* ranking = new sizeType[n*n];
+    auto* next = new sizeType[n];
+    auto* current = new sizeType[n];
 
     populatePreferenceList(menPref, men, women);
     populatePreferenceList(womenPref, women, men);
@@ -128,23 +130,23 @@ int stable_matching()
 #endif
 
     calculateRankings(ranking, womenPref, n);
-    std::list<int> freeProposers(n);
+    std::list<sizeType> freeProposers(n);
     std::iota(freeProposers.begin(), freeProposers.end(), 0);
     std::fill_n(next, n, 0);
-    std::fill_n(current, n , -1);
+    std::fill_n(current, n , std::numeric_limits<sizeType>::max());
 
     while (!freeProposers.empty())
     {
         auto m = freeProposers.front();
         assert(next[m] != n);
-        int w = menPref[m*n + next[m]];
-        if(current[w] == -1)
+        auto w = menPref[m*n + next[m]];
+        if(current[w] == std::numeric_limits<sizeType>::max())
         {
             current[w] = m;
             freeProposers.pop_front();
         }
         else{
-            int mo = current[w];
+            auto mo = current[w];
             if(ranking[w*n + m] < ranking[w*n + mo])
             {
                 current[w] = m;
@@ -156,7 +158,7 @@ int stable_matching()
     }
 
     std::cout << "stable matching:" << std::endl;
-    for(int i=0; i<n; i++)
+    for(sizeType i=0; i<n; i++)
     {
         std::cout << women[i] << " " << men[current[i]] << std::endl;
     }
@@ -172,3 +174,12 @@ int stable_matching()
         delete[] current;
     return 0;
 }
+
+namespace pq {
+
+    heap::heap(int size)
+    {
+        
+    }
+
+}}
