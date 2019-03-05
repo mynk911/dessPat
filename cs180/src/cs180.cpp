@@ -175,11 +175,4 @@ int stable_matching()
     return 0;
 }
 
-namespace pq {
-
-    heap::heap(int size)
-    {
-        
-    }
-
-}}
+}

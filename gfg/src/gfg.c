@@ -12,8 +12,8 @@
 #include <stdlib.h>
 #include "gfg.h"
 
-int loc[1010];
-int aux[1010];
+static int loc[1010];
+static int aux[1010];
 
 int cmp(const void* a, const void* b)
 {

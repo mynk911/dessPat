@@ -51,6 +51,17 @@ int main (int argc, char *argv[])
     {
         std::cout << "stable matching algo :" << std::endl;
         cs180::stable_matching();
+        cs180::pq::heap<int> pq;
+        pq.insert(5, 1);
+        pq.insert(4, 8);
+        pq.insert(2, 2);
+        pq.insert(1, 4);
+        pq.insert(3, 3);
+        pq.insert(7, 5);
+        pq.changeKey(0, 25);
+        for(int i = 0;i < 6;i++)
+            std::cout << pq.extractmin() << " ";
+        std::cout << "\n";
     }
 #endif
 #ifdef GFG
