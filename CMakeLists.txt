@@ -13,7 +13,7 @@ configure_file (
  "${PROJECT_BINARY_DIR}/dessPatConfig.h"
 )
 
-#configure saple input file
+#configure sample input file
 configure_file (
  "${PROJECT_SOURCE_DIR}/sampleInput.txt.in"
  "${PROJECT_BINARY_DIR}/sampleInput.txt"
@@ -37,6 +37,10 @@ option (GOF "use gang of four" ON)
 option (GFG "use geek" ON)
 option (LCTHW "use hard" ON)
 option(CS180 "use cs180" ON)
+option(CONCUR "use concur" ON)
+option(MCPP "use mcpp" ON)
+option(LIN "use lin" ON)
+option(WIN "use win" ON)
 
 #add the GoF library ?
 if(GOF)
@@ -61,6 +65,30 @@ if(CS180)
 add_subdirectory (cs180)
 set (EXTRA_LIBS ${EXTRA_LIBS} CS180::cs180)
 endif(CS180)
+
+#add the concur library ?
+if(CONCUR)
+add_subdirectory (concur)
+set (EXTRA_LIBS ${EXTRA_LIBS} CONCUR::concur)
+endif(CONCUR)
+
+#add the mcpp library ?
+if(MCPP)
+add_subdirectory (mcpp)
+set (EXTRA_LIBS ${EXTRA_LIBS} MCPP::mcpp)
+endif(MCPP)
+
+#add the lin library ?
+if(LIN)
+add_subdirectory (lin)
+set (EXTRA_LIBS ${EXTRA_LIBS} LIN::lin)
+endif(LIN)
+
+#add the win library ?
+if(WIN)
+add_subdirectory (win)
+set (EXTRA_LIBS ${EXTRA_LIBS} WIN::win)
+endif(WIN)
 
 #add the executable
 add_executable (dessPat dessPat.cpp)

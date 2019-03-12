@@ -7,3 +7,7 @@
 #cmakedefine GFG
 #cmakedefine LCTHW
 #cmakedefine CS180
+#cmakedefine CONCUR
+#cmakedefine MCPP
+#cmakedefine LIN
+#cmakedefine WIN

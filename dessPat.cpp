@@ -25,6 +25,21 @@
 #include "cs180.h"
 #endif
 
+#ifdef CONCUR
+#include "concur.h"
+#endif
+
+#ifdef MCPP
+#include "mcpp.h"
+#endif
+
+#ifdef LIN
+#include "lin.h"
+#endif
+
+#ifdef WIN
+#include "win.h"
+#endif
 int main (int argc, char *argv[])
 {
     fprintf(stdout,"%s Version %d.%d\n",
@@ -353,6 +368,25 @@ int main (int argc, char *argv[])
   ex24(argc, argv);
   printf("Exercise 25:\n");
   ex25(argc, argv);
+#endif
+
+#ifdef CONCUR
+    execAll();
+#endif
+
+#ifdef MCPP
+    test tt;
+    tt();
+#endif
+
+#ifdef LIN
+    lin ln;
+    ln();
+#endif
+
+#ifdef WIN
+    win wn;
+    wn();
 #endif
   return 0;
 }
