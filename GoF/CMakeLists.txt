@@ -2,25 +2,24 @@ cmake_minimum_required(VERSION 3.5)
 project(GOF VERSION 1.0 LANGUAGES CXX)
 
 add_library (gof src/maze.cpp
-				 src/maze.h
+                 src/maze.h
                  src/mazegame.cpp
-				 include/mazegame.h
+                 include/mazegame.h
                  src/mazefactory.cpp
-				 include/mazefactory.h
+                 include/mazefactory.h
                  src/mazebuilder.cpp
-				 include/mazebuilder.h
+                 include/mazebuilder.h
                  src/shape.cpp
-				 include/shape.h
+                 include/shape.h
                  src/textview.cpp
-				 include/textview.h
-				 src/textshape.cpp
-				 include/textshape.h)
+                 include/textview.h
+                 src/textshape.cpp
+                 include/textshape.h)
 
 add_library (GOF::gof ALIAS gof)
 include(GenerateExportHeader)
 generate_export_header(gof)
 
-find_package(Boost REQUIRED)
 target_include_directories(gof
     PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/GOF>
@@ -83,15 +82,16 @@ install(
      DESTINATION ${INSTALL_CONFIGDIR}
      )
 
-if(BUILD_DOCS)
-if(DOXYGEN_FOUND)
+if (CMAKE_BUILD_TYPE MATCHES "^[Rr]elease")
+if(Doxygen_FOUND)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in
     ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY
 )
 
-add_custom_target(gof_doc_doxygen
+add_custom_target(gof_doc_doxygen ALL
     COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
-endif(DOXYGEN_FOUND)
-endif(BUILD_DOCS)
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html DESTINATION ${CMAKE_INSTALL_DOCDIR})
+endif(Doxygen_FOUND)
+endif()

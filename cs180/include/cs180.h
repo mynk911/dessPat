@@ -13,14 +13,13 @@
 #include <memory>
 #include <limits>
 #include "cs180_export.h"
-#include "dbg.h"
 
 namespace cs180 {
 
 int CS180_EXPORT stable_matching();
 namespace pq {
 template <typename T>
-class CS180_EXPORT heap
+class heap
 {
     struct node;
     std::vector<node> buf;
@@ -36,7 +35,6 @@ class CS180_EXPORT heap
               id(i),
               elem(std::make_unique<T>(std::forward<Args>(args)...))
         {
-            debug("creating a node");
         }
         node(const node& other)
             : key(other.key),

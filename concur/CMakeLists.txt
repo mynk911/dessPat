@@ -5,7 +5,6 @@ add_library(concur src/concur.cpp
                    include/concur.h)
 add_library(CONCUR::concur ALIAS concur)
 
-find_package(Threads)
 target_link_libraries(concur ${CMAKE_THREAD_LIBS_INIT})
 
 include(GenerateExportHeader)
@@ -67,16 +66,17 @@ install(
      DESTINATION ${INSTALL_CONFIGDIR}
      )
 
-if(BUILD_DOCS)
-if(DOXYGEN_FOUND)
+if (CMAKE_BUILD_TYPE MATCHES "^[Rr]elease")
+if(Doxygen_FOUND)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in
     ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY
 )
 
-add_custom_target(concur_doc_doxygen
+add_custom_target(concur_doc_doxygen ALL
     COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
-endif(DOXYGEN_FOUND)
-endif(BUILD_DOCS)
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html DESTINATION ${CMAKE_INSTALL_DOCDIR})
+endif(Doxygen_FOUND)
+endif()
 
