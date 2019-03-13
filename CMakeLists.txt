@@ -15,7 +15,10 @@ configure_file (
 
 option(BUILD_SHARED_LIBS "build shared library instead of static" OFF)
 
+if (CMAKE_BUILD_TYPE MATCHES "^[Rr]elease")
 find_package(Doxygen)
+endif()
+
 find_package(Boost)
 find_package(Threads)
 
