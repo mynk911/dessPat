@@ -9,7 +9,7 @@
   file I try to explain the purpose of each function.
 
   \author mayank bansal
-  */
+ */
 
 #ifndef GFG_GFG_H_
 
@@ -19,14 +19,10 @@ extern "C" {
 
 #include "gfg_export.h"
 
-/**
-  \brief find the maximum sum contiguous subarray.
-*/
+/*!
+ * \brief find the maximum sum contiguous subarray.
+ */
 int GFG_EXPORT maximum_subarray(int A[], int n);
-
-struct arr {
-    char a[10];
-};
 
 /*!
  * \brief find missing number in given array of first n+1 natural numbers.
@@ -52,6 +48,11 @@ void  GFG_EXPORT kth_largest_element_in_a_stream(int A[], int n, int k);
 void GFG_EXPORT relative_sorting(int A[], int B[], int n, int m);
 void GFG_EXPORT spirally_traversing_a_matrix(int A[], int m, int n);
 void GFG_EXPORT sorting_array_elements_by_frequency(int A[], int n);
+
+struct arr {
+    char a[10];
+};
+
 int GFG_EXPORT largest_number_formed_by_array(struct arr As[], int n);
 #ifdef __cplusplus
 }

@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "gfg.h"
+#include "string.h"
 
 /** \defgroup Arrays Array problems
  *  \brief Basic problems which act upon array input 
@@ -38,7 +39,7 @@ int cus_cmp(const void* a, const void* b)
         return aux[y] - aux[x];
 }
 
-swap(int A[], int a, int b)
+void swap(int A[], int a, int b)
 {
     int temp = A[a];
     A[a] = A[b];
@@ -49,22 +50,22 @@ swap(int A[], int a, int b)
 /// \{
 
 ///
-/// Uses the <a href="https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane">
-/// kadane's algorithm</a> to find maximum sub array in O(n) time using
-/// O(1) auxiliury space.
+/// Uses the <a href="https://en.wikipedia.org/wiki/Maximum_subarray_problem
+/// #Kadane"> kadane's algorithm</a> to find maximum sub array in \f$O(n)\f$
+/// time using \f$O(1)\f$ auxiliury space.
 ///
-///Usage :
+/// Usage :
 ///
-///\code
-///int array[] = { 1, 2, 3, -6, 8 };
-///int res = maximum_subarray(array, 5);
-///printf("res : %d", res); // res : 8
-///\endcode
+/// \code
+/// int array[] = { 1, 2, 3, -6, 8 };
+/// int res = maximum_subarray(array, 5);
+/// printf("res : %d", res); // res : 8
+/// \endcode
 ///
-///\param A array of integers.
-///\param n size of the integer array.
+/// \param A array of integers.
+/// \param n size of the integer array.
 ///
-///\return sum of the maximum sum contiguous subarray
+/// \return sum of the maximum sum contiguous subarray
 ///
 int maximum_subarray(int A[], int n)
 {
@@ -86,7 +87,8 @@ int maximum_subarray(int A[], int n)
 
 ///
 /// Uses XOR property \f$(x \oplus y) \oplus (x \oplus y \oplus z) = z\f$ to
-/// find missing number in O(n) time complexity using O(1) auxiliury space.
+/// find missing number in \f$O(n)\f$ time complexity using \f$O(1)\f$ auxiliury
+/// space.
 /// 
 /// \code
 /// int array[] = { 1,2,3,5,6 };

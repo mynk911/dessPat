@@ -13,5 +13,4 @@ int main (int argc, char *argv[])
               dessPat_VERSION_MINOR);
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
-  return 0;
 }
