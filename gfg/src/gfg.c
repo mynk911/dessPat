@@ -12,6 +12,10 @@
 #include <stdlib.h>
 #include "gfg.h"
 
+/** \defgroup Arrays Array problems
+ *  \brief Basic problems which act upon array input 
+ */
+
 static int loc[1010];
 static int aux[1010];
 
@@ -41,18 +45,36 @@ swap(int A[], int a, int b)
     A[b] = temp;
 }
 
+/// \addtogroup Arrays
+/// \{
+
 ///
-/// find the maximum sum contiguous subarray in a given array using the kadane's
-/// algorithm which is an O(n) solution to the problem with O(1) auxiliury space.
-/// https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane's_algorithm
+/// Uses the <a href="https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane">
+/// kadane's algorithm</a> to find maximum sub array in O(n) time using
+/// O(1) auxiliury space.
+///
+///Usage :
+///
+///\code
+///int array[] = { 1, 2, 3, -6, 8 };
+///int res = maximum_subarray(array, 5);
+///printf("res : %d", res); // res : 8
+///\endcode
+///
+///\param A array of integers.
+///\param n size of the integer array.
+///
+///\return sum of the maximum sum contiguous subarray
 ///
 int maximum_subarray(int A[], int n)
 {
     int maxSoFar = INT_MIN, maxAtIndex = 0, temp = 0;
-    for (int index = 0; index<n; index++) {
+    for (int index = 0; index<n; index++) 
+    {
         //get max for subarray that ends at index
         temp = maxAtIndex + A[index];
         maxAtIndex = temp < A[index] ? A[index] : temp;
+
         //update global max
         if (maxSoFar < maxAtIndex) {
             maxSoFar = maxAtIndex;
@@ -62,23 +84,38 @@ int maximum_subarray(int A[], int n)
     return maxSoFar;
 }
 
-
-/// uses property of XOR to find missing number.
+///
+/// Uses XOR property \f$(x \oplus y) \oplus (x \oplus y \oplus z) = z\f$ to
+/// find missing number in O(n) time complexity using O(1) auxiliury space.
+/// 
+/// \code
+/// int array[] = { 1,2,3,5,6 };
+/// int res = find_missing_number(array, 5);
+/// printf("res : %d", res); // res : 4)
+/// \endcode
+///
+/// \param A array of integers in range(1, n + 1) with one number missing
+/// \param n size of array A
+///
+/// \return missing number in array
+///
 int find_missing_number(int A[], int n)
 {
-    /// Calculate X = XOR of first n+1 natural numbers
+    // Calculate X = XOR of first n+1 natural numbers
     int X = 0;
     for(int i = 1; i <= n+1; i++)
         X ^= i;
 
-    /// Calculate Y = XOR of all numbers in array
+    // Calculate Y = XOR of all numbers in array
     int Y = 0;
     for(int i = 0;i < n; i++)
         Y ^= A[i];
 
-    /// return X^Y = missing number
+    // return X^Y = missing number
     return X^Y;
 }
+
+/// \}
 
 /*!
  * \brief subarry_with_given_sum
