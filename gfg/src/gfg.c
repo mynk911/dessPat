@@ -50,9 +50,10 @@ void swap(int A[], int a, int b)
 /// \{
 
 ///
-/// Uses the <a href="https://en.wikipedia.org/wiki/Maximum_subarray_problem
-/// #Kadane"> kadane's algorithm</a> to find maximum sub array in \f$O(n)\f$
+/// Uses the kadane's algorithm to find maximum sub array in \f$O(n)\f$
 /// time using \f$O(1)\f$ auxiliury space.
+///
+/// \sa https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane's_algorithm
 ///
 /// Usage :
 ///
