@@ -20,14 +20,18 @@ extern "C" {
 #include "gfg_export.h"
 
 /*!
- * \brief find the maximum sum contiguous subarray.
+ * \brief finds the maximum sum contiguous subarray.
  */
 int GFG_EXPORT maximum_subarray(int A[], int n);
 
 /*!
- * \brief find missing number in given array of first n+1 natural numbers.
+ * \brief finds missing number in given array of first n+1 natural numbers.
  */
 int GFG_EXPORT find_missing_number(int A[], int n);
+
+/*!
+ * \brief finds subarray with elements that sum to value s.
+ */
 void GFG_EXPORT subarry_with_given_sum(int A[], int n, int s);
 void GFG_EXPORT sort_012(int A[], int n);
 void GFG_EXPORT equilibrium_point(int A[], int n);

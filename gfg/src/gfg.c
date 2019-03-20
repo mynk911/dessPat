@@ -97,7 +97,7 @@ int maximum_subarray(int A[], int n)
 /// printf("res : %d", res); // res : 4)
 /// \endcode
 ///
-/// \param A array of integers in range(1, n + 1) with one number missing
+/// \param A array of natural numbers in range(1, n + 1) with one number missing
 /// \param n size of array A
 ///
 /// \return missing number in array
@@ -118,18 +118,26 @@ int find_missing_number(int A[], int n)
     return X^Y;
 }
 
-/// \}
-
-/*!
- * \brief subarry_with_given_sum
- * \param A
- * \param n
- * \param s
- * \return
- */
+///
+/// uses a method similar to sliding-window technique to find subarray with
+/// given sum in \f$O(n)\f$ time using \f$O(1)\f$ auxiliury space.
+///
+/// \sa https://www.geeksforgeeks.org/window-sliding-technique/
+///
+/// \code
+/// int array[] = { 1,2,3,5,6 };
+/// subarry_with_given_sum(array, 5);
+/// \endcode
+///
+/// \param A array of natural numbers
+/// \param n size of array A
+/// \param s sum of the elements of subarray
+///
 void subarry_with_given_sum(int A[], int n, int s)
 {
     int start=0, end=0, curr = 0;
+
+    // loop invariant : curr is sum of elements in [start,end)
     while(start<n)
     {
         if(curr == s) break;
@@ -139,6 +147,8 @@ void subarry_with_given_sum(int A[], int n, int s)
     if(curr == s) printf("%d %d\n",start+1,end);
     else printf("-1\n");
 }
+
+/// \}
 
 void sort_012(int A[], int n)
 {
