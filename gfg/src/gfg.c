@@ -13,6 +13,8 @@
 #include "gfg.h"
 #include "string.h"
 
+#include "dbg.h"
+
 /** \defgroup Arrays Array problems
  *  \brief Basic problems which act upon array input 
  */
@@ -126,26 +128,44 @@ int find_missing_number(int A[], int n)
 ///
 /// \code
 /// int array[] = { 1,2,3,5,6 };
-/// subarry_with_given_sum(array, 5);
+/// int res[2];
+/// int out = subarry_with_given_sum(array, 5, 10, res, 2);
 /// \endcode
 ///
-/// \param A array of natural numbers
-/// \param n size of array A
-/// \param s sum of the elements of subarray
+/// \param [in] A array of natural numbers
+/// \param [in] n size of array A
+/// \param [in] s sum of the elements of subarray
+/// \param [out] res holds start and end position of result sub array
+/// \param [in] size of res
 ///
-void subarry_with_given_sum(int A[], int n, int s)
+int subarry_with_given_sum(int A[], int n, int s, int res[], size_t m)
 {
-    int start=0, end=0, curr = 0;
+    int start = 0, end = 0, curr = 0;
 
     // loop invariant : curr is sum of elements in [start,end)
     while(start<n)
     {
         if(curr == s) break;
-        else if(curr < s && end<n) curr+=A[end++];
-        else curr-=A[start++];
+        else if(curr < s)
+        {
+            if(end < n)
+                curr += A[end++];
+            else break;
+        }
+        else curr -= A[start++];
     }
-    if(curr == s) printf("%d %d\n",start+1,end);
-    else printf("-1\n");
+
+    // put results in res if curr == s
+    if(curr == s)
+    {
+        check(m >= 2, "result array should be atleast 2 integer length");
+        res[0] = start+1;
+        res[1] = end;
+        return 0;
+    }
+    else return -1;
+error:
+    return -1;
 }
 
 /// \}

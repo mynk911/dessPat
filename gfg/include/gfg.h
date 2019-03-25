@@ -17,6 +17,8 @@
 extern "C" {
 #endif
 
+#include <stddef.h>
+
 #include "gfg_export.h"
 
 /*!
@@ -32,7 +34,7 @@ int GFG_EXPORT find_missing_number(int A[], int n);
 /*!
  * \brief finds subarray with elements that sum to value s.
  */
-void GFG_EXPORT subarry_with_given_sum(int A[], int n, int s);
+int GFG_EXPORT subarry_with_given_sum(int A[], int n, int s, int res[], size_t m);
 void GFG_EXPORT sort_012(int A[], int n);
 void GFG_EXPORT equilibrium_point(int A[], int n);
 void GFG_EXPORT maximum_sum_increasing_subsequence(int A[], int n);
