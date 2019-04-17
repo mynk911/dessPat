@@ -4,12 +4,15 @@
 /// \author Mayank Bansal
 ///
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-
 #include "lcthw.h"
 
 #define MAX_DATA 512
@@ -39,7 +42,7 @@ void die(const char* message)
     }
     else
     {
-        printf("ERROR: %s\n", message);
+        fprintf(stderr, "ERROR: %s\n", message);
     }
     exit(1);
 }
@@ -51,7 +54,7 @@ void Address_print(struct Address *addr)
 
 void Database_load(struct Connection *conn)
 {
-    int rc = fread(conn->db, sizeof(struct Database), 1, conn->file);
+    size_t rc = fread(conn->db, sizeof(struct Database), 1, conn->file);
     if (rc != 1)
         die("Failed to load database.");
 }
@@ -165,12 +168,12 @@ void Database_list(struct Connection* conn)
     }
 }
 
-int ex17(int argc, char **argv)
+int ex17(int argc,const char **argv)
 {
     if(argc < 3)
         die("USAGE: dessPat <dbfile> <action> [action param]");
 
-    char* filename = argv[1];
+    const char* filename = argv[1];
     char action = argv[2][0];
     struct Connection* conn = Database_open(filename, action);
     int id = 0;

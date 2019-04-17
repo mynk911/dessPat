@@ -13,13 +13,18 @@
 ///
 /// print statements
 ///
-int ex3(int argc, char *argv[])
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///         otherwise any other number
+///
+int ex3(FILE* out)
 {
     int age = 23;
     int height = 74;
 
-    printf("I am %d years old.\n", age);
-    printf("I am %d inches tall.\n", height);
+    fprintf(out, "I am %d years old.\n", age);
+    fprintf(out, "I am %d inches tall.\n", height);
 
     return 0;
 }

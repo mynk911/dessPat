@@ -10,14 +10,18 @@
 #include "lcthw.h"
 
 ///
-/// this is a typical hello world program.
+/// prints a number.
 ///
-int ex1(int argc, char *argv[])
+/// \param out FILE pointer
+///
+/// \return 0 for success,
+///         otherwise any other number
+///
+int ex1(FILE* out)
 {
     int distance = 100;
 
-    // this is also a comment
-    printf("You are %d miles away.\n", distance);
+    fprintf(out, "You are %d miles away.\n", distance);
 
     return 0;
 }

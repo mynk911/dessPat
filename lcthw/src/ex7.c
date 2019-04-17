@@ -13,10 +13,16 @@
 #include <ctype.h>
 
 #include "lcthw.h"
+
 ///
-/// exercise seven implementation
+/// print examples of various data types.
 ///
-int ex7(int argc, char* argv[])
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///         otherwise any other number
+///
+int ex7(FILE* out)
 {
     int distance = 100;
     float power = 2.345f;
@@ -25,95 +31,102 @@ int ex7(int argc, char* argv[])
     char first_name[] = "Zed";
     char last_name[] = "Shaw";
 
-    printf("You are %d miles away.\n", distance);
-    printf("You have %f levels of power.\n", power);
-    printf("You have %f awesome super powers.\n", super_power);
-    printf("I have an initial %c.\n", initial);
-    printf("I have a first name %s.\n", first_name);
-    printf("I have a last name %s.\n", last_name);
-    printf("My whole name is %s %c %s.\n",
+    fprintf(out, "You are %d miles away.\n", distance);
+    fprintf(out, "You have %f levels of power.\n", power);
+    fprintf(out, "You have %f awesome super powers.\n", super_power);
+    fprintf(out, "I have an initial %c.\n", initial);
+    fprintf(out, "I have a first name %s.\n", first_name);
+    fprintf(out, "I have a last name %s.\n", last_name);
+    fprintf(out, "My whole name is %s %c %s.\n",
             first_name, initial, last_name);
 
     int bugs = 100;
     double bug_rate = 1.2;
 
-    printf("You have %d bugs at the imaginary rate of %f.\n",
+    fprintf(out, "You have %d bugs at the imaginary rate of %f.\n",
             bugs, bug_rate);
 
-    unsigned long universe_of_defects = 1L * 1024L * 1024L * 1024L*1024L*1024L*1024L*2L;
-    printf("The entire universe has %ld bugs.\n", universe_of_defects);
+    unsigned long universe_of_defects = 1UL * 1024L * 1024L * 1024L;
+    fprintf(out, "The entire universe has %lu bugs.\n", universe_of_defects);
 
     double expected_bugs = bugs * bug_rate;
-    printf("You are expected to have %f bugs.\n", expected_bugs);
+    fprintf(out, "You are expected to have %f bugs.\n", expected_bugs);
 
     double part_of_universe = expected_bugs / universe_of_defects;
-    printf("That is only a %e portion of the universe.\n ",
+    fprintf(out, "That is only a %e portion of the universe.\n",
                                                 part_of_universe);
 
     //this makes no sense, just a demo of something weird
     char nul_byte = '\0';
     int care_percentage = bugs * nul_byte;
-    printf("Which means you should care %d%%.\n", care_percentage);
+    fprintf(out, "Which means you should care %d%%.\n", care_percentage);
     return 0;
 }
 
-/*!
- * \brief ex8 if else if in c
- *
- * \param argc
- * \param argv
- * \return
- */
-int ex8(int argc, char *argv[])
+///
+/// a demonstration of if else and command line parameters.
+///
+/// \param argc c command line arguments count, from main()
+/// \param argv c command line arguments from main()
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///         otherwise any other number.
+///
+int ex8(int argc, const char *argv[], FILE* out)
 {
     int i = 0;
 
+    // since executable is at index 0, argc > 1 if arguments given
     if (argc == 1) {
-        printf("You only have one argument. You suck.\n");
+        fprintf(out, "You only have one argument. You suck.\n");
     } else if (argc > 1 && argc < 4) {
-        printf("Here's your arguments:\n");
+        fprintf(out, "Here's your arguments:\n");
 
         for (i = 0; i < argc; i++) {
-            printf("%s ", argv[i]);
+            fprintf(out, "%s ", argv[i]);
         }
-        printf("\n");
     } else  {
-        printf("You have too many arguments. You suck.\n");
+        fprintf(out, "You have too many arguments. You suck.\n");
     }
 
     return 0;
 }
 
-/*!
- * \brief ex9 switch;
- *
- * \param argc
- * \param argv
- *
- * \return
- */
-int ex9(int argc, char *argv[])
+///
+/// prints out in aloop
+///
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///         otherwise any other number.
+///
+int ex9(FILE* out)
 {
     int i = 0;
     while (i < 25) {
-        printf("%d\n", i);
+        fprintf(out, "%d ", i);
         i++;
     }
+    fprintf(out, "\n");
     return 0;
 }
 
-/*!
- * \brief ex10 switch statement
- *
- * \param argc
- * \param argv
- * \return
- */
-int ex10(int argc, char *argv[])
+
+///
+/// switch statement example
+///
+/// \param argc argument count
+/// \param argv arguments
+/// \param out file pointer
+///
+/// \return 0 for success,
+///         otherwise some other number
+///
+int ex10(int argc,const char *argv[], FILE* out)
 {
     if (argc != 2) {
-        printf("ERROR: You need one argument.\n");
-        // this is how you abort a program
+        fprintf(out, "ERROR: You need one argument.\n");
         return 1;
     }
 
@@ -124,39 +137,39 @@ int ex10(int argc, char *argv[])
         switch (letter) {
         case 'a':
         case 'A':
-            printf("%d: 'A'\n", i);
+            fprintf(out, "%d: 'A'\n", i);
             break;
 
         case 'e':
         case 'E':
-            printf("%d: 'E'\n", i);
+            fprintf(out, "%d: 'E'\n", i);
             break;
 
         case 'i':
         case 'I':
-            printf("%d: 'I'\n", i);
+            fprintf(out, "%d: 'I'\n", i);
             break;
 
         case 'o':
         case 'O':
-            printf("%d: 'O'\n", i);
+            fprintf(out, "%d: 'O'\n", i);
             break;
 
         case 'u':
         case 'U':
-            printf("%d: 'U'\n", i);
+            fprintf(out, "%d: 'U'\n", i);
             break;
 
         case 'y':
         case 'Y':
             if (i > 2) {
                 // it's only sometimes Y
-                printf("%d: 'Y'\n", i);
+                fprintf(out, "%d: 'Y'\n", i);
             }
             break;
 
         default:
-            printf("%d: %c is not a vowel\n", i, letter);
+            fprintf(out, "%d: %c is not a vowel\n", i, letter);
         }
     }
 
@@ -165,11 +178,12 @@ int ex10(int argc, char *argv[])
 
 /*!
  * \brief ex11 strings
- * \param argc
- * \param argv
- * \return
+ *
+ * \param FILE pointer
+ *
+ * \return 0 for success
  */
-int ex11(int argc, char *argv[])
+int ex11(FILE* out)
 {
     int numbers[4] = { 0 };
     char name[4] = { 'a'};
@@ -177,21 +191,21 @@ int ex11(int argc, char *argv[])
     char y[4];
     memcpy(y,&x,4);
     // first, print them out raw
-    printf("numbers: %d %d %d %d\n",
+    fprintf(out, "numbers: %d %d %d %d\n",
            numbers[0], numbers[1], numbers[2], numbers[3]);
 
-    printf("name each: %d %d %d %d\n",
+    fprintf(out, "name each: %d %d %d %d\n",
            name[0], name[1], name[2], name[3]);
 
-    printf("name each: %c %c %c %c\n",
+    fprintf(out, "name each: %c %c %c %c\n",
            y[0], y[1], y[2], y[3]);
 
     x = UINT_MAX;
     memcpy(y,&x,4);
-    printf("name each: %c %c %c %c\n",
+    fprintf(out, "name each: %c %c %c %c\n",
            y[0], y[1], y[2], y[3]);
 
-    printf("name: %s\n", name);
+    fprintf(out, "name: %s\n", name);
 
     // setup the numbers
     numbers[0] = 1;
@@ -206,33 +220,34 @@ int ex11(int argc, char *argv[])
     name[3] = '\0';
 
     // then print them out initialized
-    printf("numbers: %d %d %d %d\n",
+    fprintf(out, "numbers: %d %d %d %d\n",
            numbers[0], numbers[1], numbers[2], numbers[3]);
 
-    printf("name each: %c %c %c %c\n",
+    fprintf(out, "name each: %c %c %c %c\n",
            name[0], name[1], name[2], name[3]);
 
     // print the name like a string
-    printf("name: %s\n", name);
+    fprintf(out, "name: %s\n", name);
 
     // another way to use name
     char *another = "Zed";
 
-    printf("another: %s\n", another);
+    fprintf(out, "another: %s\n", another);
 
-    printf("another each: %c %c %c %c\n",
+    fprintf(out, "another each: %c %c %c %c\n",
            another[0], another[1], another[2], another[3]);
 
     return 0;
 }
 
-/*!
- * \brief ex12 arrays and sizeof
- * \param argc
- * \param argv
- * \return
- */
-int ex12(int argc, char *argv[])
+///
+/// \brief ex12 arrays and sizeof
+///
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///
+int ex12(FILE *out)
 {
     char full_name[] = {
         'Z', 'e', 'd',
@@ -245,34 +260,37 @@ int ex12(int argc, char *argv[])
 
     // WARNING: On some systems you may have to change the
     // %ld in this code to a %u since it will use unsigned ints
-    printf("The size of an int: %ld\n", sizeof(int));
-    printf("The size of areas (int[]): %ld\n", sizeof(areas));
-    printf("The number of ints in areas: %ld\n",
+    fprintf(out, "The size of an int: %u\n", sizeof(int));
+    fprintf(out, "The size of areas (int[]): %u\n", sizeof(areas));
+    fprintf(out, "The number of ints in areas: %u\n",
             sizeof(areas) / sizeof(int));
-    printf("The first area is %d, the 2nd %d.\n", areas[0], areas[1]);
+    fprintf(out, "The first area is %d, the 2nd %u.\n", areas[0], areas[1]);
 
-    printf("The size of a char: %ld\n", sizeof(char));
-    printf("The size of name (char[]): %ld\n", sizeof(name));
-    printf("The number of chars: %ld\n", sizeof(name) / sizeof(char));
+    fprintf(out, "The size of a char: %u\n", sizeof(char));
+    fprintf(out, "The size of name (char[]): %u\n", sizeof(name));
+    fprintf(out,"The number of chars: %u\n", sizeof(name) / sizeof(char));
 
-    printf("The size of full_name (char[]): %ld\n", sizeof(full_name));
-    printf("The number of chars: %ld\n",
+    fprintf(out,"The size of full_name (char[]): %u\n", sizeof(full_name));
+    fprintf(out, "The number of chars: %u\n",
             sizeof(full_name) / sizeof(char));
 
     //full_name[12] = 'X';
 
-    printf("name=\"%s\" and full_name=\"%s\"\n", name, full_name);
+    fprintf(out, "name=\"%s\" and full_name=\"%s\"\n", name, full_name);
 
     return 0;
 }
 
-/*!
- * \brief ex13 for loop
- * \param argc
- * \param argv
- * \return
- */
-int ex13(int argc, char *argv[])
+///
+/// for loop demo in c
+///
+/// \param argc argument count
+/// \param argv arguments
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///
+int ex13(int argc, const char *argv[], FILE* out)
 {
     int i = 0;
     // let's make our own array of strings
@@ -285,13 +303,13 @@ int ex13(int argc, char *argv[])
 
     // go through each string in argv
     // why am I skipping argv[0]?
-    for (i = 0; i < argc; i++) {
-        printf("arg %d: %s\n", i, argv[i]);
+    for (i = 1; i < argc; i++) {
+        fprintf(out, "arg %d: %s\n", i, argv[i]);
     }
 
 
     for (i = 0; i < num_states; i++) {
-        printf("state %d: %s\n", i, states[i]);
+        fprintf(out, "state %d: %s\n", i, states[i]);
     }
 
     return 0;
@@ -299,30 +317,29 @@ int ex13(int argc, char *argv[])
 
 //forward declarations
 int can_print_it(char ch);
-void print_letters(char arg[],int n);
+void print_letters(const char arg[],size_t n, FILE* out);
 
-void print_arguments(int argc, char *argv[])
+void print_arguments(int argc,const char *argv[], FILE* out)
 {
     int i = 0;
 
     for (i = 0; i < argc; i++) {
-        print_letters(argv[i],strlen(argv[i]));
+        print_letters(argv[i],strlen(argv[i]), out);
     }
 }
 
-void print_letters(char arg[], int n)
+void print_letters(const char arg[], size_t n, FILE* out)
 {
-    int i = 0;
+    size_t i = 0;
 
     for (i = 0; i<n; i++) {
         char ch = arg[i];
 
         if (can_print_it(ch)) {
-            printf("'%c' == %d ", ch, ch);
+            fprintf(out, "%c", ch);
         }
     }
-
-    printf("\n");
+        fprintf(out, "\n");
 }
 
 int can_print_it(char ch)
@@ -331,21 +348,29 @@ int can_print_it(char ch)
 		   isblank((unsigned char)ch);
 }
 
-/*!
- * \brief ex14 functions
- *
- * \param argc
- * \param argv
- *
- * \return
- */
-int ex14(int argc, char *argv[])
+///
+/// \brief functions demo
+///
+/// \param argc argument count
+/// \param argv arguments
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///
+int ex14(int argc,const char *argv[], FILE* out)
 {
-    print_arguments(argc, argv);
+    print_arguments(argc, argv, out);
     return 0;
 }
 
-int ex15(int argc, char *argv[])
+///
+/// demo on pointers and their relation to arrays
+///
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///
+int ex15(FILE* out)
 {
 	    // create two arrays we care about
     int ages[] = { 23, 43, 12, 89, 2 };
@@ -360,34 +385,34 @@ int ex15(int argc, char *argv[])
 
     // first way using indexing
     for (i = 0; i < count; i++) {
-        printf("%s has %d years alive.\n", names[i], ages[i]);
+        fprintf(out, "%s has %d years alive.\n", names[i], ages[i]);
     }
 
-    printf("---\n");
+    fprintf(out, "---\n");
 
     // setup the pointers to the start of the arrays
-    int *cur_age = (int *)names;
+    int *cur_age = ages;
     char **cur_name = names;
 
     // second way using pointers
     for (i = 0; i < count; i++) {
-        printf("%s is %d years old.\n",
+        fprintf(out, "%s has %d years alive.\n",
                 *(cur_name + i), *(cur_age + i));
     }
 
-    printf("---\n");
+    fprintf(out, "---\n");
 
     // third way, pointers are just arrays
     for (i = 0; i < count; i++) {
-        printf("%s is %d years old again.\n", cur_name[i], cur_age[i]);
+        fprintf(out, "%s has %d years alive.\n", cur_name[i], cur_age[i]);
     }
 
-    printf("---\n");
+    fprintf(out, "---\n");
 
     // fourth way with pointers in a stupid complex way
     for (cur_name = names, cur_age = ages;
             (cur_age - ages) < count; cur_name++, cur_age++) {
-        printf("%s lived %d years so far.\n", *cur_name, *cur_age);
+        fprintf(out, "%s has %d years alive.\n", *cur_name, *cur_age);
     }
 
     return 0;

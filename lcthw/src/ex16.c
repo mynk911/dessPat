@@ -12,68 +12,59 @@
 #include "lcthw.h"
 
 struct Person {
-	char* name;
-	int age;
-	int height;
-	int weight;
+    char* name;
+    int age;
+    int height;
+    int weight;
 };
 
-/*!
- * \brief create a person 
- *
- * \param n name
- * \param a age
- * \param h height
- * \param w weight
- *
- * \return person
- */
-struct Person* CreatePerson(char* n, int a, int h, int w)
+///
+/// create a person with given information.
+///
+/// \param n name
+/// \param a age
+/// \param h height
+/// \param w weight
+///
+/// \return person
+///
+struct Person* CreatePerson(const char* n, int a, int h, int w)
 {
-	struct Person* who = (struct Person*) malloc(sizeof(struct Person));
-	assert(who != NULL);
-	
-	who->name = strdup(n);
-	who->age = a;
-	who->height = h;
-	who->weight = w;
+    struct Person* who = (struct Person*) malloc(sizeof(struct Person));
+    assert(who != NULL);
 
-	return who;
+    who->name = _strdup(n);
+    who->age = a;
+    who->height = h;
+    who->weight = w;
+
+    return who;
 }
 
-/*!
- * \brief destroy a person
- *
- * \param p person
- */
-void DestroyPerson(struct Person* p)
+///
+/// destroys specified person.
+///
+/// \param p person
+///
+void DestroyPerson(struct Person** p)
 {
-	assert(p != NULL);
-	free(p->name);
-	free(p);
+    assert(*p != NULL);
+    free((*p)->name);
+    free(*p);
+    *p = NULL;
 }
 
-/*!
-* \brief print a person
-*
-* \param p person
-*/
-void PrintPerson(struct Person* p)
+///
+/// prints a person's information.
+///
+/// \param p person
+/// \param out FILE pointer
+///
+void PrintPerson(FILE* out, struct Person* p)
 {
-	printf("Name : %s\n", p->name);
-	printf("Age : %d\n", p->age);
-	printf("Height : %d\n", p->height);
-	printf("Weight : %d\n", p->weight);
+    fprintf(out, "Name : %s\n", p->name);
+    fprintf(out, "Age : %d\n", p->age);
+    fprintf(out, "Height : %d\n", p->height);
+    fprintf(out, "Weight : %d\n", p->weight);
 }
 
-int ex16(int argc, char* argv[])
-{
-	struct Person *joe = CreatePerson("Joe Alex", 32, 64, 140);
-	struct Person *frank = CreatePerson("Frank Blank", 20, 72, 180);
-	printf("Joe is at memory location %p\n", joe);
-	PrintPerson(joe);
-	printf("Frank is at memory location %p\n", frank);
-	PrintPerson(frank);
-	DestroyPerson(joe);
-	return 0;
-}
