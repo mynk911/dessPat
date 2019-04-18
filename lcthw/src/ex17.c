@@ -168,7 +168,7 @@ void Database_list(struct Connection* conn)
     }
 }
 
-int ex17(int argc,const char **argv)
+int ex17(int argc,const char *argv[])
 {
     if(argc < 3)
         die("USAGE: dessPat <dbfile> <action> [action param]");

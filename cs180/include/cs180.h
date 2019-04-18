@@ -57,7 +57,7 @@ class heap
         }
     };
     static constexpr heap_size_type Size = 100;
-    static heap_size_type counter;
+    heap_size_type counter;
     void heapifyUp(heap_size_type i)
     {
         heap_size_type j = 0;
@@ -168,7 +168,7 @@ void swap(heap<T>& a, heap<T>& b) noexcept
     a.swap(b);
 }
 
-template <typename T> typename heap<T>::heap_size_type heap<T>::counter = 0;
+//template <typename T> typename heap<T>::heap_size_type heap<T>::counter = 0;
 
 }}
 

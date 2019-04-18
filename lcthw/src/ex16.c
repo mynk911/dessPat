@@ -33,7 +33,10 @@ struct Person* CreatePerson(const char* n, int a, int h, int w)
     struct Person* who = (struct Person*) malloc(sizeof(struct Person));
     assert(who != NULL);
 
-    who->name = _strdup(n);
+    size_t length = strlen(n);
+    who->name = malloc(length);
+    strcpy(who->name, n);
+
     who->age = a;
     who->height = h;
     who->weight = w;

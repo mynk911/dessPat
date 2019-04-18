@@ -361,6 +361,7 @@ TEST(lcthw, ex16)
 
 TEST(lcthw, ex17)
 {
+    errno = 0;
     int argc = 2;
     const char *argv[] = {"ex17", "test_dbFile"};
     EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
