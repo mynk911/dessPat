@@ -14,25 +14,15 @@
 #include <errno.h>
 #include <string.h>
 #include "lcthw.h"
+#include "ex17_ds.h"
 
-#define MAX_DATA 512
-#define MAX_ROWS 100
+#define TESTING
 
-struct Address {
-    int id;
-    int set;
-    char name[MAX_DATA];
-    char email[MAX_DATA];
-};
+#ifdef TESTING
+void * my_malloc(size_t size);
+#define malloc my_malloc
+#endif
 
-struct Database {
-    struct Address rows[MAX_ROWS];
-};
-
-struct Connection {
-    FILE *file;
-    struct Database *db;
-};
 
 void die(const char* message)
 {

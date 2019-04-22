@@ -4,6 +4,8 @@
 
 #include "gtest/gtest.h"
 #include "lcthw.h"
+#include "Fixture.h"
+#include "ex17_ds.h"
 
 TEST(lcthw, ex1)
 {
@@ -359,11 +361,39 @@ TEST(lcthw, ex16)
     fclose(out_test);
 }
 
-TEST(lcthw, ex17)
+TEST(lcthw, ex17InSufficientArguments)
 {
     errno = 0;
     int argc = 2;
     const char *argv[] = {"ex17", "test_dbFile"};
     EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
                 "ERROR: USAGE: dessPat <dbfile> <action> ");
+}
+
+TEST_F(Fixture, ex17MallocFail1)
+{
+    EXPECT_CALL(*(Fixture::_malloc), malloc(::testing::_))
+                                       .WillRepeatedly(::testing::Return(nullptr));
+    errno = ENOMEM;
+    ::testing::Mock::AllowLeak((Fixture::_malloc).get());
+    int argc = 3;
+    const char *argv[] = {"ex17", "test_dbFile", "c"};
+    EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
+                "Memory Error");
+}
+
+TEST_F(Fixture, ex17MallocFail2)
+{
+    void* p = malloc(sizeof(struct Connection));
+    EXPECT_CALL(*(Fixture::_malloc), malloc(::testing::_))
+                                       .Times(::testing::AnyNumber())
+                                       .WillOnce(::testing::Return(p))
+                                       .WillRepeatedly(::testing::Return(nullptr));
+    errno = ENOMEM;
+    ::testing::Mock::AllowLeak((Fixture::_malloc).get());
+    int argc = 3;
+    const char *argv[] = {"ex17", "test_dbFile", "c"};
+    EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
+                "Memory Error");
+    free(p);
 }
