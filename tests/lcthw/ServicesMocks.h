@@ -3,10 +3,10 @@
 
 #include "gmock/gmock.h"
 
-class MallocService
+class LibcService
 {
 public:
-    virtual ~MallocService() {}
+    virtual ~LibcService() {}
     MOCK_METHOD1(malloc, void*(size_t));
 };
 #endif

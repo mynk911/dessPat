@@ -10,14 +10,14 @@ class Fixture : public ::testing::Test
 public:
     Fixture()
     {
-        _malloc.reset(new ::testing::NiceMock<MallocService>());
+        _libc.reset(new ::testing::NiceMock<LibcService>());
     }
 
     ~Fixture()
     {
-        _malloc.reset();
+        _libc.reset();
     }
-    static std::unique_ptr<MallocService> _malloc;
+    static std::unique_ptr<LibcService> _libc;
 };
 
 #endif

@@ -53,11 +53,11 @@ struct Connection* Database_open(const char* filename, char mode)
 {
     struct Connection* conn = malloc(sizeof(struct Connection));
     if(!conn)
-        die("Memory Error");
+        die("Cannot create Connection");
 
     conn->db = malloc(sizeof(struct Database));
     if(!conn->db)
-        die("Memory Error");
+        die("Cannot create Database");
 
     if(mode == 'c')
     {
