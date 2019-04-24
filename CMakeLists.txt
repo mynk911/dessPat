@@ -85,9 +85,11 @@ add_executable (dessPat dessPat.cpp
                         tests/gfg/test_gfg.cpp
                         tests/lcthw/tests_lcthw.cpp
                         tests/lcthw/ServicesMocks.h
+                        tests/lcthw/ServicesMocks.cpp
                         tests/lcthw/Fixture.h
                         tests/lcthw/Fixture.cpp
-                        tests/lcthw/FakeServices.cpp)
+                        tests/lcthw/FakeServices.cpp
+                        tests/lcthw/FakeServices.h)
 
 #add the binary directory to the search path for include files so that we will
 #find dessPatConfig.h

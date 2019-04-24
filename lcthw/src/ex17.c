@@ -19,8 +19,11 @@
 #define TESTING
 
 #ifdef TESTING
-void * my_malloc(size_t size);
+#include "FakeServices.h"
+
 #define malloc my_malloc
+#define fopen my_fopen
+
 #endif
 
 

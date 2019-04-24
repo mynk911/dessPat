@@ -6,7 +6,8 @@
 class LibcService
 {
 public:
-    virtual ~LibcService() {}
+    virtual ~LibcService();
     MOCK_METHOD1(malloc, void*(size_t));
+    MOCK_METHOD2(fopen, FILE*(const char*, const char*));
 };
 #endif

@@ -361,9 +361,10 @@ TEST(lcthw, ex16)
     fclose(out_test);
 }
 
-using LcthwDeathTest = Fixture;
+using LcthwEx17DeathTest = Fixture;
+using LcthwEx17Test = Fixture;
 
-TEST_F(LcthwDeathTest, ex17InSufficientArguments)
+TEST_F(LcthwEx17DeathTest, ex17InSufficientArguments)
 {
     errno = 0;
     int argc = 2;
@@ -372,7 +373,7 @@ TEST_F(LcthwDeathTest, ex17InSufficientArguments)
                 "ERROR: USAGE: dessPat <dbfile> <action> ");
 }
 
-TEST_F(LcthwDeathTest, ex17MallocFail1)
+TEST_F(LcthwEx17DeathTest, ex17MallocFail1)
 {
     EXPECT_CALL(*(Fixture::_libc), malloc(::testing::_))
                                        .WillRepeatedly(::testing::Return(nullptr));
@@ -382,20 +383,4 @@ TEST_F(LcthwDeathTest, ex17MallocFail1)
     const char *argv[] = {"ex17", "test_dbFile", "c"};
     EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
                 "Cannot create Connection");
-}
-
-TEST_F(LcthwDeathTest, ex17MallocFail2)
-{
-    void* p = malloc(sizeof(struct Connection));
-    EXPECT_CALL(*(Fixture::_libc), malloc(::testing::_))
-                                       .Times(::testing::AnyNumber())
-                                       .WillOnce(::testing::Return(p))
-                                       .WillRepeatedly(::testing::Return(nullptr));
-    errno = ENOMEM;
-    ::testing::Mock::AllowLeak((Fixture::_libc).get());
-    int argc = 3;
-    const char *argv[] = {"ex17", "test_dbFile", "c"};
-    EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
-                "Cannot create Database");
-    free(p);
 }
