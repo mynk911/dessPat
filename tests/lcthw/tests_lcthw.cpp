@@ -371,7 +371,7 @@ TEST_F(LcthwEx17DeathTest, ex17InSufficientArguments)
     int argc = 2;
     const char *argv[] = {"ex17", "test_dbFile"};
     EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
-                "ERROR: USAGE: dessPat <dbfile> <action> ");
+                "USAGE: dessPat <dbfile> <action> ");
 }
 
 #ifdef C_SERVICE_MOCK_TESTS
@@ -387,3 +387,22 @@ TEST_F(LcthwEx17DeathTest, ex17MallocFail1)
                 "Cannot create Connection");
 }
 #endif // C_SERVICE_MOCK_TESTS
+
+TEST_F(LcthwEx17DeathTest, ex17TryingToReadNonExistentDatabaseFile)
+{
+    errno = 0;
+    int argc = 4;
+    const char *argv[] = {"ex17", "test_gtsgserufldfjnaku", "g"};
+    EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
+               "failed to open file");
+}
+
+TEST_F(LcthwEx17DeathTest, ex17InvalidRecordNumber)
+{
+    errno = 0;
+    int argc = 4;
+    auto s = std::to_string(MAX_ROWS);
+    const char *argv[] = {"ex17", "test_dbFile", "c", s.c_str()};
+    EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
+               "there are not that many records");
+}
