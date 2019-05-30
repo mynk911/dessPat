@@ -1,3 +1,4 @@
 // the configured options and settings for dessPat
 #define dessPat_VERSION_MAJOR @dessPat_VERSION_MAJOR@
 #define dessPat_VERSION_MINOR @dessPat_VERSION_MINOR@
+#cmakedefine C_SERVICE_MOCK_TESTS

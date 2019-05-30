@@ -4,8 +4,9 @@
 
 #include "gtest/gtest.h"
 #include "lcthw.h"
-#include "Fixture.h"
 #include "ex17_ds.h"
+#include "Fixture.h"
+
 
 TEST(lcthw, ex1)
 {
@@ -373,6 +374,7 @@ TEST_F(LcthwEx17DeathTest, ex17InSufficientArguments)
                 "ERROR: USAGE: dessPat <dbfile> <action> ");
 }
 
+#ifdef C_SERVICE_MOCK_TESTS
 TEST_F(LcthwEx17DeathTest, ex17MallocFail1)
 {
     EXPECT_CALL(*(Fixture::_libc), malloc(::testing::_))
@@ -384,3 +386,4 @@ TEST_F(LcthwEx17DeathTest, ex17MallocFail1)
     EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
                 "Cannot create Connection");
 }
+#endif // C_SERVICE_MOCK_TESTS

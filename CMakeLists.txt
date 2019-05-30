@@ -15,6 +15,13 @@ configure_file (
 
 option(BUILD_SHARED_LIBS "build shared library instead of static" OFF)
 
+#Control unit tests which use service mocking as explained here.
+#https://www.codeproject.com/Articles/1040972/Using-GoogleTest-and-GoogleMock-frameworks-for-emb
+#The method is a bit experimental and has issues in shared lib builds.
+option(C_SERVICE_MOCK_TESTS "use service mocking tests for c projects.
+    (experimental)" OFF)
+mark_as_advanced(C_SERVICE_MOCK_TESTS)
+
 if (CMAKE_BUILD_TYPE MATCHES "^[Rr]elease")
 find_package(Doxygen)
 endif()
@@ -80,16 +87,21 @@ if(CMAKE_VERSION VERSION_LESS 2.8.11)
                         "${gmock_SOURCE_DIR}/include")
 endif()
 
+set( SRC_FILES ${SRC_FILES} dessPat.cpp
+                            tests/gfg/test_gfg.cpp
+                            tests/lcthw/tests_lcthw.cpp
+                            tests/lcthw/Fixture.h
+                            tests/lcthw/Fixture.cpp)
+
+if(C_SERVICE_MOCK_TESTS)
+    set( SRC_FILES ${SRC_FILES}
+        tests/lcthw/ServicesMocks.h
+        tests/lcthw/ServicesMocks.cpp
+        tests/lcthw/FakeServices.cpp
+        tests/lcthw/FakeServices.h)
+endif(C_SERVICE_MOCK_TESTS)
 #add the executable
-add_executable (dessPat dessPat.cpp
-                        tests/gfg/test_gfg.cpp
-                        tests/lcthw/tests_lcthw.cpp
-                        tests/lcthw/ServicesMocks.h
-                        tests/lcthw/ServicesMocks.cpp
-                        tests/lcthw/Fixture.h
-                        tests/lcthw/Fixture.cpp
-                        tests/lcthw/FakeServices.cpp
-                        tests/lcthw/FakeServices.h)
+add_executable (dessPat ${SRC_FILES})
 
 #add the binary directory to the search path for include files so that we will
 #find dessPatConfig.h

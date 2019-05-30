@@ -15,16 +15,15 @@
 #include <string.h>
 #include "lcthw.h"
 #include "ex17_ds.h"
+#include "dessPatConfig.h"
 
-#define TESTING
-
-#ifdef TESTING
+#ifdef C_SERVICE_MOCK_TESTS
 #include "FakeServices.h"
 
 #define malloc my_malloc
 #define fopen my_fopen
 
-#endif
+#endif // C_SERVICE_MOCK_TESTS
 
 
 void die(const char* message)

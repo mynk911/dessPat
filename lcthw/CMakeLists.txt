@@ -13,7 +13,7 @@ add_library (lcthw include/lcthw.h
 				   src/ex22_m.c
 				   src/ex23.c
 				   src/ex24.c
-				   src/ex25.c)
+                                   src/ex25.c)
 add_library (LCTHW::lcthw ALIAS lcthw)
 include(GenerateExportHeader)
 generate_export_header(lcthw)
@@ -23,9 +23,16 @@ target_include_directories(lcthw
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/common/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+    )
+
+if(C_SERVICE_MOCK_TESTS)
+target_include_directories(lcthw
+    PUBLIC
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/tests/lcthw>
     )
+endif(C_SERVICE_MOCK_TESTS)
 
 if(UNIX)
 target_compile_features(lcthw
