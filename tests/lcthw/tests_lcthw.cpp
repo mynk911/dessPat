@@ -406,3 +406,14 @@ TEST_F(LcthwEx17DeathTest, ex17InvalidRecordNumber)
     EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
                "there are not that many records");
 }
+
+TEST_F(LcthwEx17DeathTest, databaseFileDoesNotExist)
+{
+    errno = 0;
+    int argc = 4;
+    const char *argv[] = {"ex17", "aslifghwgwhwgrwn", "g", "1"};
+    EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
+               "failed to open file");
+}
+
+
