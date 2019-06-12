@@ -23,7 +23,7 @@
 namespace cs180 {
 using sizeType = std::vector<std::string>::size_type;
 //#define debugPrints
-void populatePreferenceList(sizeType* pref,
+void populatePreferenceList(std::istream& in, sizeType* pref,
         std::vector < std::string >& preferer,
         std::vector < std::string >& preferee)
 {
@@ -31,13 +31,13 @@ void populatePreferenceList(sizeType* pref,
     sizeType n = preferer.size();
     for(sizeType i = 0; i < n; i++)
     {
-        std::cin >> name;
+        in >> name;
         auto itr = std::lower_bound(preferer.begin(), preferer.end(), name);
         auto idx =static_cast<sizeType>(itr - preferer.begin());
 
         for(sizeType j = 0; j < n; j++)
         {
-            std::cin >> name;
+            in >> name;
             itr = std::lower_bound(preferee.begin(), preferee.end(), name);
             pref[idx * n + j] = static_cast<sizeType>(itr - preferee.begin());
         }
@@ -64,7 +64,7 @@ void printPreferenceList(sizeType *pref,
 bool checkForUniqueNames(std::vector< std::string> vec)
 {
     std::unordered_set<std::string> s;
-    for( auto i : vec)
+    for( auto& i : vec)
         s.insert(i);
     if(vec.size() != s.size() )
     {
@@ -85,7 +85,7 @@ void calculateRankings(sizeType* r, const sizeType* p, sizeType n)
     }
 }
 
-int stable_matching()
+int stable_matching(std::istream& in, std::ostream& out)
 {
     sizeType n;
     std::cin >> n;
@@ -122,8 +122,8 @@ int stable_matching()
     auto* next = new sizeType[n];
     auto* current = new sizeType[n];
 
-    populatePreferenceList(menPref, men, women);
-    populatePreferenceList(womenPref, women, men);
+    populatePreferenceList(in, menPref, men, women);
+    populatePreferenceList(in, womenPref, women, men);
 #ifdef debugPrints
     printPreferenceList(menPref, men , women);
     printPreferenceList(womenPref, women, men);
@@ -157,10 +157,10 @@ int stable_matching()
         next[m]++;
     }
 
-    std::cout << "stable matching:" << std::endl;
+    out << "stable matching:" << std::endl;
     for(sizeType i=0; i<n; i++)
     {
-        std::cout << women[i] << " " << men[current[i]] << std::endl;
+        out << women[i] << " " << men[current[i]] << std::endl;
     }
     if (menPref != nullptr)
         delete[] menPref;
