@@ -1,39 +1,16 @@
-#include <iostream>
 #include <thread>
 
 #include "concur.h"
 using namespace std;
 
-void hello()
+void hello(std::ostream& out)
 {
-    cout << "Hello concur World!" << endl;
+    out << "Hello concur World!";
 }
 
-struct func {
-    int& i;
-    static long x;
-    func(int& i_) : i(i_) {}
-    void operator()()
-    {
-        for(unsigned j = 0; j<1000000; ++j)
-        {
-            x+=i;
-        }
-    }
-};
-long func::x = 0;
-
-void oops()
+int exec(std::ostream& out)
 {
-    int a = 5;
-    func mfun(a);
-    std::thread th(mfun);
-    th.detach();
-}
-int execAll()
-{
-    thread t(hello);
+    thread t(hello, std::ref(out));
     t.join();
-    oops();
     return 0;
 }
