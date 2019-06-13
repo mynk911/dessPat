@@ -31,9 +31,9 @@ void populatePreferenceList(std::istream& in, sizeType* pref,
     sizeType n = preferer.size();
     for(sizeType i = 0; i < n; i++)
     {
-        in >> name;
-        auto itr = std::lower_bound(preferer.begin(), preferer.end(), name);
-        auto idx =static_cast<sizeType>(itr - preferer.begin());
+	in >> name;
+	auto itr = std::lower_bound(preferer.begin(), preferer.end(), name);
+	auto idx =static_cast<sizeType>(itr - preferer.begin());
 
         for(sizeType j = 0; j < n; j++)
         {
@@ -78,29 +78,29 @@ void calculateRankings(sizeType* r, const sizeType* p, sizeType n)
 {
     for(sizeType i = 0; i < n; i++)
     {
-        for(sizeType j = 0; j < n; j++)
-        {
-            r[n*i + p[n*i + j] ]= j;
-        }
+	for(sizeType j = 0; j < n; j++)
+	{
+	    r[n*i + p[n*i + j] ]= j;
+	}
     }
 }
 
 int stable_matching(std::istream& in, std::ostream& out)
 {
     sizeType n;
-    std::cin >> n;
+    in >> n;
     std::vector< std::string > men, women;
     std::string name;
     for(sizeType i = 0; i < n; i++)
     {
-        std::cin >> name;
-        men.push_back(name);
+	in >> name;
+	men.push_back(name);
     }
     if(!checkForUniqueNames(men)) return -1;
     for(sizeType i = 0; i < n; i++)
     {
-        std::cin >> name;
-        women.push_back(name);
+        in >> name;
+	women.push_back(name);
     }
     if(!checkForUniqueNames(women)) return -1;
 
@@ -157,7 +157,6 @@ int stable_matching(std::istream& in, std::ostream& out)
         next[m]++;
     }
 
-    out << "stable matching:" << std::endl;
     for(sizeType i=0; i<n; i++)
     {
         out << women[i] << " " << men[current[i]] << std::endl;

@@ -16,7 +16,7 @@
 
 namespace cs180 {
 
-int CS180_EXPORT stable_matching();
+int CS180_EXPORT stable_matching(std::istream& in, std::ostream& out);
 namespace pq {
 template <typename T>
 class heap

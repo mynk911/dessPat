@@ -41,10 +41,17 @@ endif(Threads_FOUND)
 
 add_subdirectory (mcpp)
 set (EXTRA_LIBS ${EXTRA_LIBS} MCPP::mcpp)
+
+if(UNIX)
 add_subdirectory (lin)
 set (EXTRA_LIBS ${EXTRA_LIBS} LIN::lin)
+endif(UNIX)
+
+if(WIN32)
 add_subdirectory (win)
 set (EXTRA_LIBS ${EXTRA_LIBS} WIN::win)
+endif(WIN32)
+
 add_subdirectory (gfg)
 set (EXTRA_LIBS ${EXTRA_LIBS} GFG::gfg)
 add_subdirectory(lcthw)
@@ -92,7 +99,8 @@ set( SRC_FILES ${SRC_FILES} dessPat.cpp
                             tests/lcthw/tests_lcthw.cpp
                             tests/lcthw/Fixture.h
                             tests/lcthw/Fixture.cpp
-                            tests/concur/tests_concur.cpp)
+                            tests/concur/tests_concur.cpp
+			    tests/cs180/tests_cs180.cpp)
 
 if(C_SERVICE_MOCK_TESTS)
     set( SRC_FILES ${SRC_FILES}
