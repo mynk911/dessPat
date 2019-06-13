@@ -1,3 +1,4 @@
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "gfg.h"
@@ -235,3 +236,15 @@ TEST(gfgArraysFunc, largestNumberFormedByArray)
     EXPECT_EQ(a, 0);
     EXPECT_STREQ(res, "9534330");
 }
+
+TEST(gfgStrings, reverseWordsInAGivenString)
+{
+    char str[] = "i.like.this.program.very.much";
+    char str2[] = "much.very.program.this.like.i";
+    char res[40] = {0};
+    int a = reverse_words_in_a_given_string(str, res);
+    EXPECT_EQ(a, 0);
+
+    EXPECT_STREQ(str2, res);
+}
+

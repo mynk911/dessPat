@@ -78,3 +78,14 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html DESTINATION ${CMAKE_INSTA
 endif(DOXYGEN_FOUND)
 endif()
 
+add_executable(wintest WIN32 include/win_test.h
+                        src/win_test.cpp)
+                    target_include_directories(wintest
+                        PUBLIC
+                        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+                        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/common/include>
+                        PRIVATE
+                        ${CMAKE_CURRENT_SOURCE_DIR}/src
+                        )
+
+

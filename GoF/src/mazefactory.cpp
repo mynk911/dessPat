@@ -3,8 +3,6 @@
  * \brief definitions for mazefactory heirarchy
  * \author mayank bansal
  */
-#ifndef _GOF_MAZEFACTORY_CPP_
-#define _GOF_MAZEFACTORY_CPP_
 
 #include <iostream>
 #include <cstring>
@@ -85,7 +83,6 @@ std::unique_ptr<Wall> Mazefactory::MakeWall() const
 {
     return std::make_unique<Wall>();
 }
-#endif /* ifndef _GOF_MAZEFACTORY_CPP_ */
 
 /*! \brief Enchanted Maze factory constructor
  *

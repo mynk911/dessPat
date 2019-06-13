@@ -1,3 +1,6 @@
+#ifndef WIN_H_
+#define WIN_H_
+
 #include <iostream>
 
 #include "win_export.h"
@@ -11,3 +14,5 @@ public:
         std::cout<<t<<"\n";
 	}
 };
+
+#endif // WIN_H_

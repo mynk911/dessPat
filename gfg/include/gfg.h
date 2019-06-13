@@ -156,10 +156,16 @@ struct arr {
 };
 
 /*!
- * \brief find largest number that can be formed by given numbers
+ * \brief find largest number that can be formed by given numbers.
  */
 int GFG_EXPORT largest_number_formed_by_array(struct arr As[], size_t n,
                                                char *res, size_t *res_size);
+
+/*!
+ * \brief reverse period separated words in a string.
+ */
+int GFG_EXPORT reverse_words_in_a_given_string(char *S, char *res);
+
 #ifdef __cplusplus
 }
 #endif 

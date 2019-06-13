@@ -1161,9 +1161,12 @@ int cus_cmp2(const void* a, const void* b)
 /// space.
 ///
 ///
-/// \param As
-/// \param n
-/// \return
+/// \param As [in] array of type struct arr.
+/// \param n [in] size of arrat As.
+/// \param res [out] largest number possible as a character array.
+/// \param res_size [out] size of res.
+///
+/// \return 0 for success.
 ///
 int largest_number_formed_by_array(struct arr As[], size_t n,
                                    char *res, size_t *res_size)
@@ -1176,5 +1179,44 @@ int largest_number_formed_by_array(struct arr As[], size_t n,
     *res_size = strlen(res);
     return 0;
 }
-
 /// \}
+
+/** \defgroup Strings String problems
+ *  \brief Basic problems which act upon string input
+ */
+
+/// \addtogroup Strings
+/// \{
+
+///
+/// uses c library function strtok to solve in \f$O(n)\f$ time using
+/// \f$O(1)\f$ auxiliury space.
+///
+/// \param S [in] string with words separated by period.
+/// \param res [out] string wih words reversed..
+///
+/// \return 0 for success.
+///
+int reverse_words_in_a_given_string(char *S, char* res)
+{
+    int i = -1;
+    char* stack[50];
+    stack[++i] = strtok(S,".");
+    while(stack[i]){
+        stack[++i] = strtok(NULL, ".");
+    }
+    size_t skip = 0;
+    i--;
+    while(i > -1)
+    {
+        strcpy(res + skip, stack[i]);
+        size_t copy_length = strlen(stack[i]);
+        res[skip + copy_length] = '.';
+        skip+= copy_length + 1;
+        i--;
+    }
+    res[skip - 1] = '\0';
+    return 0;
+}
+
+/// /}
