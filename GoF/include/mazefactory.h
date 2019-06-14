@@ -14,17 +14,51 @@
 #include <memory>
 #include "gof_export.h"
 
+/** @Defgroup Creational  creational design patterns.
+ *
+ * Examples of creational design patterns. Central to all examples is 
+ * the composite Type heirarchy MapSite. All examples build objects of 
+ * MapSite type to demonstrate pros and cons of different creational 
+ * patterns and applicability of each to particular scenarios. MazeGame 
+ * brings creation and MapSite code together. It also contains code for 
+ * Factory Method pattern.
+ *
+ */
+
+/** @Defgroup Abstract_Factory Abstract Factory Pattern Examples.
+ *@Ingroup Creational
+ *
+ * Abstract Factory classes create a family of related objects. In our
+ * example MazeFactory creates objects of type Maze, Room, Wall and Door.
+ * All these objects together constitute a maze. EnchantedMazeFactory and
+ * BombedMazeFactory override MazeFactory to create EnchantedRooms and 
+ * RoomWithabomb respectively instead of normal rooms.
+ *
+ * The pattern is not suitable for our composite type since objects in maze
+ * family do not form segregated sub families. For example we could have a
+ * maze with both bombed and enchanted rooms. Abstract Factory works best 
+ * when classes form a family with respect to a property and subclassing one
+ * entails subclassing all.
+ */
+
+/** @Defgroup Singleton  Singleton Pattern classes.
+ *
+ * 
+ */
+
 /*!
  * \namespace gof
  *
  * \brief main namespace for GoF lib.
+ * 
+ * This namespace collects all the types and names related to GoF library.
  */
 namespace gof {
 
 /*!
  * \namespace creational
  *
- * \brief namespace for creational design patterns.
+ * \brief namespace for 
  */
 namespace creational {
 
@@ -36,64 +70,66 @@ class Wall;
 class Spell;
 class Bomb;
 
-/*!
- * \class Mazefactory.
- * \brief The Mazefactory class. Singleton base for maze factories.
+/** @Brief Singleton base for Maze factories.
+ *
+ * MazeFactory heirarchy demonstrates singleton, factory and prototype
+ * design patterns. Base class is a singleton. This ensures that only one
+ * MazeFactory object exists. Derived classes BombedMazeFactory and
+ * EnchantedMazeFactory demonstrate factory pattern while PrototypeMaze-
+ * Factory shows the use of prototype pattern.
  */
-class GOF_EXPORT Mazefactory
+class GOF_EXPORT MazeFactory
 {
-public:
-    /*!
-     * \brief destroy a mazefactory
-     */
-    virtual ~Mazefactory();
-    /*!
-     * \brief manages the MazeFactory object.
-     */
-    static Mazefactory* Instance();
-    /*!
-     * \brief make a maze.
-     */
+public: 
+/** @Brief MazeFactory destructor.
+ */
+    virtual ~MazeFactory();
+    
+/** @Brief manages single instance of MazeFactory.
+ */
+    static MazeFactory* Instance();
+
+/** @Brief Factory method for creating Maze. 
+ */
     virtual std::unique_ptr<Maze> MakeMaze() const;
-    /*!
-     * \brief make a room.
-     */
+/** @Brief Factory method for creating Room.
+ */    
     virtual std::unique_ptr<Room> MakeRoom(int rn) const;
-    /*!
-     * \brief Make a Door.
-     */
-    virtual std::unique_ptr<Door> MakeDoor(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2) const;
-    /*!
-     * \brief Make a Wall.
-     */
+    
+/** @Brief Factory method for creating Door.
+ */
+    virtual std::unique_ptr<Door> MakeDoor(std::shared_ptr<Room> r1, 
+					   std::shared_ptr<Room> r2) const;
+/** @Brief Factory Method for creating Wall.
+ */
     virtual std::unique_ptr<Wall> MakeWall() const;
 protected:
-    /*!
-     * \brief create a maze factory instance.
-     */
-    Mazefactory();
+/** @Brief MazeFactory Constructor.
+ */
+    MazeFactory();
 private:
     /// holds a unique MazeFactory instance.
-    static std::unique_ptr<Mazefactory> _instance;
+    static std::unique_ptr<MazeFactory> _instance;
 };
 
-/*!
- * \class EnchantedMazefactory.
- * \inherits Mazefactory.
- *
- * \brief Mazefactory which can create enchanted rooms.
+    
+/** @Brief Factory class for enchanted mazes.
+ * 
+ * While MazeFactory helps us create basic mazes, EnchantedMazeFactory 
+ * facilitates creation of enchanted mazes where rooms are bound by spells. 
+ * If we have code to create maze of certain design as in MazeGame::createMaze 
+ * just passing in EnchantedMazeFactory allows for creation of enchanted mazes 
+ * without any code changes. 
  */
-class GOF_EXPORT EnchantedMazefactory : public Mazefactory
+class GOF_EXPORT EnchantedMazeFactory : public MazeFactory
 {
 public:
-    /*!
-     * \brief Enchanted Maze factory constructor.
-     */
-    EnchantedMazefactory();
+    
+    EnchantedMazeFactory();
     /*!
      * \brief Enchanted Maze factory destructor.
      */
-    ~EnchantedMazefactory() override;
+    ~EnchantedMazeFactory() override;
     /*!
      * \brief MakeRoom
      */
@@ -111,7 +147,7 @@ protected:
  *
  * \brief Mazefactory which can create rooms with a bomb.
  */
-class GOF_EXPORT BombedMazeFactory : public Mazefactory
+class GOF_EXPORT BombedMazeFactory : public MazeFactory
 {
 public:
     /*!
@@ -140,7 +176,7 @@ protected:
     std::unique_ptr<Bomb> MakeBomb(int n) const;
 };
 
-class GOF_EXPORT MazePrototypeFactory : public Mazefactory
+class GOF_EXPORT MazePrototypeFactory : public MazeFactory
 {
 public:
     MazePrototypeFactory(std::unique_ptr<Maze> m, std::unique_ptr<Room> r,

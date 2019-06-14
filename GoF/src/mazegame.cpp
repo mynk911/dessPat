@@ -60,7 +60,7 @@ void MazeGame::CreateMaze()
 
 }
 
-void MazeGame::CreateMaze(Mazefactory* mf)
+void MazeGame::CreateMaze(MazeFactory* mf)
 {
     _maze = mf->MakeMaze();
     std::shared_ptr<Room> r1 = mf->MakeRoom(1);

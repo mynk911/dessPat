@@ -137,7 +137,7 @@ void Room::Initialize(int rno)
 ///
 void Room::enter()
 {
-    std::cout << "location :" << _roomNumber << std::endl;
+    debug("location : %d", _roomNumber);
 }
 
 Wall::Wall()
@@ -187,7 +187,7 @@ std::unique_ptr<Wall> Wall::Clone() const
 ///
 void Wall::enter()
 {
-    std::cout << "!!you've hit a wall!!" << std::endl;
+    debug("!!you've hit a wall!!");
 }
 
 Door::Door(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2)
@@ -291,9 +291,9 @@ std::shared_ptr<Room> Door::OtherSideFrom(std::shared_ptr<Room> r)
 void Door::enter()
 {
     if(_isOpen)
-        std::cout<< "location changed";
+        debug("location changed");
     else
-        std::cout<< "door is locked";
+        debug("door is locked");
 }
 
 Maze::Maze()
@@ -417,9 +417,9 @@ EnchantedRoom::~EnchantedRoom()
  */
 void EnchantedRoom::enter() {
     if(_spell->dispell("test"))
-        std::cout << "Spell broken!! location:" << this->GetRoomNo() << std::endl;
+        debug("Spell broken!! location: %d", this->GetRoomNo());
     else
-        std::cout << "Spell not broken!! location:" << this->GetRoomNo() << std::endl;
+        debug("Spell not broken!! location: %d",this->GetRoomNo());
 }
 
 /*!
@@ -475,7 +475,7 @@ RoomWithABomb::~RoomWithABomb()
  */
 void RoomWithABomb::enter()
 {
-    std::cout << "location : time" << this->GetRoomNo() <<" : " << _bomb->GetDetonationTime() << std::endl;
+    debug("location : time %d : %d", this->GetRoomNo() , _bomb->GetDetonationTime());
 }
 
 BombedWall::BombedWall()
@@ -490,6 +490,6 @@ BombedWall::~BombedWall()
 
 void BombedWall::enter()
 {
-    std::cout << "!!you've hit a bombed wall!!" << std::endl;
+    debug("!!you've hit a bombed wall!!");
 }
 }}

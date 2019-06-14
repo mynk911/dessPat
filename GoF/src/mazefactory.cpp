@@ -14,9 +14,18 @@
 namespace gof {
 namespace creational {
 
-std::unique_ptr<Mazefactory> Mazefactory::_instance = nullptr;
+std::unique_ptr<MazeFactory> MazeFactory::_instance = nullptr;
 
-Mazefactory* Mazefactory::Instance()
+
+/** @Brief manages the single instance of MazeFactory.
+ *
+ * creates a mazefactory instance on first call. The type of object
+ * can be changed using environment variable MAZESTYLE. Subsequent calls 
+ * return the same object.
+ *
+ * @return <b>{nil}</b> pointer to MazeFactory.
+ */
+MazeFactory* MazeFactory::Instance()
 {
     if(_instance == nullptr)
     {
@@ -25,58 +34,66 @@ Mazefactory* Mazefactory::Instance()
         if(strcmp(mazestyle, "bombed") == 0)
             _instance = std::unique_ptr<BombedMazeFactory>(new BombedMazeFactory);
         else if(strcmp(mazestyle, "enchanted") == 0)
-            _instance = std::unique_ptr<EnchantedMazefactory>(new EnchantedMazefactory);
+            _instance = std::unique_ptr<EnchantedMazeFactory>(new EnchantedMazeFactory);
+	// TODO : add MazePrototypeFactory case here.
         else
-            _instance = std::unique_ptr<Mazefactory>(new Mazefactory);
+            _instance = std::unique_ptr<MazeFactory>(new MazeFactory);
     }
     return _instance.get();
 }
 
 
-/// \brief create a maze factory instance.
-Mazefactory::Mazefactory()
+
+/** @Brief MazeFactory constructor.
+ */
+MazeFactory::MazeFactory()
 {
     debug("creating MazeFactory");
 }
 
-/// \brief destroy a mazefactory
-Mazefactory::~Mazefactory()
+
+/** @Brief MazeFactory destructor.
+ */
+MazeFactory::~MazeFactory()
 {
     debug("destroying MazeFactory");
 
 }
 
-/// \brief make a maze
-///
-/// \return unique pointer to a maze
-std::unique_ptr<Maze> Mazefactory::MakeMaze() const
+
+/** @Brief Factory method for creating Maze.
+ * @return an instance of Maze.
+ */
+std::unique_ptr<Maze> MazeFactory::MakeMaze() const
 {
     return std::make_unique<Maze>();
 }
 
-/// \brief make a room
-///
-/// \return unique pointer to a room
-std::unique_ptr<Room> Mazefactory::MakeRoom(int rn) const
+
+/** @Brief Factory method for creating Room.
+ * @param  rn  room number to assign to room.
+ * @return <b>{std::unique_ptr<Door>}</b> an instance of room.
+ */
+std::unique_ptr<Room> MazeFactory::MakeRoom(int rn) const
 {
     return std::make_unique<Room>(rn);
 }
 
-/// \brief Make a Door
-///
-/// \param r1
-/// \param r2
-///
-/// \return door
-std::unique_ptr<Door> Mazefactory::MakeDoor(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2) const
+
+/** @Brief Factory method for creating Door.
+ * @param r1 <b>{std::unique_ptr<Room>}</b> Room connected to this door.
+ * @param std <b>{nil}</b> Room connected to this door.
+ * @return <b>{std::unique_ptr<Door>}</b> an instance of door.
+ */
+std::unique_ptr<Door> MazeFactory::MakeDoor(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2) const
 {
     return std::make_unique<Door>(r1, r2);
 }
 
-/// \brief Make a Wall
-///
-/// \return
-std::unique_ptr<Wall> Mazefactory::MakeWall() const
+/** @Brief Factory Method for creating Wall.
+ * @return <b>{std::unique_ptr<Wall>}</b> an instance of type wall.
+ */
+std::unique_ptr<Wall> MazeFactory::MakeWall() const
 {
     return std::make_unique<Wall>();
 }
@@ -84,8 +101,8 @@ std::unique_ptr<Wall> Mazefactory::MakeWall() const
 /// \brief Enchanted Maze factory constructor
 ///
 ///  creates maze components with a spell on them
-EnchantedMazefactory::EnchantedMazefactory()
-    :Mazefactory()
+EnchantedMazeFactory::EnchantedMazeFactory()
+    :MazeFactory()
 {
     debug("creating enchanted maze factory");
 }
@@ -93,7 +110,7 @@ EnchantedMazefactory::EnchantedMazefactory()
 /// \brief Enchanted Maze factory destructor
 ///
 /// destroys an enchanted maze factory
-EnchantedMazefactory::~EnchantedMazefactory()
+EnchantedMazeFactory::~EnchantedMazeFactory()
 {
    debug("destroying enchanted maze factory");
 }
@@ -104,7 +121,7 @@ EnchantedMazefactory::~EnchantedMazefactory()
 ///
 /// \param rn room number
 /// \return unique ptr to room
-std::unique_ptr<Room> EnchantedMazefactory::MakeRoom(int rn) const
+std::unique_ptr<Room> EnchantedMazeFactory::MakeRoom(int rn) const
 {
     return std::make_unique<EnchantedRoom>(rn, CastSpell());
 }
@@ -114,7 +131,7 @@ std::unique_ptr<Room> EnchantedMazefactory::MakeRoom(int rn) const
 /// creates and returns a spell object
 ///
 /// \return spell unique pointer
-std::unique_ptr<Spell> EnchantedMazefactory::CastSpell() const
+std::unique_ptr<Spell> EnchantedMazeFactory::CastSpell() const
 {
     return std::make_unique<Spell>("qwer","test");
 }
@@ -123,7 +140,7 @@ std::unique_ptr<Spell> EnchantedMazefactory::CastSpell() const
 ///
 /// creates maze components with a spell on them
 BombedMazeFactory::BombedMazeFactory()
-    :Mazefactory()
+    :MazeFactory()
 {
     debug("creating bombed maze factory");
 }
@@ -176,7 +193,7 @@ std::unique_ptr<Bomb> BombedMazeFactory::MakeBomb(int n) const
 /// \param w
 MazePrototypeFactory::MazePrototypeFactory(std::unique_ptr<Maze> m, std::unique_ptr<Room> r,
                                            std::unique_ptr<Door> d, std::unique_ptr<Wall> w)
-    : Mazefactory (),
+    : MazeFactory (),
       _prototypeMaze(std::move(m)),
       _prototypeRoom(std::move(r)),
       _prototypeDoor(std::move(d)),
