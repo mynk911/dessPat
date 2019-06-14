@@ -45,11 +45,13 @@ set (EXTRA_LIBS ${EXTRA_LIBS} MCPP::mcpp)
 if(UNIX)
 add_subdirectory (lin)
 set (EXTRA_LIBS ${EXTRA_LIBS} LIN::lin)
+set( SRC_FILES ${SRC_FILES} tests/lin/tests_lin.cpp)
 endif(UNIX)
 
 if(WIN32)
 add_subdirectory (win)
 set (EXTRA_LIBS ${EXTRA_LIBS} WIN::win)
+set( SRC_FILES ${SRC_FILES} tests/win/tests_win.cpp)
 endif(WIN32)
 
 add_subdirectory (gfg)
@@ -95,12 +97,14 @@ if(CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 
 set( SRC_FILES ${SRC_FILES} dessPat.cpp
+                            tests/concur/tests_concur.cpp
+                            tests/cs180/tests_cs180.cpp
                             tests/gfg/test_gfg.cpp
+                            tests/gof/tests_gof.cpp
                             tests/lcthw/tests_lcthw.cpp
                             tests/lcthw/Fixture.h
                             tests/lcthw/Fixture.cpp
-                            tests/concur/tests_concur.cpp
-			    tests/cs180/tests_cs180.cpp)
+                            tests/mcpp/tests_mcpp.cpp)
 
 if(C_SERVICE_MOCK_TESTS)
     set( SRC_FILES ${SRC_FILES}

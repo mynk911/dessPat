@@ -15,4 +15,5 @@ public:
 	}
 };
 
+int WIN_EXPORT test();
 #endif // WIN_H_

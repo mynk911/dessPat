@@ -72,7 +72,7 @@ TEST(lcthw, ex8NoArg)
 {
     FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 1;
-    const char *argv[] = {"test"};
+    char *argv[] = {"test"};
     int a = ex8(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -86,7 +86,7 @@ TEST(lcthw, ex8Arg)
 {
     FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 2;
-    const char *argv[] = {"test", "here it is"};
+    char *argv[] = {"test", "here it is"};
     int a = ex8(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -102,7 +102,7 @@ TEST(lcthw, ex8TooManyArgs)
 {
     FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 4;
-    const char *argv[] = {"test", "here it is", "tease", "fried"};
+    char *argv[] = {"test", "here it is", "tease", "fried"};
     int a = ex8(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -128,7 +128,7 @@ TEST(lcthw, ex10NoArgs)
 {
     FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 1;
-    const char *argv[] = {"test"};
+    char *argv[] = {"test"};
     int a = ex10(argc, argv, out_test);
     EXPECT_EQ(a, 1);
     fseek(out_test, 0, SEEK_SET);
@@ -142,7 +142,7 @@ TEST(lcthw, ex10Args)
 {
     FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 2;
-    const char *argv[] = {"test", "uyYaieyobDOYEIAU"};
+    char *argv[] = {"test", "uyYaieyobDOYEIAU"};
     int a = ex10(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -247,7 +247,7 @@ TEST(lcthw, ex13)
 {
     FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 3;
-    const char *argv[] = {"test", "hey", "there"};
+    char *argv[] = {"test", "hey", "there"};
     int a = ex13(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -271,7 +271,7 @@ TEST(lcthw, ex14)
 {
     FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 3;
-    const char *argv[] = {"test", "bruce wills", "bruce123 wills#%!"};
+    char *argv[] = {"test", "bruce wills", "bruce123 wills#%!"};
     int a = ex14(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);

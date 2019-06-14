@@ -35,7 +35,7 @@ int LCTHW_EXPORT ex7(FILE* out);
 /*!
  * \brief ex8 if else if in c
  */
-int LCTHW_EXPORT ex8(int argc, const char *argv[], FILE* out);
+int LCTHW_EXPORT ex8(int argc, char *argv[], FILE* out);
 
 /*!
  * \brief ex9 while loop and boolean expression
@@ -45,7 +45,7 @@ int LCTHW_EXPORT ex9(FILE* out);
 /*!
  * \brief ex10 switch statement
  */
-int LCTHW_EXPORT ex10(int argc,const char *argv[], FILE* out);
+int LCTHW_EXPORT ex10(int argc,char *argv[], FILE* out);
 
 /*!
  * \brief ex11 strings
@@ -60,12 +60,12 @@ int LCTHW_EXPORT ex12(FILE* out);
 /*!
  * \brief ex13 for loop
  */
-int LCTHW_EXPORT ex13(int argc, const char *argv[], FILE* out);
+int LCTHW_EXPORT ex13(int argc, char *argv[], FILE* out);
 
 /*!
  * \brief ex14 functions
  */
-int LCTHW_EXPORT ex14(int argc,const char *argv[], FILE* out);
+int LCTHW_EXPORT ex14(int argc, char *argv[], FILE* out);
 
 /*!
  * \brief ex15 pointers

@@ -73,7 +73,7 @@ int ex7(FILE* out)
 /// \return 0 for success
 ///         otherwise any other number.
 ///
-int ex8(int argc, const char *argv[], FILE* out)
+int ex8(int argc, char *argv[], FILE* out)
 {
     int i = 0;
 
@@ -123,7 +123,7 @@ int ex9(FILE* out)
 /// \return 0 for success,
 ///         otherwise some other number
 ///
-int ex10(int argc,const char *argv[], FILE* out)
+int ex10(int argc,char *argv[], FILE* out)
 {
     if (argc != 2) {
         fprintf(out, "ERROR: You need one argument.\n");
@@ -290,7 +290,7 @@ int ex12(FILE *out)
 ///
 /// \return 0 for success
 ///
-int ex13(int argc, const char *argv[], FILE* out)
+int ex13(int argc, char *argv[], FILE* out)
 {
     int i = 0;
     // let's make our own array of strings
@@ -357,7 +357,7 @@ int can_print_it(char ch)
 ///
 /// \return 0 for success
 ///
-int ex14(int argc,const char *argv[], FILE* out)
+int ex14(int argc, char *argv[], FILE* out)
 {
     print_arguments(argc, argv, out);
     return 0;
