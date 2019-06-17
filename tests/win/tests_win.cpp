@@ -2,6 +2,6 @@
 #include "win.h"
 
 TEST(win, wintest){
-    int a = test();
+    int a = win_hello();
     EXPECT_EQ(a, 0);
 }

@@ -1,9 +1,5 @@
-/// \file mazegame.cpp
-/// \brief implementation for MazeGme
-///
-/// implementation for a MazeGame that user can use to create a MazeGame.
-
-/// \author Mayank Bansal
+// \file mazegame.cpp
+// implementation for a MazeGame that user can use to create a MazeGame.
 
 #include <iostream>
 
@@ -12,9 +8,7 @@
 #include "mazegame.h"
 #include "mazefactory.h"
 #include "mazebuilder.h"
-
 namespace gof {
-namespace creational {
 
 MazeGame::MazeGame()
     :_maze(nullptr)
@@ -85,8 +79,6 @@ void MazeGame::CreateMaze(MazeFactory* mf)
     r2->SetSide(Direction::East, w);
     r2->SetSide(Direction::South, w);
     r2->SetSide(Direction::West, theDoor);
-
-    r2->enter();
 }
 
 void MazeGame::CreateMaze(std::shared_ptr<MazeBuilder> mb)
@@ -107,9 +99,7 @@ void MazeGame::CreateMaze(std::shared_ptr<MazeBuilder> mb)
     }
 }
 
-/*! \name Factory Methods
- * factory methods to create maze and it's components
- */
+
 ///\{
 /*!
  * \brief MazeGame::MakeMaze create a maze
@@ -149,7 +139,6 @@ std::unique_ptr<Wall> MazeGame::MakeWall() const
 {
     return std::make_unique<Wall>();
 }
-///\}
 
 void MazeGame::CreateMazebyFactoryMethods()
 {
@@ -231,4 +220,17 @@ std::unique_ptr<MazePrototypeFactory> MazeGame::MakePrototypeFactory()
                                                   std::move(wall));
 }
 
-}}
+void MazeGame::initGame(MazePlayer &player)
+{
+    player.setLocation(1);
+    _maze->RoomNo(1)->enter(player);
+}
+
+void MazeGame::playGame(MazePlayer &player, Direction d)
+{
+    _maze->RoomNo(player.getLocation())
+            ->GetSide(d)
+            ->enter(player);
+}
+
+}

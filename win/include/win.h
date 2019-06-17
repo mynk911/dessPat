@@ -15,5 +15,5 @@ public:
 	}
 };
 
-int WIN_EXPORT test();
+int WIN_EXPORT win_hello();
 #endif // WIN_H_

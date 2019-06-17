@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(GOF VERSION 1.0 LANGUAGES CXX)
 
 add_library (gof src/maze.cpp
-                 src/maze.h
+                 include/maze.h
                  src/mazegame.cpp
                  include/mazegame.h
                  src/mazefactory.cpp

@@ -1,19 +1,15 @@
-/// \file maze.cpp
-/// \brief contains implementations for map sites and maze used in a a maze
-//  game.
-///
-/// this file contains a class hierarchy for different MapSites used
-/// in a MazeGame.
-/// \author Mayank Bansal
+// file maze.cpp
+// this file contains a class hierarchy for different MapSites used
+// in a MazeGame.
 
 #include <iostream>
 #include <stdexcept>
 
 #include "maze.h"
 #include "dbg.h"
+#include "mazegame.h"
 
 namespace gof {
-namespace creational {
 
 MapSite::MapSite()
 {
@@ -129,15 +125,16 @@ void Room::Initialize(int rno)
     _roomNumber = rno;
 }
 
-///
-/// for now the implementation simply prints _roomNumber as we are only
+// for now the implementation simply prints _roomNumber as we are only
 //  interested in creation of mazes
-/// \todo add player class and make enter take it as argument to change location
-/// on entering room
-///
-void Room::enter()
+// TODO: add player class and make enter take it as argument to change location
+// on entering room
+void Room::enter(MazePlayer& player)
 {
-    debug("location : %d", _roomNumber);
+    player.setLocation(_roomNumber);
+    std::string s = "Room:";
+    s += std::to_string(_roomNumber);
+    player.status(s);
 }
 
 Wall::Wall()
@@ -180,14 +177,10 @@ std::unique_ptr<Wall> Wall::Clone() const
 {
     return std::make_unique<Wall>(*this);
 }
-///
-/// for now the implementation simply prints message as we are only interested
-/// creation of mazes
-/// \todo add player class and make enter take it as argument
-///
-void Wall::enter()
+
+void Wall::enter(MazePlayer& player)
 {
-    debug("!!you've hit a wall!!");
+    player.status("Wall");
 }
 
 Door::Door(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2)
@@ -202,6 +195,7 @@ Door::Door(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2)
     else
         throw std::runtime_error("Door Constructor: Rooms do not exist!!");
 }
+
 Door::Door()
     :_room1(std::weak_ptr<Room>()),
       _room2(std::weak_ptr<Room>()),
@@ -209,7 +203,6 @@ Door::Door()
 {
     debug("Creating Door!!");
 }
-
 
 Door::Door(Door&& other)
     :MapSite (std::move(other)),
@@ -245,8 +238,6 @@ Door& Door::operator=(const Door& other)
     return *this;
 }
 
-
-
 std::unique_ptr<Door> Door::Clone() const
 {
     return std::make_unique<Door>(*this);
@@ -268,32 +259,26 @@ Door::~Door()
     debug("Destroying Door");
 }
 
-std::shared_ptr<Room> Door::OtherSideFrom(std::shared_ptr<Room> r)
+std::shared_ptr<Room> Door::OtherSideFrom(int r)
 {
     auto tr1 = _room1.lock();
     auto tr2 = _room2.lock();
     if(tr1 != nullptr && tr2 != nullptr)
     {
-        if(r->GetRoomNo() == tr1->GetRoomNo())
-            return tr1;
-        else if(r->GetRoomNo() == tr2->GetRoomNo())
+        if(r == tr1->GetRoomNo())
             return tr2;
+        else if(r == tr2->GetRoomNo())
+            return tr1;
     }
     return nullptr;
 }
 
-///
-/// for now the implementation simply prints message as we are only interested
-/// creation of mazes
-/// \todo add player class and make enter take it as argument, need to change
-/// location according to current room user is in.
-///
-void Door::enter()
+void Door::enter(MazePlayer& player)
 {
     if(_isOpen)
-        debug("location changed");
+        OtherSideFrom(player.getLocation())->enter(player);
     else
-        debug("door is locked");
+        player.status("Door Locked");
 }
 
 Maze::Maze()
@@ -356,10 +341,7 @@ std::shared_ptr<Room> Maze::RoomNo(int rn) const
         throw std::invalid_argument("Room numbers should be in valid range");
 }
 
-/*! \brief Spell constructor
- *
- *  create a spell object
- */
+
 Spell::Spell(std::string q,std::string a)
     : q(q),
       a(a)
@@ -367,32 +349,15 @@ Spell::Spell(std::string q,std::string a)
     debug("creating a spell!!");
 }
 
-/*! \brief Spell destructor
- *
- *  destroys a spell object
- */
 Spell::~Spell()
 {
     debug("destroy a spell");
 }
 
-/*! \brief dispell this spell
- *
- *  if provided string is correct the spell is dispelled
- *
- * \param s answer string
- * \return true if s == answer
- *         false otherwise
- */
 bool Spell::dispell(std::string s) {
     return s == this->a;
 }
-/*! \brief Enchanted room consructor *
- *  create an enchanted room.Enchanted rooms need a spell to be broken.
- *
- * \param n room number
- * \param s spell
- */
+
 EnchantedRoom::EnchantedRoom(int n, std::unique_ptr<Spell> s)
     : Room(n),
       _spell(std::move(s))
@@ -400,33 +365,27 @@ EnchantedRoom::EnchantedRoom(int n, std::unique_ptr<Spell> s)
     debug("Creating enchanted room");
 }
 
-/*! \brief Enchanted Room destructor
- *
- *  destroys an enchanted room
- */
 EnchantedRoom::~EnchantedRoom()
 {
     debug("Destroying enchanted Room %d", this->GetRoomNo());
 }
 
-/*! \brief enter this room
- *
- *  currently tells if the spell answer is right or wrong.
- *  \todo on adding player class enter only if spell broken
- *
- */
-void EnchantedRoom::enter() {
+void EnchantedRoom::enter(MazePlayer& player) {
     if(_spell->dispell("test"))
-        debug("Spell broken!! location: %d", this->GetRoomNo());
-    else
-        debug("Spell not broken!! location: %d",this->GetRoomNo());
+    {
+        player.setLocation(this->GetRoomNo());
+        std::string s = "EnchantedRoom:";
+        s += std::to_string(this->GetRoomNo());
+        player.status(s);
+    }
+    else{
+        std::string s = "Spell not broken!! location";
+        s += std::to_string(this->GetRoomNo());
+        player.status(s);
+    }
 }
 
-/*!
- * \brief Bomb constructor
- *
- * \param n time bomb goes off
- */
+
 Bomb::Bomb(int n)
     :_time(n)
 {
@@ -441,20 +400,12 @@ Bomb::~Bomb()
     debug("Destroying Bomb!!");
 }
 
-/*!
- * \brief Get Detonation Time
- * \return detonation time
- */
 int Bomb::GetDetonationTime()
 {
     return _time;
 }
 
-/*!
- * \brief Create Room With A Bomb
- * \param n room no
- * \param b bomb
- */
+
 RoomWithABomb::RoomWithABomb(int n, std::unique_ptr<Bomb> b)
     : Room(n),
       _bomb(std::move(b))
@@ -462,20 +413,18 @@ RoomWithABomb::RoomWithABomb(int n, std::unique_ptr<Bomb> b)
     debug("Creating Room with a bomb!!, %d", this->GetRoomNo());
 }
 
-/*!
- * \brief Destroy Room With A Bomb
- */
 RoomWithABomb::~RoomWithABomb()
 {
     debug("Destroying Room with a bomb!!");
 }
 
-/*!
- * \brief enter behaviour of bombed room
- */
-void RoomWithABomb::enter()
+void RoomWithABomb::enter(MazePlayer& player)
 {
-    debug("location : time %d : %d", this->GetRoomNo() , _bomb->GetDetonationTime());
+    player.setLocation(this->GetRoomNo());
+    std::string s = "EnchantedRoom:";
+    s += std::to_string(this->GetRoomNo());
+    s += " detonation " + std::to_string(_bomb->GetDetonationTime());
+    player.status(s);
 }
 
 BombedWall::BombedWall()
@@ -488,8 +437,39 @@ BombedWall::~BombedWall()
     debug("Destroying bombed Wall");
 }
 
-void BombedWall::enter()
+void BombedWall::enter(MazePlayer& player)
 {
-    debug("!!you've hit a bombed wall!!");
+    player.status("BombedWall");
 }
-}}
+
+int MazePlayer::getLocation() const
+{
+    return location;
+}
+
+void MazePlayer::setLocation(int value)
+{
+    location = value;
+}
+
+MazePlayer::~MazePlayer()
+{
+
+}
+
+MazePlayer::MazePlayer()
+    :location(0)
+{
+
+}
+
+MazePlayer::MazePlayer(const MazePlayer &other) = default;
+MazePlayer& MazePlayer::operator=(const MazePlayer &other) = default;
+
+void MazeTestPlayer::status(std::string s)
+{
+    _status.clear();
+    _status = s;
+}
+
+}

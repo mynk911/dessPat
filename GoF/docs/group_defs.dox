@@ -1,0 +1,87 @@
+/** @defgroup Creational  creational design patterns
+
+Examples of creational design patterns. Central to all examples is 
+the composite Type heirarchy MapSite. All examples build objects of 
+MapSite type to demonstrate pros and cons of different creational 
+patterns and applicability of each to particular scenarios. MazeGame 
+brings creation and MapSite code together. It also contains code for 
+Factory Method pattern.
+
+*/
+
+/** @defgroup Abstract_Factory Abstract Factory Pattern Examples.
+*@ingroup Creational
+ 
+Abstract Factory classes create a family of related objects. In our
+example MazeFactory creates objects of type Maze, Room, Wall and Door.
+All these objects together constitute a maze. EnchantedMazeFactory and
+BombedMazeFactory override MazeFactory to create EnchantedRooms and 
+RoomWithabomb respectively instead of normal rooms. 
+
+Abstract Factories help to keep design logic of the whole structure independent
+of it's constituents. If we have code to create maze of certain design as in 
+MazeGame::createMaze just passing in EnchantedMazeFactory allows for creation of 
+enchanted mazes without any code changes.
+
+In our example, this method is suitable if mazes are categorized to 
+always be made of a particular types of MapSite subclasses. 
+
+For Example:
+<ul>
+<li> Set1 {Room, Wall, Door} </li> 
+<li> Set2 {EnchantedRoom, EnchantedWall, EnchantedDoor} </li>
+</ul>
+
+In such a circumstance, one can have a MazeFactory dedicated to each such 
+subgroup.
+*/ 
+
+/** @defgroup Singleton  Singleton Pattern classes.
+@ingroup Creational
+
+Singleton pattern enforces existence of only single object of a class. Such
+classes are also refererred as singleton.
+ 
+MazeFactory is a singleton. Only one MazeFactory object can exist.
+*/ 
+
+/** @defgroup Builder  Builder Pattern classes.
+@ingroup Creational
+
+Builders build complex structures by creating and assembling simpler objects. The details of  
+of assembly are internal to the builder. User only makes calls for creation of simpler object
+and then retrieves the final result.
+
+In our example, StandardMazeBuilder can build a connected maze if just asked to create a
+Maze with two rooms and one door. Creation of walls and placing door on common wall is 
+abstracted out.
+ */
+
+/** @defgroup Builder  Prototype Pattern classes.
+@ingroup Creational
+
+Prototype uses prototypes of objects to be created for specifying objects to be created. New objects
+are created by cloning prototypes. Prototype pushes the responsibility of creation on the
+the class of which object is being created. Prototype is useful when there is a great variety of classes
+and they are not interdependent with regards to the creation logic.
+
+In our example of PrototypeMazeFactory User can create a maze of arbitrary setting by passing 
+in arbitrary combination of prototypes. However a maze still has only one type of rooms, walls 
+and doors. Even greater flexibilty can be achieved by providing a MapSiteCreator class which is initialized
+with a prototype. Each object of MapSiteCreator can be initialized with a prototype of any room, 
+wall or door. This can pove very useful in a GUI tool pallette. 
+*/
+
+/** @defgroup Factory_Methods Factory Method usage.
+@ingroup Creational
+
+Factory method keeps creation logic in the user's class. User can define virtual functions which 
+create object of a particular type. When user needs to create object of derived class, he would
+derive his own class and override the virtual functions he created. Hence factory method forces 
+user to use a particular class to create particular object(or family of objects). This makes his
+code sensitive to changes in the classes he instantiates.
+
+In our example MazeGame uses factory methods to create Room, Wall and Door. EnchantedMazeGame and
+BombedMazeGame are created to allow creation of rooms woth spells and bombs.
+
+ */

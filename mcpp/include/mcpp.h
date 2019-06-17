@@ -2,7 +2,7 @@
 
 #include "mcpp_export.h"
 
-class MCPP_EXPORT test
+class MCPP_EXPORT mcpp_test
 {
 	int t = 5;
 public:

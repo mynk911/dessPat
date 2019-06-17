@@ -1,46 +1,35 @@
 /**
-  \file mazegame.h
-  \brief header for MazeGme
-
+  @file mazegame.h
+  header for MazeGame.
   declarations for a MazeGame that user can use to create a MazeGame.
-
-  \author Mayank Bansal
-  */
+ */
 
 #ifndef _GOF_MAZEGAME_H_
 #define _GOF_MAZEGAME_H_
 
 #include <memory>
-
+#include <string>
 #include "gof_export.h"
 
 namespace gof {
-namespace creational {
 
-/*!
- * \brief forward declaration of class Maze \link maze.h
- */
 class Maze;
 class Room;
 class Door;
 class Wall;
 class Spell;
-/*!
- * \brief forward declaration of class Maze \link mazebuilder.h
- */
-class Mazefactory;
+class MazeFactory;
 class MazeBuilder;
 class MazePrototypeFactory;
-///
-/// \brief The MazeGame class
-/// this class can be used to create a Maze Game.
-///
+class MazePlayer;
+enum class Direction;
+/** This class can be used to create a Maze Game.
+ * @ingroup Factory_Methods
+ */
 class GOF_EXPORT MazeGame
 {
 public:
-    /**
-     * \brief MazeGame Constructor
-     */
+    /// @brief MazeGame Constructor
     MazeGame();
 
     MazeGame(MazeGame&& rhs);
@@ -49,9 +38,7 @@ public:
     MazeGame& operator=(const MazeGame& rhs) = delete;
 
 
-    /*!
-      \brief MazeGame Destructor
-     */
+    /// MazeGame Destructor
     virtual ~MazeGame();
 
     virtual std::unique_ptr<Maze> MakeMaze() const;
@@ -59,21 +46,23 @@ public:
     virtual std::unique_ptr<Door> MakeDoor(std::shared_ptr<Room> r1, std::shared_ptr<Room> r2) const;
     virtual std::unique_ptr<Wall> MakeWall() const;
 
-    /**
-     * \brief Creates a maze game
-     */
+    /// \brief Creates a maze game
     void CreateMaze();
-    void CreateMaze(Mazefactory* mf);
+    void CreateMaze(MazeFactory* mf);
     void CreateMaze(std::shared_ptr<MazeBuilder> mb);
     void CreateMazebyFactoryMethods();
     std::unique_ptr<MazePrototypeFactory> MakePrototypeFactory();
+
+    void initGame(MazePlayer& player);
+    void playGame(MazePlayer& player, Direction d);
+
 private:
-    /*!
-     * \brief pointer to maze
-     */
     std::unique_ptr<Maze> _maze;
 };
 
+/** Overrides factory methods to create RoomWithABomb.
+ * @ingroup Factory_Methods
+ */
 class GOF_EXPORT BombedMazeGame : public MazeGame
 {
 public:
@@ -83,6 +72,9 @@ public:
     std::unique_ptr<Wall> MakeWall() const override;
 };
 
+/** Overrides Factory methods to ceate EnchantedRoom
+ * @ingroup Factory_Methods
+ */
 class GOF_EXPORT EnchantedMazeGame : public MazeGame
 {
 public:
@@ -93,5 +85,5 @@ protected:
     std::unique_ptr<Spell> CastSpell() const;
 };
 
-}}
+}
 #endif

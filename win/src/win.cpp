@@ -4,7 +4,7 @@
 #include "win.h"
 #include <windows.h>
 
-int test()
+int win_hello()
 {
     MessageBox (NULL, TEXT ("Hello, Windows 98!"), TEXT ("HelloMsg"), 0) ;
     return 0 ;
