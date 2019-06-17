@@ -13,23 +13,26 @@
 
 namespace gof {
 
+MazeFactory* MazeFactory::_instance;
+
 MazeFactory* MazeFactory::Instance()
 {
-    static std::unique_ptr<MazeFactory> _instance;
     if(_instance == nullptr)
     {
         const char* mazestyle = getenv("MAZESTYLE");
         if(mazestyle == nullptr) mazestyle = "default";
         if(strcmp(mazestyle, "bombed") == 0)
-            _instance = std::unique_ptr<BombedMazeFactory>(new BombedMazeFactory);
+            _instance = new BombedMazeFactory;
         else if(strcmp(mazestyle, "enchanted") == 0)
-            _instance = std::unique_ptr<EnchantedMazeFactory>(new EnchantedMazeFactory);
+            _instance = new EnchantedMazeFactory;
 	// TODO : add MazePrototypeFactory case here.
         else
-            _instance = std::unique_ptr<MazeFactory>(new MazeFactory);
+            _instance = new MazeFactory;
     }
-    return _instance.get();
+    return _instance;
 }
+
+
 
 MazeFactory::MazeFactory()
 {
@@ -41,7 +44,14 @@ MazeFactory::MazeFactory()
 MazeFactory::~MazeFactory()
 {
     debug("destroying MazeFactory");
-
+    if(_instance != nullptr)
+    {
+        // delete the object after zeroing out the static
+        // instance.
+        MazeFactory* ptr = _instance;
+        _instance = nullptr;
+        delete ptr;
+    }
 }
 
 std::unique_ptr<Maze> MazeFactory::MakeMaze() const

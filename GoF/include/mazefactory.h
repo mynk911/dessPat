@@ -32,11 +32,17 @@ class Bomb;
  */
 class GOF_EXPORT MazeFactory
 {
-public: 
-    /** MazeFactory destructor.
+public:
+    /** @name Deleted Functions
+     * Singleton cannot be copied, assigned or moved.
      */
-    virtual ~MazeFactory();
-    
+    ///@{
+    MazeFactory(const MazeFactory& other) = delete;
+    MazeFactory& operator=(const MazeFactory& other) = delete;
+    MazeFactory(MazeFactory&& other) = delete;
+    MazeFactory& operator=(MazeFactory&& other) = delete;
+    ///@}
+
     /** manages the single instance of MazeFactory.
      creates a mazefactory instance on first call. The type of object
      can be changed using environment variable MAZESTYLE. Subsequent calls
@@ -69,6 +75,11 @@ protected:
      constructor can only be made by derived classes and Instance.
      */
     MazeFactory();
+    /** MazeFactory destructor.
+     */
+    virtual ~MazeFactory();
+private:
+    static MazeFactory* _instance;
 };
 
 /** @file mazefactory_private.h
