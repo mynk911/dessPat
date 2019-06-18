@@ -77,7 +77,7 @@ protected:
     MazeFactory();
     /** MazeFactory destructor.
      */
-    virtual ~MazeFactory();
+    ~MazeFactory();
 private:
     static MazeFactory* _instance;
 };
@@ -95,7 +95,7 @@ class EnchantedMazeFactory : public MazeFactory
 {
     friend class MazeFactory;
 public:
-     ~EnchantedMazeFactory() override;
+     ~EnchantedMazeFactory();
     /// creates and returns an EnchantedRoom.
     std::unique_ptr<Room> MakeRoom(int rn) const override;
 protected:
@@ -112,7 +112,7 @@ class BombedMazeFactory : public MazeFactory
 {
     friend class MazeFactory;
 public:
-    ~BombedMazeFactory() override;
+    ~BombedMazeFactory();
     /// creates and returns a RoomWithABomb.
     std::unique_ptr<Room> MakeRoom(int rn) const override;
     std::unique_ptr<Wall> MakeWall() const override;

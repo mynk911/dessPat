@@ -46,7 +46,7 @@ TEST(gofTests, ManualCreationTest)
     testRoom2Walls(mg, mP, s);
 }
 
-class TestMazeFactory : public gof::MazeFactory {
+class TestMazeFactory final : public gof::MazeFactory {
 public:
     void destroySingleton()
     {
@@ -73,18 +73,37 @@ TEST(gofTests, MazeFactoryTest)
     tmf = nullptr;
 }
 
-//TEST(gofTests, EnchantedMazeFactoryTest)
-//{
-//    putenv("MAZESTYLE=enchanted");
-//    gof::MazeGame mg;
-//    mg.CreateMaze(gof::MazeFactory::Instance());
-//    gof::MazeTestPlayer mP;
-//    mg.initGame(mP);
-//    EXPECT_EQ("EnchantedRoom:1", mP._status);
-//    std::string s = "Wall";
-//    testRoom1Walls(mg, mP, s);
-//    mg.playGame(mP, gof::Direction::East);
-//    EXPECT_EQ("EnchantedRoom:2", mP._status);
-//    testRoom2Walls(mg, mP, s);
-//}
+TEST(gofTests, EnchantedMazeFactoryTest)
+{
+    auto tmf = static_cast<TestMazeFactory*>
+                    (operator new(sizeof(TestMazeFactory)));    
+    putenv("MAZESTYLE=enchanted");
+    gof::MazeGame mg;
+    mg.CreateMaze(gof::MazeFactory::Instance());
+    gof::MazeTestPlayer mP;
+    mg.initGame(mP);
+    EXPECT_EQ("EnchantedRoom:1", mP._status);
+    std::string s = "Wall";
+    testRoom1Walls(mg, mP, s);
+    mg.playGame(mP, gof::Direction::East);
+    EXPECT_EQ("EnchantedRoom:2", mP._status);
+    testRoom2Walls(mg, mP, s);
+    tmf->destroySingleton();
+    operator delete (tmf);
+    tmf = nullptr;
+}
 
+TEST(gofTests, BombedMazeFactoryTest)
+{    
+    putenv("MAZESTYLE=bombed");
+    gof::MazeGame mg;
+    mg.CreateMaze(gof::MazeFactory::Instance());
+    gof::MazeTestPlayer mP;
+    mg.initGame(mP);
+    EXPECT_EQ("BombedRoom:1 detonation 1", mP._status);
+    std::string s = "BombedWall";
+    testRoom1Walls(mg, mP, s);
+    mg.playGame(mP, gof::Direction::East);
+    EXPECT_EQ("BombedRoom:2 detonation 2", mP._status);
+    testRoom2Walls(mg, mP, s);
+}

@@ -421,7 +421,7 @@ RoomWithABomb::~RoomWithABomb()
 void RoomWithABomb::enter(MazePlayer& player)
 {
     player.setLocation(this->GetRoomNo());
-    std::string s = "EnchantedRoom:";
+    std::string s = "BombedRoom:";
     s += std::to_string(this->GetRoomNo());
     s += " detonation " + std::to_string(_bomb->GetDetonationTime());
     player.status(s);
