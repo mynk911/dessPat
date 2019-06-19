@@ -1,11 +1,3 @@
-/*!
- * \file mazebuilder.h
- * \brief contains mazebuilder classes
-
-   provide builder classes to create mazes from mapsites.
-   \author Mayank Bansal
- */
-
 #ifndef _GOF_MAZE_BUILDER_H_
 #define _GOF_MAZE_BUILDER_H_
 

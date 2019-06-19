@@ -1,11 +1,3 @@
-/*!
-  \file maze.h
-  \brief contains declarations for map sites used in a a maze game.
-
-  this file contains a class hierarchy for different MapSites used
-  in a MazeGame.
-  \author Mayank Bansal
-  */
 #ifndef GOF_MAZE_H_
 #define GOF_MAZE_H_
 

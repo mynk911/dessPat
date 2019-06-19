@@ -1,8 +1,3 @@
-/**
- *  @file mazefactory.h
- *  declarations for mazefactory.
- */
-
 #ifndef GOF_MAZEFACTORY_H_
 #define GOF_MAZEFACTORY_H_
 

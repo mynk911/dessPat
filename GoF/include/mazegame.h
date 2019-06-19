@@ -1,9 +1,3 @@
-/**
-  @file mazegame.h
-  header for MazeGame.
-  declarations for a MazeGame that user can use to create a MazeGame.
- */
-
 #ifndef _GOF_MAZEGAME_H_
 #define _GOF_MAZEGAME_H_
 
