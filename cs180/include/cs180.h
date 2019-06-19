@@ -1,11 +1,3 @@
-/**
- * \file cs180.h
- * \brief CS180 header file
- *
- * declarations for CS180
- *
- * \author Mayank Bansal
- */
 #ifndef _CS180_CS180_H_
 #define _CS180_CS180_H_
 
@@ -14,9 +6,43 @@
 #include <limits>
 #include "cs180_export.h"
 
+/** Main namespace for cs180. 
+ */
 namespace cs180 {
 
-int CS180_EXPORT stable_matching(std::istream& in, std::ostream& out);
+/** Finds stable matching between two groups.
+ *Given two groups and ordered list of their preferences for individuals in
+ *other group, finds a stable matching - a matching where no two particular
+ *matches can break to form new matches.
+ */
+CS180_EXPORT class StableMatching 
+{
+public:
+    /// size type
+    using SizeType = std::vector<std::string>::size_type;
+    /** constructor
+     * @param in std::istream& streams the input data. Data :
+        <ol>
+        <li>n - an integer </li>
+        <li> n unique strings representing n members in Group 1</li>
+        <li> n unique strings representing n members in Group 2</li>
+         <li> preference list for n Group 1 members in form 
+              group1-member followed by n group 2 members</li>
+         <li> preference list for n Group 2 members in form 
+              group2-member followed by n group 1 members</li>
+        </ol>
+        The order of data should be maintained as above.
+     */
+    StableMatching(std::istream& in);
+    /// finds stable matching and streams output to out.
+    ~StableMatching();
+    StableMatching& operator()(std::ostream& out, bool proposerIsGroup1 = true);
+private:
+    SizeType n;
+    std::vector< std::string > group1, group2;
+    SizeType* preferences1, *preferences2, *rankings1, *rankings2;
+};
+    
 namespace pq {
 template <typename T>
 class heap

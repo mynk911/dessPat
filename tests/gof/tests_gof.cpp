@@ -5,6 +5,9 @@
 #include "mazebuilder.h"
 #include "mazegame.h"
 #include "maze.h"
+#include "shape.h"
+#include "textview.h"
+#include "textshape.h"
 
 void testCommonWalls(gof::MazeGame& mg,
                     gof::MazeTestPlayer& mP,
@@ -47,6 +50,8 @@ TEST(gofTests, ManualCreationTest)
     testRoom2Walls(mg, mP, s);
 }
 
+// this class lets us access MazeFactory destructor so that we can delete
+// the singleton.
 class TestMazeFactory final : public gof::MazeFactory {
 public:
     void destroySingleton()
@@ -74,6 +79,8 @@ TEST(gofTests, MazeFactoryTest)
     tmf = nullptr;
 }
 
+// Here object of type EnchantedMazeFactory is deleted by ~MazeFactory which
+// is non-virtual. This would not be a safe practice.
 TEST(gofTests, EnchantedMazeFactoryTest)
 {
     auto tmf = static_cast<TestMazeFactory*>
@@ -191,4 +198,41 @@ TEST(gofTests, PrototypeFactoryTest)
     mg.playGame(mP, gof::Direction::East);
     EXPECT_EQ("Room:2", mP._status);
     testRoom2Walls(mg, mP, s);
+}
+
+TEST(gofTests, ShapeTest)
+{
+    gof::Shape sp(2,4, 4,6);
+    gof::Point p1(0,0), p2(0,0);
+    
+    sp.BoundingBox(&p1, &p2);
+    EXPECT_EQ(p1.getX(), 2);
+    EXPECT_EQ(p1.getY(), 4);
+    EXPECT_EQ(p2.getX(), 4);
+    EXPECT_EQ(p2.getY(), 6);
+}
+
+TEST(gofTests, TextViewTest)
+{
+    gof::TextView tv(2, 4, 2, 2);
+    gof::Coord a,b,c,d;
+    
+    tv.GetOrigin(a, b);
+    tv.GetExtent(c, d);
+    EXPECT_EQ(a, 2);
+    EXPECT_EQ(b, 4);
+    EXPECT_EQ(c, 2);
+    EXPECT_EQ(d, 2);
+}
+
+TEST(gofTests, TextShapeTest)
+{
+    gof::TextShape tsp(2,4, 4,6);
+    gof::Point p1(0,0), p2(0,0);
+    
+    tsp.BoundingBox(&p1, &p2);
+    EXPECT_EQ(p1.getX(), 2);
+    EXPECT_EQ(p1.getY(), 4);
+    EXPECT_EQ(p2.getX(), 4);
+    EXPECT_EQ(p2.getY(), 6);
 }

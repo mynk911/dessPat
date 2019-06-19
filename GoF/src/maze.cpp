@@ -1,7 +1,3 @@
-// file maze.cpp
-// this file contains a class hierarchy for different MapSites used
-// in a MazeGame.
-
 #include <iostream>
 #include <stdexcept>
 

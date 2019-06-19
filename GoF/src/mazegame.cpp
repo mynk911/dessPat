@@ -1,6 +1,3 @@
-// \file mazegame.cpp
-// implementation for a MazeGame that user can use to create a MazeGame.
-
 #include <iostream>
 
 #include "dbg.h"

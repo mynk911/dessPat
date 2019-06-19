@@ -1,11 +1,3 @@
-/*!
- * \file mazebuilder.cpp
- *
- * maze builder classes implementations
- *
- * \author Mayank Bansal
- */
-
 #include <iostream>
 
 #include "dbg.h"

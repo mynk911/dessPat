@@ -1,9 +1,3 @@
-/*!
- * \file mazefactory.cpp
- * \brief definitions for mazefactory heirarchy
- * \author mayank bansal
- */
-
 #include <iostream>
 #include <cstring>
 

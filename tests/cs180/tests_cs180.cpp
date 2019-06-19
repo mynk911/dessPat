@@ -10,8 +10,20 @@ TEST(cs180, stableMatchingBasic)
     in << "2 m1 m2 w1 w2 m1 w2 w1 m2 w1 w2 w1 m1 m2 w2 m1 m2\0";
     std::string s("w1 m2\n"
 		  "w2 m1\n");
-    auto i = cs180::stable_matching(in, out);
-    EXPECT_EQ(i, 0);
+    cs180::StableMatching sm(in);
+    sm(out);
+    EXPECT_EQ(s, out.str());
+}
+
+TEST(cs180, stableMatchingBasicReversed)
+{
+    std::stringstream in, out;
+
+    in << "2 m1 m2 w1 w2 m1 w2 w1 m2 w1 w2 w1 m1 m2 w2 m1 m2\0";
+    std::string s("m1 w2\n"
+		  "m2 w1\n");
+    cs180::StableMatching sm(in);
+    sm(out, false);
     EXPECT_EQ(s, out.str());
 }
 
@@ -39,7 +51,8 @@ TEST(cs180, stableMatchingComplex)
 
     std::string s("debra deb\nfelicity brian\njenny adam\nkatie ethan\nlucy "
 		  "greg\nmary charlie\nsusan fred\n");
-    auto i = cs180::stable_matching(in, out);
-    EXPECT_EQ(i, 0);
+    cs180::StableMatching sm(in);
+    sm(out);
+    
     EXPECT_EQ(s, out.str());
 }
