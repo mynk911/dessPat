@@ -32,7 +32,7 @@ enum class Direction {
 /** An abstract class that provides interface for all mapsites
  * @ingroup Creational
 */
-class MapSite
+class GOF_EXPORT MapSite
 {
 public:
     /// controls entry behaviour for mapsite
@@ -48,7 +48,7 @@ public:
 /** A room inside a maze
  * @ingroup Creational
  */
-class Room: public MapSite {
+class GOF_EXPORT Room: public MapSite {
 public:
     /** Room constructor
      * @param roomNo to uniquely identify a room
@@ -91,7 +91,7 @@ private:
 /** A mapsite which represents wall
  * @ingroup Creational
  */
-class Wall : public MapSite
+class GOF_EXPORT Wall : public MapSite
 {
 public:
     /// Wall constructor
@@ -111,7 +111,7 @@ public:
 /** A mapsite which represents a door
  * @ingroup Creational
  */
-class Door: public MapSite {
+class GOF_EXPORT Door: public MapSite {
 public:
     /** Door constructor
      * @param r1 room one
@@ -142,7 +142,7 @@ private:
 /** A collection of map sites
  * @ingroup Creational
  */
-class Maze
+class GOF_EXPORT Maze
 {
 public:
     /// Maze constructor

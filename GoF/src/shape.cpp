@@ -4,7 +4,6 @@
 #include "shape.h"
 
 namespace gof {
-namespace structural {
 
 namespace bg = boost::geometry;
 
@@ -85,5 +84,5 @@ std::unique_ptr<Manipulator> Shape::CreateManipulator() const
     return std::make_unique<Manipulator>(*this);
 }
 
-}}
+}
 

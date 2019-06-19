@@ -89,6 +89,16 @@ CountingMazeBuilder::~CountingMazeBuilder()
     debug("Destroying Counting Maze Builder");
 }
 
+void CountingMazeBuilder::BuildMaze()
+{
+}
+
+std::unique_ptr<Maze> CountingMazeBuilder::GetMaze()
+{
+    return nullptr;
+}
+
+
 void CountingMazeBuilder::BuildRoom(int rno)
 {
     _rooms++;

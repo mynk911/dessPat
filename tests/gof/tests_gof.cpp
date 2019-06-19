@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 #include "mazefactory.h"
+#include "mazebuilder.h"
 #include "mazegame.h"
 #include "maze.h"
 
@@ -105,5 +106,89 @@ TEST(gofTests, BombedMazeFactoryTest)
     testRoom1Walls(mg, mP, s);
     mg.playGame(mP, gof::Direction::East);
     EXPECT_EQ("BombedRoom:2 detonation 2", mP._status);
+    testRoom2Walls(mg, mP, s);
+}
+
+TEST(gofTests, StandardMazeBuilderTesst)
+{
+    gof::MazeGame mg;
+    std::stringstream out;
+    mg.CreateMaze(out, std::make_shared<gof::StandardMazeBuilder>());
+    EXPECT_EQ("", out.str());
+    gof::MazeTestPlayer mP;
+    mg.initGame(mP);
+    EXPECT_EQ("Room:1", mP._status);
+    std::string s = "Wall";
+    testRoom1Walls(mg, mP, s);
+    mg.playGame(mP, gof::Direction::East);
+    EXPECT_EQ("Room:2", mP._status);
+    testRoom2Walls(mg, mP, s);
+}
+
+TEST(gofTests, CountingMazeBuilderTesst)
+{
+    gof::MazeGame mg;
+    std::stringstream out;
+    mg.CreateMaze(out, std::make_shared<gof::CountingMazeBuilder>());
+    EXPECT_EQ("room count 2 door count 1", out.str());
+}
+
+TEST(gofTests, FactoryMethodTest1)
+{
+    gof::MazeGame mg;
+    mg.CreateMazebyFactoryMethods();
+    gof::MazeTestPlayer mP;
+    mg.initGame(mP);
+    EXPECT_EQ("Room:1", mP._status);
+    std::string s = "Wall";
+    testRoom1Walls(mg, mP, s);
+    mg.playGame(mP, gof::Direction::East);
+    EXPECT_EQ("Room:2", mP._status);
+    testRoom2Walls(mg, mP, s);
+}
+
+TEST(gofTests, FactoryMethodTest2)
+{
+    gof::EnchantedMazeGame mg;
+    mg.CreateMazebyFactoryMethods();
+    gof::MazeTestPlayer mP;
+    mg.initGame(mP);
+    EXPECT_EQ("EnchantedRoom:1", mP._status);
+    std::string s = "Wall";
+    testRoom1Walls(mg, mP, s);
+    mg.playGame(mP, gof::Direction::East);
+    EXPECT_EQ("EnchantedRoom:2", mP._status);
+    testRoom2Walls(mg, mP, s);
+}
+
+TEST(gofTests, FactoryMethodTest3)
+{
+    gof::BombedMazeGame mg;
+    mg.CreateMazebyFactoryMethods();
+    gof::MazeTestPlayer mP;
+    mg.initGame(mP);
+    EXPECT_EQ("BombedRoom:1 detonation 1", mP._status);
+    std::string s = "BombedWall";
+    testRoom1Walls(mg, mP, s);
+    mg.playGame(mP, gof::Direction::East);
+    EXPECT_EQ("BombedRoom:2 detonation 2", mP._status);
+    testRoom2Walls(mg, mP, s);
+}
+
+TEST(gofTests, PrototypeFactoryTest)
+{
+    gof::MazeGame mg;
+    gof::MazePrototypeFactory mf(std::make_unique<gof::Maze>(),
+                              std::make_unique<gof::Room>(0),
+                              std::make_unique<gof::Door>(),
+                              std::make_unique<gof::Wall>());
+    mg.CreateMaze(&mf);
+    gof::MazeTestPlayer mP;
+    mg.initGame(mP);
+    EXPECT_EQ("Room:1", mP._status);
+    std::string s = "Wall";
+    testRoom1Walls(mg, mP, s);
+    mg.playGame(mP, gof::Direction::East);
+    EXPECT_EQ("Room:2", mP._status);
     testRoom2Walls(mg, mP, s);
 }

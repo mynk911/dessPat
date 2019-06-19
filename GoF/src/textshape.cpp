@@ -2,7 +2,6 @@
 #include "dbg.h"
 
 namespace gof {
-namespace structural {
 
 TextManipulator::TextManipulator(const TextShape& txtShape)
     : Manipulator(txtShape)
@@ -21,7 +20,7 @@ void TextManipulator::manipulate()
 }
 TextShape::TextShape(double left, double bottom, double right, double top)
     :Shape(left, bottom, right, top),
-      Textview (left, bottom, right - left, top - bottom)
+      TextView (left, bottom, right - left, top - bottom)
 {
     debug("Creating TextShape");
 }
@@ -42,7 +41,7 @@ void TextShape::BoundingBox(Point *bottomLeft, Point *topRight) const
 
 bool TextShape::IsEmpty() const
 {
-    return Textview::IsEmpty();
+    return TextView::IsEmpty();
 }
 
 std::unique_ptr<Manipulator> TextShape::CreateManipulator() const
@@ -50,4 +49,4 @@ std::unique_ptr<Manipulator> TextShape::CreateManipulator() const
     return std::make_unique<TextManipulator>(*this);
 }
 
-}}
+}

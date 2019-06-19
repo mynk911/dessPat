@@ -10,6 +10,7 @@
 #define _GOF_MAZE_BUILDER_H_
 
 #include <memory>
+#include "gof_export.h"
 
 namespace gof {
 
@@ -20,7 +21,7 @@ enum class Direction;
  * defines a common interface for builder classes.
  * @ingroup Builder
  */
-class MazeBuilder
+class GOF_EXPORT MazeBuilder
 {
 public:
     /// MazeBuilder Destructor.
@@ -47,7 +48,7 @@ protected:
 /** assembles a Simple MAze from given rooms and doors.
  * @ingroup Builder
  */
-class StandardMazeBuilder : public MazeBuilder
+class GOF_EXPORT StandardMazeBuilder : public MazeBuilder
 {
 public:
     StandardMazeBuilder();
@@ -65,13 +66,15 @@ protected:
 /** a special builder example which simply counts doors and rooms in a plan.
  * @ingroup Builder
  */
-class CountingMazeBuilder : public MazeBuilder
+class GOF_EXPORT CountingMazeBuilder : public MazeBuilder
 {
 public:
     CountingMazeBuilder();
     ~CountingMazeBuilder() override;
     void BuildRoom(int rno) override;
     void BuildDoor(int r1, int r2) override;
+    void BuildMaze() override;
+    std::unique_ptr<Maze> GetMaze() override;
     /** Get Counts of doors and rooms.
      * @param rooms[out] number of rooms.
      * @param doors[out] number of doors.

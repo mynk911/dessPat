@@ -81,7 +81,7 @@ void MazeGame::CreateMaze(MazeFactory* mf)
     r2->SetSide(Direction::West, theDoor);
 }
 
-void MazeGame::CreateMaze(std::shared_ptr<MazeBuilder> mb)
+void MazeGame::CreateMaze(std::ostream& out, std::shared_ptr<MazeBuilder> mb)
 {
     mb->BuildMaze();
     mb->BuildRoom(1);
@@ -95,7 +95,7 @@ void MazeGame::CreateMaze(std::shared_ptr<MazeBuilder> mb)
     {
         int rooms = 0 , doors = 0;
         cmb->GetCounts(rooms, doors);
-        std::cout << "room count" << rooms << "door count" << doors << std::endl;
+        out << "room count " << rooms << " door count " << doors;
     }
 }
 
@@ -205,19 +205,7 @@ std::unique_ptr<Room> EnchantedMazeGame::MakeRoom(int rno) const
 
 std::unique_ptr<Spell> EnchantedMazeGame::CastSpell() const
 {
-    return std::make_unique<Spell>("test","ans");
-}
-
-std::unique_ptr<MazePrototypeFactory> MazeGame::MakePrototypeFactory()
-{
-    auto maze = std::make_unique<Maze>();
-    auto room = std::make_unique<Room>();
-    auto door = std::make_unique<Door>();
-    auto wall = std::make_unique<Wall>();
-    return std::make_unique<MazePrototypeFactory>(std::move(maze),
-                                                  std::move(room),
-                                                  std::move(door),
-                                                  std::move(wall));
+    return std::make_unique<Spell>("qwe","test");
 }
 
 void MazeGame::initGame(MazePlayer &player)

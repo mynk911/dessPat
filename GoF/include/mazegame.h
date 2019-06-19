@@ -49,9 +49,8 @@ public:
     /// \brief Creates a maze game
     void CreateMaze();
     void CreateMaze(MazeFactory* mf);
-    void CreateMaze(std::shared_ptr<MazeBuilder> mb);
+    void CreateMaze(std::ostream& out, std::shared_ptr<MazeBuilder> mb);
     void CreateMazebyFactoryMethods();
-    std::unique_ptr<MazePrototypeFactory> MakePrototypeFactory();
 
     void initGame(MazePlayer& player);
     void playGame(MazePlayer& player, Direction d);

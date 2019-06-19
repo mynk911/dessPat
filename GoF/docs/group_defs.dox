@@ -1,5 +1,7 @@
 /** @defgroup Creational  creational design patterns
 
+<!-- add some explanation for creational patterns-->
+
 Examples of creational design patterns. Central to all examples is 
 the composite Type heirarchy MapSite. All examples build objects of 
 MapSite type to demonstrate pros and cons of different creational 
@@ -70,6 +72,7 @@ in arbitrary combination of prototypes. However a maze still has only one type o
 and doors. Even greater flexibilty can be achieved by providing a MapSiteCreator class which is initialized
 with a prototype. Each object of MapSiteCreator can be initialized with a prototype of any room, 
 wall or door. This can pove very useful in a GUI tool pallette. 
+<!-- update : currently only Room, Wall and Door can be prototyped -->
 */
 
 /** @defgroup Factory_Methods Factory Method usage.
@@ -85,3 +88,25 @@ In our example MazeGame uses factory methods to create Room, Wall and Door. Ench
 BombedMazeGame are created to allow creation of rooms woth spells and bombs.
 
  */
+
+/** @defgroup Structural structural design patterns
+
+Structural patterns are concerned with how classes and objects are composed to form larger structures.
+ */
+
+/** @defgroup Adapter Adapter pattern examples
+@ingroup Structural
+
+Adapter adapts an adaptee's implementation to a target's interface. The pattern comes in two flavours.
+Class adapter and Object Adapter
+
+Class adapter uses inheritence to adapt a class to another's interface 
+
+Object Adapter uses object composition to adapt a class to another's interface.
+
+In our example, class Shape is a generic shape. TextView is a third party class which can render text graphics.
+However our renderer can only understand Shape's interface. Hence TextShape implements Shape's interface and hides
+TextView. It handles all exchange of data and any conversions and pre processing required. TextShape can be simply
+plugged into APIs which accept shape and Text is rendered just any other shape. Here we take bounding box as an
+example from the many different possible properties of TextView and Shape which differ in ther internal implementation.
+*/ 

@@ -2,9 +2,8 @@
 #include "textview.h"
 
 namespace gof {
-namespace structural {
 
-struct Textview::pImpl {
+struct TextView::pImpl {
     Coord OriginX;
     Coord OriginY;
     Coord width;
@@ -19,33 +18,33 @@ struct Textview::pImpl {
     }
 };
 
-Textview::Textview(Coord OriginX, Coord OriginY, Coord width, Coord height)
+TextView::TextView(Coord OriginX, Coord OriginY, Coord width, Coord height)
     : pimpl(std::make_unique<pImpl>(OriginX, OriginY, width, height))
 {
     debug("creating textview");
 }
 
-Textview::~Textview()
+TextView::~TextView()
 {
     debug("destroying textview");
 }
 
-void Textview::GetOrigin(Coord& x, Coord& y) const
+void TextView::GetOrigin(Coord& x, Coord& y) const
 {
     x = pimpl->OriginX;
     y = pimpl->OriginY;
 }
 
-void Textview::GetExtent(Coord& width, Coord& height) const
+void TextView::GetExtent(Coord& width, Coord& height) const
 {
     width = pimpl->width;
     height = pimpl->height;
 }
 
-bool Textview::IsEmpty() const
+bool TextView::IsEmpty() const
 {
     return false;
 }
 
-}}
+}
 
