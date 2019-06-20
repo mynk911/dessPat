@@ -1,12 +1,3 @@
-/// \file gfg.c
-/// \brief this file contains implementations to some coding problems I am
-/// working on.
-///
-/// I am putting together this file to keep track of problems I have solved as
-/// well as a reference when I need a quick brush up of common topics. In this
-/// file I include the underlying algorithms used to solve problems as well as
-/// relevent references.
-
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #endif
@@ -18,10 +9,6 @@
 #include "string.h"
 
 #include "dbg.h"
-
-/** \defgroup Arrays Array problems
- *  \brief Basic problems which act upon array input 
- */
 
 static int loc[1010];
 static int aux[1010];
@@ -53,27 +40,6 @@ void swap(int A[], size_t a, size_t b)
     A[b] = temp;
 }
 
-/// \addtogroup Arrays
-/// \{
-
-///
-/// Uses the kadane's algorithm to find maximum sub array in \f$O(n)\f$
-/// time using \f$O(1)\f$ auxiliury space.
-///
-/// \sa https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane's_algorithm
-///
-/// \code
-/// int A[] = { 1, 2, 3, -6, 8 };
-/// int res;
-/// int out = maximum_subarray(A, 5, &res); // res : 8
-/// \endcode
-///
-/// \param [in] A array of integers.
-/// \param [in] n size of the integer array.
-/// \param [out] res sum of the maximum sum contiguous subarray
-///
-/// \return 0 for success
-///
 int maximum_subarray(int A[], size_t n, int* res)
 {
     int maxSoFar = INT_MIN, maxAtIndex = 0, temp = 0;
@@ -93,23 +59,6 @@ int maximum_subarray(int A[], size_t n, int* res)
     return 0;
 }
 
-///
-/// Uses XOR property \f$(x \oplus y) \oplus (x \oplus y \oplus z) = z\f$ to
-/// find missing number in \f$O(n)\f$ time complexity using \f$O(1)\f$ auxiliury
-/// space.
-/// 
-/// \code
-/// int A[] = { 1,2,3,5,6 };
-/// int res;
-/// int out = find_missing_number(A, 5, &res); // res : 4
-/// \endcode
-///
-/// \param [in] A array of natural numbers in range(1, n + 1) with one number missing
-/// \param [in] n size of array A
-/// \param [out] res missing number in array
-///
-/// \return 0 for success
-///
 int find_missing_number(int A[], size_t n, int* res)
 {
     // Calculate X = XOR of first n+1 natural numbers
@@ -127,26 +76,6 @@ int find_missing_number(int A[], size_t n, int* res)
     return 0;
 }
 
-///
-/// uses a method similar to sliding-window technique to find subarray with
-/// given sum in \f$O(n)\f$ time using \f$O(1)\f$ auxiliury space.
-///
-/// \sa https://www.geeksforgeeks.org/window-sliding-technique/
-///
-/// \code
-/// int A[] = { 1,2,3,5,6 };
-/// int res[2];
-/// int out = subarry_with_given_sum(A, 5, 10, res, 2); // res : {2, 4}
-/// \endcode
-///
-/// \param [in] A array of natural numbers
-/// \param [in] n size of array A
-/// \param [in] s sum of the elements of subarray
-/// \param [out] res holds start and end position of result sub array
-/// \param [in] size of res
-///
-/// \return 0 for success, else error code
-///
 int subarray_with_given_sum(int A[], size_t n, int s, size_t res[], size_t m)
 {
     size_t start = 0, end = 0;
@@ -178,22 +107,6 @@ error:
     return -1;
 }
 
-///
-/// uses Dutch national flag algorithm to sort an array of 0,1 and 2s in
-/// \f$O(n)\f$ time using \f$O(1)\f$ auxiliury space.
-///
-/// \sa https://en.wikipedia.org/wiki/Dutch_national_flag_problem
-///
-/// \code
-/// int A[] = { 0,1,2,1 };
-/// int out = sort_012(A, 4); // A : {0,1,1,2}
-/// \endcode
-///
-/// \param [in,out] A input array which is sorted in place.
-/// \param [in] n number of elements in A
-///
-/// \return 0 for success, else error code
-///
 int sort_012(int A[], size_t n)
 {
     size_t b = 0, m = 0, e = n;
@@ -219,22 +132,6 @@ int sort_012(int A[], size_t n)
     return 0;
 }
 
-///
-/// uses precomputed sum for rhs to find equilibrium point in \f$O(n)\f$ using
-/// \f$O(1)\f$ auxiliury space.
-///
-/// \code
-/// int A[] = {1, 3, 5, 2, 2};
-/// size_t res;
-/// int out = equilibrium_point(A, 5, &res); // res : 3
-/// \endcode
-///
-/// \param [in] A array of positive integers
-/// \param [in] n size if array A
-/// \param [out] res index of equilibrium
-///
-/// \return 0 if equilibrium point found, -1 if not found.
-///
 int equilibrium_point(int A[], size_t n, size_t *res)
 {
     //
@@ -265,24 +162,6 @@ int equilibrium_point(int A[], size_t n, size_t *res)
     return 0;
 }
 
-///
-/// uses dynamic programming to find maximum sum increaing subsequence in
-/// \f$O(n^2)\f$ time using \f$O(n)\f$ auxiloury space.
-///
-/// \sa https://en.wikipedia.org/wiki/Longest_increasing_subsequence
-///
-/// \code
-/// int A[] = {1, 101, 2, 3, 100, 4, 5};
-/// int res;
-/// int out = maximum_sum_increasing_subsequence(A, 7, &res); // res : 106
-/// \endcode
-///
-/// \param [in] A input array of positive numbers
-/// \param [in] n size of input array
-/// \param [out] res maximum sum
-///
-/// \return 0 for success
-///
 int maximum_sum_increasing_subsequence(int A[], size_t n, int* res)
 {
     // find MIS ending at index i
@@ -314,23 +193,6 @@ int maximum_sum_increasing_subsequence(int A[], size_t n, int* res)
     return 0;
 }
 
-///
-/// uses reverse traversal to find leaders in \f$O(n)\f$ time using \f$O(n)\f$
-/// auxiliury space.
-///
-/// \code
-/// int A[] = {16, 17, 4, 3, 5, 2};
-/// size_t res;
-/// int out = leaders_in_an_array(A, 6, res, &res_size); // res : (17 5 2)
-/// \endcode
-///
-/// \param [in] A input array  of positive numbers
-/// \param [in] n size of input array
-/// \param [out] res array of leaders \note there can be upto n leaders
-/// \param [out] res_size size of res
-///
-/// \return 0 for success
-///
 int leaders_in_an_array(int A[], size_t n, int *res, size_t* res_size)
 {
     //loop invariant : A[aux_index[i]] is the largest element in [j,n)
@@ -357,24 +219,6 @@ int leaders_in_an_array(int A[], size_t n, int *res, size_t* res_size)
     return 0;
 }
 
-///
-/// uses simple traversal to find min platforms minimum in \f$O(n)\f$ time
-/// using \f$O(1)\f$ auxiliury space.
-///
-/// \code
-/// int A[] = {900,  940, 950,  1100, 1500, 1800};
-/// int B[] = {910, 1200, 1120, 1130, 1900, 2000};
-/// int res;
-/// int out = minimum_platforms(A,B, 6, &res); // res : 3
-/// \endcode
-///
-/// \param [in] A array of arrival times of trains
-/// \param [in] B array of departure times of trains
-/// \param [in] n size of array
-/// \param [out] res minimum number of platforms
-///
-/// \return 0 for success
-///
 int minimum_platforms(int A[], int B[], size_t n, int* res)
 {
     // sort arrival and departure of trains in ascending order.
@@ -400,26 +244,6 @@ int minimum_platforms(int A[], int B[], size_t n, int* res)
     return 0;
 }
 
-
-///
-/// finds maximum in all subarrays of input array in \f$O(n)\f$ time using \f$O(1)
-/// \f$ auxiliury space.
-///
-/// \code
-/// int A[] = {1, 2, 3, 1, 4, 5, 2, 3, 6};
-/// int res[9]; size_t res_size;
-/// int out = maximums_of_subarray_size_k(A, 9, 3, res, &res_size);
-/// // res : (3, 3, 4, 5, 5, 5 ,6)
-/// \endcode
-///
-/// \param [in] A array of positive numbers
-/// \param [in] n size of array A
-/// \param [in] k size of subarray
-/// \param [out] res result array
-/// \param [out] res_size size of result array
-///
-/// \return 0 for success.
-///
 int maximums_of_subarray_size_k(int A[], size_t n, size_t k, int* res,
                                 size_t *res_size)
 {
@@ -447,23 +271,6 @@ int maximums_of_subarray_size_k(int A[], size_t n, size_t k, int* res,
     return 0;
 }
 
-///
-/// uses simple traversal to reverse groups of k elements in \f$O(n)\f$ time
-/// using \f$O(1)\f$ auxiliury space.
-///
-/// \code
-/// int A[] = {1, 2, 3, 4, 5};
-/// int out = reverse_array_in_groups(A, 5, 3);
-/// // res : (3, 2, 1, 5, 4)
-/// \endcode
-///
-/// \param [in,out] A array of positive integers. Integers are reversed in
-/// place.
-/// \param [in] n size of array A.
-/// \param [in] k size of the group. \f$k < n\f$
-///
-/// \return 0 for success.
-///
 int reverse_array_in_groups(int A[], size_t n, size_t k)
 {
     for (size_t i = 0; i < n; i += k)
@@ -483,23 +290,6 @@ int reverse_array_in_groups(int A[], size_t n, size_t k)
     return 0;
 }
 
-///
-/// uses modified bubble sort to find kth smallest element in \f$O(k*n)\f$ time
-/// using \f$O(1)\f$ auxiliury space.
-///
-/// \code
-/// int A[] = {7, 10, 4, 3, 20, 15};
-/// int res;
-/// int out = kth_smallest_element(A, 6, 3, &res); // res : 7
-/// \endcode
-///
-/// \param [in] A array of natural numbers
-/// \param [in] n size of array A
-/// \param [in] k index from left in a sorted array A
-/// \param [out] res kth smallest element in  A
-///
-/// \return 0 for success
-///
 int kth_smallest_element(int A[], size_t n, size_t k, int* res)
 {
     // loop invariant : [n-1-i,n) contains ith smallest to smallest
@@ -522,22 +312,6 @@ int kth_smallest_element(int A[], size_t n, size_t k, int* res)
     return 0;
 }
 
-///
-/// traverses array from left and right to find water trapped in \f$O(n)\f$ time
-/// using \f$O(1)\f$ auxiliury space.
-///
-/// \code
-/// int A[] = {7, 4, 0, 9};
-/// long long res;
-/// int out = trapping_rainwater(A, 4, &res); // res : 10
-/// \endcode
-///
-/// \param [in] A array of natural numbers
-/// \param [in] n size of array
-/// \param [out] res rain water trapped
-///
-/// \return 0 for success
-///
 int trapping_rainwater(int A[], size_t n, long long* res)
 {
     size_t l = 0, r = n - 1;
@@ -565,20 +339,6 @@ int trapping_rainwater(int A[], size_t n, long long* res)
     return 0;
 }
 
-///
-/// tries combinations 0f three elemnts to find if a pythagorean triplet
-/// exists in \f$O(n^2)\f$ time using \f$O(1)\f$ auxiliury space.
-///
-/// \code
-/// int A[] = {3, 2, 4, 6, 5};
-/// int out = pythagorean_triplet(A, 5); // out : (0)
-/// \endcode
-///
-/// \param [in] A array of natural numbers
-/// \param [in] n size of array
-///
-/// \return 0 for success, -1 for failure
-///
 int pythagorean_triplet(int A[], size_t n)
 {
     for (size_t i = 0; i < n; i++)
@@ -606,26 +366,6 @@ int pythagorean_triplet(int A[], size_t n)
     return 0;
 }
 
-
-
-///
-/// uses sorting to find minimum difference in elements separated by m elements
-/// in \f$O(n^2)\f$ time using \f$O(1)\f$ auxiliury space.
-///
-/// \code
-/// int A[] = {3, 4, 1, 9, 56, 7, 9, 12};
-/// int res;
-/// int out = chocolate_distribution(A, 8, 5, &res); // out : (6)
-/// \endcode
-///
-/// \param [in] A array of natural numbers, each element is number of chocolates
-/// in a packet.
-/// \param [in] n size of array A
-/// \param [in] m number of students
-/// \param [out] res minimum difference between largest and smallest packet.
-///
-/// \return 0 for success
-///
 int chocolate_distribution(int A[], size_t n, size_t m, int* res)
 {
     qsort(A, n, sizeof(int), cmp);
@@ -644,33 +384,11 @@ int chocolate_distribution(int A[], size_t n, size_t m, int* res)
     return 0;
 }
 
-
-
 struct iv {
     size_t buy;
     size_t sell;
 };
 
-///
-/// uses local minima and maxima finding approach to solve in in \f$O(n^2)\f$
-/// time using \f$O(1)\f$ auxiliury space.
-///
-/// \code
-/// int A[] = {100, 180, 260, 310, 40, 535, 695};
-/// size_t res[4];
-/// size_t res;
-/// int out = stock_buy_and_sell(A, 7, res, &res_size); // res : ( 0 3 4 6 )
-/// \endcode
-///
-/// \param [in] A size of array A
-/// \param [in] n number of elements in A
-/// \param [out] resu array of resulting buy,sell pairs. buys in even and
-/// sells in odd indexes.
-/// \param [out] res_size size of resu
-///
-/// \return 0 if a buy,sell pair exists and success,
-///         -1 if no buy, sell pair found
-///
 int stock_buy_and_sell(int A[], size_t n, size_t* resu, size_t* res_size)
 {
     struct iv res[505];
@@ -704,26 +422,6 @@ int stock_buy_and_sell(int A[], size_t n, size_t* resu, size_t* res_size)
     return 0;
 }
 
-
-
-///
-/// uses memorization to solve in \f$O(n)\f$ time using \f$O(n)\f$ auxiliury
-/// space.
-///
-/// \code
-/// int A[] = {4, 2, 5, 7};
-/// int res;
-/// int out = elements_with_left_side_smaller_and_right_side_greater(
-///  A, 4, &res); // out : (5)
-/// \endcode
-///
-/// \param [in] A array of natural numbers
-/// \param [in] n size of array A
-/// \param [out] res holds the resulting element
-///
-/// \return 0 success
-///        -1 element not found
-///
 int elements_with_left_side_smaller_and_right_side_greater(int A[], size_t n,
                                                            int* res)
 {
@@ -753,21 +451,6 @@ int elements_with_left_side_smaller_and_right_side_greater(int A[], size_t n,
     return 0;
 }
 
-///
-/// uses traversal to solve in \f$O(n)\f$ time using \f$O(1)\f$ auxiliury
-/// space.
-///
-/// \code
-/// int A[] = {4, 3, 7, 8, 6, 2, 1};
-/// int out = convert_array_into_zigzag_fashion(A, 7);
-/// // A : (3, 7, 4, 8, 2, 6, 1)
-/// \endcode
-///
-/// \param [in,out] A array of natural numbers
-/// \param [in] n size of array A
-///
-/// \return 0 for success
-///
 int convert_array_into_zigzag_fashion(int A[], size_t n)
 {
     int flag = 0; int temp;
@@ -799,24 +482,6 @@ int convert_array_into_zigzag_fashion(int A[], size_t n)
     return 0;
 }
 
-///
-/// uses array traversal to solve in \f$O(n)\f$ time using \f$O(1)\f$
-/// auxiliury space.
-///
-/// \code
-/// int A[] = {1, 1, 2, 2, 3, 3, 4, 50, 50, 65, 65};
-/// int res;
-/// int out = find_the_element_that_appears_once_in_sorted_array( A, 11, &res);
-/// // out : (4)
-/// \endcode
-///
-/// \param [in] A array of sorted integers where all but one elements appear
-/// twice.
-/// \param [in] n size of array A
-/// \param [out] res element which appears once.
-///
-/// \return 0 for success.
-///
 int find_the_element_that_appears_once_in_sorted_array(int A[], size_t n,
                                                                 int* res)
 {
@@ -890,27 +555,6 @@ void heapify(size_t i, size_t k)
     //printf("\n");
 }
 
-///
-/// continuously finds kth largest element in a stream of numbers in
-/// \f$O(n*\log k)\f$ time using \f$O(k)\f$ auxiliury space.
-///
-/// \code
-/// int A[] = {1, 2, 3, 4, 5, 6};
-/// size_t res[6];
-/// size_t res;
-/// int out = kth_largest_element_in_a_stream(A, 6, 4, res, &res_size);
-/// // res : (-1, -1, -1, 1, 2, 3)
-/// \endcode
-///
-/// \param [in] A array of natural numbers
-/// \param [in] n size of array A
-/// \param [in] k ordinality in largest number series of elements in A
-/// \param [out] res contains kth largest elements in array A at every
-/// insertion
-/// \param [out] res_size size of res.
-///
-/// \return 0 for success
-///
 int kth_largest_element_in_a_stream(int A[], size_t n, size_t k, int* res,
                                      size_t *res_size)
 {
@@ -966,29 +610,6 @@ size_t lb(int *A, size_t n, int val)
     return l;
 }
 
-///
-/// sorts in \f$O(n*\log k)\f$ time using \f$O(2*n)\f$ auxiliury space.
-/// numbers in array A which do not appear in array B are appended at
-/// the end of result sorted in ascending order.
-///
-/// \code
-/// int A[] = {2, 1, 2, 5, 7, 1, 9, 3, 6, 8, 8};
-/// int B[] = {2, 1, 8, 3};
-/// int res[11];
-/// size_t res_size;
-/// int out = relative_sorting(A, 11, B, 4, res, &res_size);
-/// // res : (2, 2, 1, 1, 8, 8, 3, 5, 6, 7, 9)
-/// \endcode
-///
-/// \param [in] A array of natural numbers
-/// \param [in] n size of array A
-/// \param [in] B array of natural numbers, defines order for sorting A
-/// \param [in] m size of array B, m < n
-/// \param [out] res array of elements in array A sorted as per order in A
-/// \param [out] res_size size of res
-///
-/// \return 0 for success.
-///
 int relative_sorting(int A[], size_t n, int B[],  size_t m,
                      int* res, size_t* res_size)
 {
@@ -1027,27 +648,6 @@ int relative_sorting(int A[], size_t n, int B[],  size_t m,
     return 0;
 }
 
-
-///
-/// traverses matrix in \f$O(n^2)\f$ time using \f$O(1)\f$ auxiliury space.
-///
-/// \code
-/// int A[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-/// int res[11];
-/// size_t res_size;
-/// int out = spirally_traversing_a_matrix(A, 11, B, 4, res, &res_size);
-/// // res : (1, 2, 3, 4, 8, 12, 16, 15, 14, 13, 9, 5, 6, 7, 11, 10)
-/// \endcode
-///
-/// \param [in] A array of natural numbers, representing matrix in row-major
-/// order.
-/// \param [in] m rows in A
-/// \param [in] n column in A
-/// \param [out] res
-/// \param [out] res_size
-///
-/// \return 0 for success.
-///
 int spirally_traversing_a_matrix(int A[], size_t m, size_t n,
                                  int* res, size_t* res_size)
 {
@@ -1090,26 +690,6 @@ int spirally_traversing_a_matrix(int A[], size_t m, size_t n,
     return 0;
 }
 
-
-///
-/// \brief sorts by frequency in \f$O(n)\f$ time using \f$O(n)\f$ auxiliury
-/// space.
-///
-/// \code
-/// int A[] = {1, 2, 3, 5, 5};
-/// int res[5];
-/// size_t res_size;
-/// int out = sorting_array_elements_by_frequency(A, 5, B, res, &res_size);
-/// // res : (5, 5, 1, 2, 3)
-/// \endcode
-///
-/// \param [in] A array of positive integers
-/// \param [in] n size of array A
-/// \param [out] res elements of A sorted by frequency
-/// \param [out] res_size size of res
-///
-/// \return 0 for success
-///
 int sorting_array_elements_by_frequency(int A[], size_t n, int* res,
                                         size_t* res_size)
 {
@@ -1156,18 +736,6 @@ int cus_cmp2(const void* a, const void* b)
     return strcmp(buf2, buf1);
 }
 
-///
-/// uses sorting to solve in \f$O(n^2)\f$ time using \f$O(n)\f$ auxiliury
-/// space.
-///
-///
-/// \param As [in] array of type struct arr.
-/// \param n [in] size of arrat As.
-/// \param res [out] largest number possible as a character array.
-/// \param res_size [out] size of res.
-///
-/// \return 0 for success.
-///
 int largest_number_formed_by_array(struct arr As[], size_t n,
                                    char *res, size_t *res_size)
 {
@@ -1179,24 +747,7 @@ int largest_number_formed_by_array(struct arr As[], size_t n,
     *res_size = strlen(res);
     return 0;
 }
-/// \}
 
-/** \defgroup Strings String problems
- *  \brief Basic problems which act upon string input
- */
-
-/// \addtogroup Strings
-/// \{
-
-///
-/// uses c library function strtok to solve in \f$O(n)\f$ time using
-/// \f$O(1)\f$ auxiliury space.
-///
-/// \param S [in] string with words separated by period.
-/// \param res [out] string wih words reversed..
-///
-/// \return 0 for success.
-///
 int reverse_words_in_a_given_string(char *S, char* res)
 {
     int i = -1;
@@ -1218,5 +769,3 @@ int reverse_words_in_a_given_string(char *S, char* res)
     res[skip - 1] = '\0';
     return 0;
 }
-
-/// /}

@@ -1,10 +1,7 @@
 /**
-  \file lcthw.h
-  \brief LCTHW header
-
+  @file lcthw.h
+  LCTHW header.
   header for lcthw solutions.
-
-  \author Mayank Bansal
   */
 
 #ifndef LCTHW_LCTHW_H_
@@ -17,80 +14,127 @@ extern "C" {
 #include "lcthw_export.h"
 #include <stdio.h>
 
-/**
- * \brief first exercise
+/** first exercise.
+ * prints a number.
+ * @param out FILE pointer
+ * @return 0 for success,
+ *         otherwise any other number
  */
 int LCTHW_EXPORT ex1(FILE* out);
 
-/*!
- * \brief second exercise prints and variables
- */
+/// second exercise prints and variables
+/// print statements
+///
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///         otherwise any other number
 int LCTHW_EXPORT ex3(FILE* out);
 
-/*!
- * \brief seventh exercise data types
- */
+/// seventh exercise data types
+/// print examples of various data types.
+///
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///         otherwise any other number
+///
 int LCTHW_EXPORT ex7(FILE* out);
 
-/*!
- * \brief ex8 if else if in c
- */
+/// ex8 if else if in c
+/// a demonstration of if else and command line parameters.
+///
+/// \param argc c command line arguments count, from main()
+/// \param argv c command line arguments from main()
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///         otherwise any other number.
 int LCTHW_EXPORT ex8(int argc, char *argv[], FILE* out);
 
-/*!
- * \brief ex9 while loop and boolean expression
- */
+/// ex9 while loop and boolean expression
+/// prints out in aloop
+///
+/// \param out FILE pointer
+///
+/// \return 0 for success
+///         otherwise any other number.
+///
 int LCTHW_EXPORT ex9(FILE* out);
 
-/*!
- * \brief ex10 switch statement
- */
+/// ex10 switch statement
+/// switch statement example
+///
+/// \param argc argument count
+/// \param argv arguments
+/// \param out file pointer
+///
+/// \return 0 for success,
+///         otherwise some other number
 int LCTHW_EXPORT ex10(int argc,char *argv[], FILE* out);
 
-/*!
- * \brief ex11 strings
- */
+/// ex11 strings
+///
+/// \param FILE pointer
+///
+/// \return 0 for success
 int LCTHW_EXPORT ex11(FILE* out);
 
-/*!
- * \brief ex12 arrays and sizeof
- */
+/// ex12 arrays and sizeof
+///
+/// \param out FILE pointer
+///
+/// \return 0 for success
 int LCTHW_EXPORT ex12(FILE* out);
 
-/*!
- * \brief ex13 for loop
- */
+/// for loop demo in c
+///
+/// \param argc argument count
+/// \param argv arguments
+/// \param out FILE pointer
+///
+/// \return 0 for success
 int LCTHW_EXPORT ex13(int argc, char *argv[], FILE* out);
 
-/*!
- * \brief ex14 functions
- */
+/// functions demo
+///
+/// \param argc argument count
+/// \param argv arguments
+/// \param out FILE pointer
+///
+/// \return 0 for success
 int LCTHW_EXPORT ex14(int argc, char *argv[], FILE* out);
 
-/*!
- * \brief ex15 pointers
- */
+/// demo on pointers and their relation to arrays
+///
+/// \param out FILE pointer
+///
+/// \return 0 for success
 int LCTHW_EXPORT ex15(FILE* out);
 
-/*!
- * \brief represents information of a person.
- */
 struct Person;
 
-/*!
- * \brief Create a Person. Ex 16 structs and pointers to them.
- */
+/// Ex 16 structs and pointers to them.
+/// create a person with given information.
+///
+/// \param n name
+/// \param a age
+/// \param h height
+/// \param w weight
+///
+/// \return person
 LCTHW_EXPORT struct Person*
 CreatePerson(const char* n, int a, int h, int w);
 
-/*!
- * \brief Destroy a Person
- */
+/// destroys specified person.
+///
+/// \param p person
 void LCTHW_EXPORT DestroyPerson(struct Person** p);
 
-/*!
- * \brief Print a person.
- */
+/// prints a person's information.
+///
+/// \param p person
+/// \param out FILE pointer
 void LCTHW_EXPORT PrintPerson(FILE* out, struct Person* p);
 
 /*!
@@ -103,6 +147,7 @@ int LCTHW_EXPORT ex22(int argc, char* argv[]);
 int LCTHW_EXPORT ex23(int argc, char* argv[]);
 int LCTHW_EXPORT ex24(int argc, char* argv[]);
 int LCTHW_EXPORT ex25(int argc, char* argv[]);
+
 #ifdef __cplusplus
 }
 #endif

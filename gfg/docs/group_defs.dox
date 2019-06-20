@@ -1,0 +1,7 @@
+/** \defgroup Arrays Array problems
+ *  \brief Basic problems which act upon array input 
+ */
+
+/** \defgroup Strings String problems
+ *  \brief Basic problems which act upon string input
+ */

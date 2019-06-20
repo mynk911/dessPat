@@ -1,27 +1,45 @@
-///
-/// \file ex7.c
-/// \brief seventh and later exercise implementation
-///
-/// solution for seventh and later exercises.
-///
-/// \author Mayank Bansal
-///
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include <stdio.h>
-#include <limits.h>
+#include <assert.h>
+#include <stdlib.h>
+#include <errno.h>
 #include <string.h>
-#include <ctype.h>
-
 #include "lcthw.h"
+#include "ex17_ds.h"
+#include "dessPatConfig.h"
 
-///
-/// print examples of various data types.
-///
-/// \param out FILE pointer
-///
-/// \return 0 for success
-///         otherwise any other number
-///
+#ifdef C_SERVICE_MOCK_TESTS
+#include "FakeServices.h"
+
+#define malloc my_malloc
+#define fopen my_fopen
+
+#endif // C_SERVICE_MOCK_TESTS
+
+int ex1(FILE* out)
+{
+    int distance = 100;
+
+    fprintf(out, "You are %d miles away.\n", distance);
+
+    return 0;
+}
+
+
+int ex3(FILE* out)
+{
+    int age = 23;
+    int height = 74;
+
+    fprintf(out, "I am %d years old.\n", age);
+    fprintf(out, "I am %d inches tall.\n", height);
+
+    return 0;
+}
+
 int ex7(FILE* out)
 {
     int distance = 100;
@@ -63,16 +81,6 @@ int ex7(FILE* out)
     return 0;
 }
 
-///
-/// a demonstration of if else and command line parameters.
-///
-/// \param argc c command line arguments count, from main()
-/// \param argv c command line arguments from main()
-/// \param out FILE pointer
-///
-/// \return 0 for success
-///         otherwise any other number.
-///
 int ex8(int argc, char *argv[], FILE* out)
 {
     int i = 0;
@@ -93,14 +101,6 @@ int ex8(int argc, char *argv[], FILE* out)
     return 0;
 }
 
-///
-/// prints out in aloop
-///
-/// \param out FILE pointer
-///
-/// \return 0 for success
-///         otherwise any other number.
-///
 int ex9(FILE* out)
 {
     int i = 0;
@@ -112,17 +112,6 @@ int ex9(FILE* out)
     return 0;
 }
 
-
-///
-/// switch statement example
-///
-/// \param argc argument count
-/// \param argv arguments
-/// \param out file pointer
-///
-/// \return 0 for success,
-///         otherwise some other number
-///
 int ex10(int argc,char *argv[], FILE* out)
 {
     if (argc != 2) {
@@ -176,13 +165,6 @@ int ex10(int argc,char *argv[], FILE* out)
     return 0;
 }
 
-/*!
- * \brief ex11 strings
- *
- * \param FILE pointer
- *
- * \return 0 for success
- */
 int ex11(FILE* out)
 {
     int numbers[4] = { 0 };
@@ -240,13 +222,6 @@ int ex11(FILE* out)
     return 0;
 }
 
-///
-/// \brief ex12 arrays and sizeof
-///
-/// \param out FILE pointer
-///
-/// \return 0 for success
-///
 int ex12(FILE *out)
 {
     char full_name[] = {
@@ -281,15 +256,6 @@ int ex12(FILE *out)
     return 0;
 }
 
-///
-/// for loop demo in c
-///
-/// \param argc argument count
-/// \param argv arguments
-/// \param out FILE pointer
-///
-/// \return 0 for success
-///
 int ex13(int argc, char *argv[], FILE* out)
 {
     int i = 0;
@@ -345,34 +311,18 @@ void print_letters(const char arg[], size_t n, FILE* out)
 int can_print_it(char ch)
 {
     return isalpha((unsigned char)ch) ||
-		   isblank((unsigned char)ch);
+           isblank((unsigned char)ch);
 }
 
-///
-/// \brief functions demo
-///
-/// \param argc argument count
-/// \param argv arguments
-/// \param out FILE pointer
-///
-/// \return 0 for success
-///
 int ex14(int argc, char *argv[], FILE* out)
 {
     print_arguments(argc, argv, out);
     return 0;
 }
 
-///
-/// demo on pointers and their relation to arrays
-///
-/// \param out FILE pointer
-///
-/// \return 0 for success
-///
 int ex15(FILE* out)
 {
-	    // create two arrays we care about
+        // create two arrays we care about
     int ages[] = { 23, 43, 12, 89, 2 };
     char *names[] = {
         "Alan", "Frank",
@@ -418,3 +368,222 @@ int ex15(FILE* out)
     return 0;
 }
 
+struct Person {
+    char* name;
+    int age;
+    int height;
+    int weight;
+};
+
+struct Person* CreatePerson(const char* n, int a, int h, int w)
+{
+    struct Person* who = (struct Person*) malloc(sizeof(struct Person));
+    assert(who != NULL);
+
+    size_t length = strlen(n) + 1;
+    who->name = (char *) malloc(length);
+    strcpy(who->name, n);
+
+    who->age = a;
+    who->height = h;
+    who->weight = w;
+
+    return who;
+}
+
+void DestroyPerson(struct Person** p)
+{
+    assert(*p != NULL);
+    free((*p)->name);
+    free(*p);
+    *p = NULL;
+}
+
+void PrintPerson(FILE* out, struct Person* p)
+{
+    fprintf(out, "Name : %s\n", p->name);
+    fprintf(out, "Age : %d\n", p->age);
+    fprintf(out, "Height : %d\n", p->height);
+    fprintf(out, "Weight : %d\n", p->weight);
+}
+
+void die(const char* message)
+{
+    if(errno)
+    {
+        perror(message);
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: %s\n", message);
+    }
+    exit(1);
+}
+
+void Address_print(struct Address *addr)
+{
+    printf("%d %s %s\n", addr->id, addr->name, addr->email);
+}
+
+void Database_load(struct Connection *conn)
+{
+    size_t rc = fread(conn->db, sizeof(struct Database), 1, conn->file);
+    if (rc != 1)
+        die("Failed to load database.");
+}
+
+struct Connection* Database_open(const char* filename, char mode)
+{
+    struct Connection* conn = malloc(sizeof(struct Connection));
+    if(!conn)
+        die("Cannot create Connection");
+
+    conn->db = malloc(sizeof(struct Database));
+    if(!conn->db)
+        die("Cannot create Database");
+
+    if(mode == 'c')
+    {
+        conn->file = fopen(filename, "wb");
+    } else {
+        conn->file = fopen(filename, "rb+");
+
+        if(conn->file)
+            Database_load(conn);
+    }
+
+    if(!conn->file)
+        die("failed to open file");
+
+    return conn;
+}
+
+void Database_close(struct Connection* conn)
+{
+    if(conn)
+    {
+        if(conn->file)
+            fclose(conn->file);
+        if(conn->db)
+            free(conn->db);
+        free(conn);
+    }
+}
+
+void Database_write(struct Connection* conn)
+{
+    rewind(conn->file);
+
+    int rc = fwrite(conn->db, sizeof(struct Database), 1, conn->file);
+    if(rc != 1)
+        die("Failed to write database");
+
+    fflush(conn->file);
+    if(rc == -1)
+        die("Cannot flush database");
+}
+
+void Database_create(struct Connection* conn)
+{
+    int i = 0;
+
+    for (i = 0; i < MAX_ROWS; ++i) {
+        struct Address addr = {.id = i, .set = 0};
+        conn->db->rows[i] = addr;
+    }
+}
+
+void Database_set(struct Connection *conn, int id, const char* name,
+        const char* email)
+{
+    struct Address *addr = &conn->db->rows[id];
+
+    if(addr->set)
+        die("Already set, delete it first");
+
+    addr->set = 1;
+    char* res = strncpy(addr->name, name, MAX_DATA);
+    if(!res)
+        die("name copy failed");
+
+    res = strncpy(addr->email, email, MAX_DATA);
+    if(!res)
+        die("email copy failed");
+}
+
+void Database_get(struct Connection *conn, int id)
+{
+    struct Address *addr = &conn->db->rows[id];
+
+    if(addr->set) {
+        Address_print(addr);
+    } else {
+        die("Id not set");
+    }
+}
+
+void Database_delete(struct Connection* conn, int id)
+{
+    struct Address addr = {.id=0 , .set = 0};
+    conn->db->rows[id] = addr;
+}
+
+void Database_list(struct Connection* conn)
+{
+    struct Database* db = conn->db;
+
+    for(int i = 0; i < MAX_ROWS; i++)
+    {
+        struct Address* curr = &db->rows[i];
+
+        if(curr->set)
+            Address_print(curr);
+    }
+}
+
+int ex17(int argc,const char *argv[])
+{
+    if(argc < 3)
+        die("USAGE: dessPat <dbfile> <action> [action param]");
+
+    const char* filename = argv[1];
+    char action = argv[2][0];
+    struct Connection* conn = Database_open(filename, action);
+    int id = 0;
+
+    if(argc  > 3) id = atoi(argv[3]);
+    if(id >= MAX_ROWS) die("there are not that many records");
+
+    switch(action)
+    {
+        case 'c' :
+            Database_create(conn);
+            Database_write(conn);
+            break;
+        case 'g' :
+            if(argc != 4)
+                die("need an id to get");
+            Database_get(conn, id);
+            break;
+        case 's':
+            if(argc != 6)
+                die("need id, name and email to set");
+            Database_set(conn, id, argv[4], argv[5]);
+            Database_write(conn);
+            break;
+        case 'd':
+            if(argc != 4)
+                die("need id to delete");
+            Database_delete(conn, id);
+            Database_write(conn);
+            break;
+        case 'l':
+            Database_list(conn);
+            break;
+        default:
+            die("Invalid action c=create, g=get, s=set, d=delete, l=list");
+    }
+    Database_close(conn);
+
+    return 0;
+}

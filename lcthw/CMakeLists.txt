@@ -2,18 +2,14 @@ cmake_minimum_required(VERSION 3.5)
 project(LCTHW VERSION 1.0 LANGUAGES C) 
 
 add_library (lcthw include/lcthw.h
-				   src/ex1.c
-				   src/ex3.c
-				   src/ex7.c
-				   src/ex16.c
-				   src/ex17.c
+				   src/lcthw.c
 				   src/ex18.c
 				   src/ex19.c
 				   src/ex22.c
 				   src/ex22_m.c
 				   src/ex23.c
 				   src/ex24.c
-                                   src/ex25.c)
+                   src/ex25.c)
 add_library (LCTHW::lcthw ALIAS lcthw)
 include(GenerateExportHeader)
 generate_export_header(lcthw)
