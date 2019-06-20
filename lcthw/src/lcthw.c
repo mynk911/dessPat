@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <limits.h>
+#include <ctype.h>
+
 #include "lcthw.h"
 #include "ex17_ds.h"
 #include "dessPatConfig.h"
@@ -81,7 +84,7 @@ int ex7(FILE* out)
     return 0;
 }
 
-int ex8(int argc, char *argv[], FILE* out)
+int ex8(int argc,const char *argv[], FILE* out)
 {
     int i = 0;
 
@@ -112,7 +115,7 @@ int ex9(FILE* out)
     return 0;
 }
 
-int ex10(int argc,char *argv[], FILE* out)
+int ex10(int argc,const char *argv[], FILE* out)
 {
     if (argc != 2) {
         fprintf(out, "ERROR: You need one argument.\n");
@@ -235,18 +238,18 @@ int ex12(FILE *out)
 
     // WARNING: On some systems you may have to change the
     // %ld in this code to a %u since it will use unsigned ints
-    fprintf(out, "The size of an int: %u\n", sizeof(int));
-    fprintf(out, "The size of areas (int[]): %u\n", sizeof(areas));
-    fprintf(out, "The number of ints in areas: %u\n",
+    fprintf(out, "The size of an int: %zu\n", sizeof(int));
+    fprintf(out, "The size of areas (int[]): %zu\n" , sizeof(areas));
+    fprintf(out, "The number of ints in areas: %zu\n",
             sizeof(areas) / sizeof(int));
-    fprintf(out, "The first area is %d, the 2nd %u.\n", areas[0], areas[1]);
+    fprintf(out, "The first area is %u, the 2nd %u.\n", areas[0], areas[1]);
 
-    fprintf(out, "The size of a char: %u\n", sizeof(char));
-    fprintf(out, "The size of name (char[]): %u\n", sizeof(name));
-    fprintf(out,"The number of chars: %u\n", sizeof(name) / sizeof(char));
+    fprintf(out, "The size of a char: %zu\n", sizeof(char));
+    fprintf(out, "The size of name (char[]): %zu\n", sizeof(name));
+    fprintf(out,"The number of chars: %zu\n", sizeof(name) / sizeof(char));
 
-    fprintf(out,"The size of full_name (char[]): %u\n", sizeof(full_name));
-    fprintf(out, "The number of chars: %u\n",
+    fprintf(out,"The size of full_name (char[]): %zu\n", sizeof(full_name));
+    fprintf(out, "The number of chars: %zu\n",
             sizeof(full_name) / sizeof(char));
 
     //full_name[12] = 'X';
@@ -256,7 +259,7 @@ int ex12(FILE *out)
     return 0;
 }
 
-int ex13(int argc, char *argv[], FILE* out)
+int ex13(int argc,const char *argv[], FILE* out)
 {
     int i = 0;
     // let's make our own array of strings
@@ -314,7 +317,7 @@ int can_print_it(char ch)
            isblank((unsigned char)ch);
 }
 
-int ex14(int argc, char *argv[], FILE* out)
+int ex14(int argc,const char *argv[], FILE* out)
 {
     print_arguments(argc, argv, out);
     return 0;
@@ -420,9 +423,9 @@ void die(const char* message)
     exit(1);
 }
 
-void Address_print(struct Address *addr)
+void Address_print(char* buf, struct Address *addr)
 {
-    printf("%d %s %s\n", addr->id, addr->name, addr->email);
+    sprintf(buf, "%d %s %s\n", addr->id, addr->name, addr->email);
 }
 
 void Database_load(struct Connection *conn)
@@ -511,12 +514,12 @@ void Database_set(struct Connection *conn, int id, const char* name,
         die("email copy failed");
 }
 
-void Database_get(struct Connection *conn, int id)
+void Database_get(struct Connection *conn,char* buf, int id)
 {
     struct Address *addr = &conn->db->rows[id];
 
     if(addr->set) {
-        Address_print(addr);
+        Address_print(buf, addr);
     } else {
         die("Id not set");
     }
@@ -528,7 +531,7 @@ void Database_delete(struct Connection* conn, int id)
     conn->db->rows[id] = addr;
 }
 
-void Database_list(struct Connection* conn)
+void Database_list(struct Connection* conn, char* buf)
 {
     struct Database* db = conn->db;
 
@@ -537,11 +540,11 @@ void Database_list(struct Connection* conn)
         struct Address* curr = &db->rows[i];
 
         if(curr->set)
-            Address_print(curr);
+            Address_print(buf, curr);
     }
 }
 
-int ex17(int argc,const char *argv[])
+int ex17(int argc,const char *argv[], char* buf)
 {
     if(argc < 3)
         die("USAGE: dessPat <dbfile> <action> [action param]");
@@ -563,7 +566,7 @@ int ex17(int argc,const char *argv[])
         case 'g' :
             if(argc != 4)
                 die("need an id to get");
-            Database_get(conn, id);
+            Database_get(conn, buf, id);
             break;
         case 's':
             if(argc != 6)
@@ -578,7 +581,7 @@ int ex17(int argc,const char *argv[])
             Database_write(conn);
             break;
         case 'l':
-            Database_list(conn);
+            Database_list(conn, buf);
             break;
         default:
             die("Invalid action c=create, g=get, s=set, d=delete, l=list");

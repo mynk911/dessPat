@@ -5,24 +5,58 @@
 #include "gtest/gtest.h"
 #include "lcthw.h"
 #include "ex17_ds.h"
-#include "Fixture.h"
 
+#ifdef C_SERVICE_MOCK_TESTS
+#include "ServicesMocks.h"
 
-TEST(lcthw, ex1)
+class LcthwServiceMockTest : public ::testing::Test
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
+public:
+    LcthwServiceMockTest()
+    {
+	_libc.reset(new ::testing::NiceMock<LibcService>());
+    }
+
+    ~LcthwServiceMockTest()
+    {
+	_libc.reset();
+    }
+    static std::unique_ptr<LibcService> _libc;
+};
+
+#endif // C_SERVICE_MOCK_TESTS
+
+
+class LcthwTest : public  ::testing::Test
+{
+protected:
+    LcthwTest()
+	: out_test(fopen("lcthw_gtest.txt", "w+"))
+    {}
+
+    ~LcthwTest()
+    {
+	fclose(out_test);
+    }
+
+    FILE* out_test;
+    static char buf[1040];
+};
+
+char LcthwTest::buf[1040];
+
+TEST_F(LcthwTest, ex1)
+{
     int a = ex1(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
     char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "You are 100 miles away.\n");
-    fclose(out_test);
 }
 
-TEST(lcthw, ex3)
+TEST_F(LcthwTest, ex3)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int a = ex3(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -31,12 +65,10 @@ TEST(lcthw, ex3)
     EXPECT_STREQ(buf, "I am 23 years old.\n");
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "I am 74 inches tall.\n");
-    fclose(out_test);
 }
 
-TEST(lcthw, ex7)
+TEST_F(LcthwTest, ex7)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int a = ex7(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -65,28 +97,24 @@ TEST(lcthw, ex7)
     EXPECT_STREQ(buf, "That is only a 1.117587e-07 portion of the universe.\n");
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf,  "Which means you should care 0%.\n");
-    fclose(out_test);
 }
 
-TEST(lcthw, ex8NoArg)
+TEST_F(LcthwTest, ex8NoArg)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 1;
-    char *argv[] = {"test"};
+    const char *argv[] = {"test"};
     int a = ex8(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
     char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "You only have one argument. You suck.\n");
-    fclose(out_test);
 }
 
-TEST(lcthw, ex8Arg)
+TEST_F(LcthwTest, ex8Arg)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 2;
-    char *argv[] = {"test", "here it is"};
+    const char *argv[] = {"test", "here it is"};
     int a = ex8(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -95,54 +123,46 @@ TEST(lcthw, ex8Arg)
     EXPECT_STREQ(buf, "Here's your arguments:\n");
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "test here it is ");
-    fclose(out_test);
 }
 
-TEST(lcthw, ex8TooManyArgs)
+TEST_F(LcthwTest, ex8TooManyArgs)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 4;
-    char *argv[] = {"test", "here it is", "tease", "fried"};
+    const char *argv[] = {"test", "here it is", "tease", "fried"};
     int a = ex8(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
     char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "You have too many arguments. You suck.\n");
-    fclose(out_test);
 }
 
-TEST(lcthw, ex9)
+TEST_F(LcthwTest, ex9)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int a = ex9(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
     char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 \n");
-    fclose(out_test);
 }
 
-TEST(lcthw, ex10NoArgs)
+TEST_F(LcthwTest, ex10NoArgs)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 1;
-    char *argv[] = {"test"};
+    const char *argv[] = {"test"};
     int a = ex10(argc, argv, out_test);
     EXPECT_EQ(a, 1);
     fseek(out_test, 0, SEEK_SET);
     char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "ERROR: You need one argument.\n" );
-    fclose(out_test);
 }
 
-TEST(lcthw, ex10Args)
+TEST_F(LcthwTest, ex10Args)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 2;
-    char *argv[] = {"test", "uyYaieyobDOYEIAU"};
+    const char *argv[] = {"test", "uyYaieyobDOYEIAU"};
     int a = ex10(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -175,12 +195,10 @@ TEST(lcthw, ex10Args)
     EXPECT_STREQ(buf, "14: 'A'\n" );
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "15: 'U'\n" );
-    fclose(out_test);
 }
 
-TEST(lcthw, ex11)
+TEST_F(LcthwTest, ex11)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int a = ex11(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -205,49 +223,45 @@ TEST(lcthw, ex11)
     EXPECT_STREQ(buf, "another: Zed\n" );
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "another each: Z e d " );
-    fclose(out_test);
 }
 
-TEST(lcthw, ex12)
+TEST_F(LcthwTest, ex12)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int a = ex12(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
     char buf[255], buf2[255];
     fgets(buf, 255, out_test);
-    sprintf(buf2, "The size of an int: %u\n", sizeof(int));
+    sprintf(buf2, "The size of an int: %zu\n", sizeof(int));
     EXPECT_STREQ(buf, buf2);
     fgets(buf, 255, out_test);
-    sprintf(buf2, "The size of areas (int[]): %u\n", sizeof(int)*5);
+    sprintf(buf2, "The size of areas (int[]): %zu\n", sizeof(int)*5);
     EXPECT_STREQ(buf, buf2);
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "The number of ints in areas: 5\n");
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "The first area is 10, the 2nd 12.\n" );
     fgets(buf, 255, out_test);
-    sprintf(buf2, "The size of a char: %u\n", sizeof(char));
+    sprintf(buf2, "The size of a char: %zu\n", sizeof(char));
     EXPECT_STREQ(buf, buf2 );
     fgets(buf, 255, out_test);
-    sprintf(buf2, "The size of name (char[]): %u\n", sizeof(char)*4);
+    sprintf(buf2, "The size of name (char[]): %zu\n", sizeof(char)*4);
     EXPECT_STREQ(buf, buf2);
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "The number of chars: 4\n" );
     fgets(buf, 255, out_test);
-    sprintf(buf2,"The size of full_name (char[]): %u\n", sizeof(char)*12);
+    sprintf(buf2,"The size of full_name (char[]): %zu\n", sizeof(char)*12);
     EXPECT_STREQ(buf, buf2 );
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "The number of chars: 12\n" );
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "name=\"Zed\" and full_name=\"Zed A. Shaw\"\n" );
-    fclose(out_test);
 }
 
-TEST(lcthw, ex13)
+TEST_F(LcthwTest, ex13)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 3;
-    char *argv[] = {"test", "hey", "there"};
+    const char *argv[] = {"test", "hey", "there"};
     int a = ex13(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -264,14 +278,12 @@ TEST(lcthw, ex13)
     EXPECT_STREQ(buf, "state 2: Washington\n" );
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "state 3: Texas\n" );
-    fclose(out_test);
 }
 
-TEST(lcthw, ex14)
+TEST_F(LcthwTest, ex14)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int argc = 3;
-    char *argv[] = {"test", "bruce wills", "bruce123 wills#%!"};
+    const char *argv[] = {"test", "bruce wills", "bruce123 wills#%!"};
     int a = ex14(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -284,9 +296,8 @@ TEST(lcthw, ex14)
     EXPECT_STREQ(buf, "bruce wills\n" );
 }
 
-TEST(lcthw, ex15)
+TEST_F(LcthwTest, ex15)
 {
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     int a = ex15(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
@@ -338,14 +349,12 @@ TEST(lcthw, ex15)
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "Lisa has 2 years alive.\n");
     fgets(buf, 255, out_test);
-    fclose(out_test);
 }
 
-TEST(lcthw, ex16)
+TEST_F(LcthwTest, ex16)
 {
     struct Person* joe = CreatePerson("Joe Frank", 32, 64,140);
     EXPECT_NE(joe, nullptr);
-    FILE* out_test = fopen("lcthw_gtest.txt", "w+");
     PrintPerson(out_test, joe);
     fseek(out_test, 0, SEEK_SET);
     char buf[255];
@@ -359,61 +368,88 @@ TEST(lcthw, ex16)
     EXPECT_STREQ(buf, "Weight : 140\n");
     DestroyPerson(&joe);
     EXPECT_EQ(joe, nullptr);
-    fclose(out_test);
 }
 
-using LcthwEx17DeathTest = Fixture;
-using LcthwEx17Test = Fixture;
+using LcthwDeathTest = LcthwTest;
 
-TEST_F(LcthwEx17DeathTest, ex17InSufficientArguments)
+TEST_F(LcthwDeathTest, ex17InSufficientArguments)
 {
+    char buf[1040];
     errno = 0;
     int argc = 2;
     const char *argv[] = {"ex17", "test_dbFile"};
-    EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
-                "USAGE: dessPat <dbfile> <action> ");
+    EXPECT_EXIT(ex17(argc, argv, buf), ::testing::ExitedWithCode(1),
+		"USAGE: dessPat <dbfile> <action> ");
 }
 
 #ifdef C_SERVICE_MOCK_TESTS
-TEST_F(LcthwEx17DeathTest, ex17MallocFail1)
+using LcthwServiceMockDeathTest = LcthwServiceMockTest
+TEST_F(LcthwServiceMockDeathTest, ex17MallocFail1)
 {
     EXPECT_CALL(*(Fixture::_libc), malloc(::testing::_))
-                                       .WillRepeatedly(::testing::Return(nullptr));
+				       .WillRepeatedly(::testing::Return(nullptr));
     errno = ENOMEM;
     ::testing::Mock::AllowLeak((Fixture::_libc).get());
+    char buf[1040];
     int argc = 3;
     const char *argv[] = {"ex17", "test_dbFile", "c"};
-    EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
-                "Cannot create Connection");
+    EXPECT_EXIT(ex17(argc, argv, buf), ::testing::ExitedWithCode(1),
+		"Cannot create Connection");
 }
 #endif // C_SERVICE_MOCK_TESTS
 
-TEST_F(LcthwEx17DeathTest, ex17TryingToReadNonExistentDatabaseFile)
+TEST_F(LcthwDeathTest, ex17TryingToReadNonExistentDatabaseFile)
 {
+    char buf[1040];
     errno = 0;
     int argc = 4;
     const char *argv[] = {"ex17", "test_gtsgserufldfjnaku", "g"};
-    EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
-               "failed to open file");
+    EXPECT_EXIT(ex17(argc, argv, buf), ::testing::ExitedWithCode(1),
+	       "failed to open file");
 }
 
-TEST_F(LcthwEx17DeathTest, ex17InvalidRecordNumber)
+TEST_F(LcthwDeathTest, ex17InvalidRecordNumber)
 {
+    char buf[1040];
     errno = 0;
     int argc = 4;
     auto s = std::to_string(MAX_ROWS);
     const char *argv[] = {"ex17", "test_dbFile", "c", s.c_str()};
-    EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
-               "there are not that many records");
+    EXPECT_EXIT(ex17(argc, argv, buf), ::testing::ExitedWithCode(1),
+	       "there are not that many records");
 }
 
-TEST_F(LcthwEx17DeathTest, databaseFileDoesNotExist)
+TEST_F(LcthwDeathTest, databaseFileDoesNotExist)
 {
+    char buf[1040];
     errno = 0;
     int argc = 4;
     const char *argv[] = {"ex17", "aslifghwgwhwgrwn", "g", "1"};
-    EXPECT_EXIT(ex17(argc, argv), ::testing::ExitedWithCode(1),
-               "failed to open file");
+    EXPECT_EXIT(ex17(argc, argv, buf), ::testing::ExitedWithCode(1),
+	       "failed to open file");
 }
 
+TEST_F(LcthwTest, ex17CRUDTest)
+{
+    errno = 0;
+    const char *command = "ex17", *file = "ex17Crudtest.txt";
+    const char modes[] = {'c', 'g', 's', 'd', 'l'};
+    const char *argv[10];
+    argv[0] = command;
+    argv[1] = file;
+    argv[2] = &modes[0];
+    int argc = 3;
+    ex17(argc, argv, buf);
 
+    argv[2] = &modes[2];
+    argv[3] = "0";
+    argv[4] = "Red";
+    argv[5] = "red@blue.mail";
+    argc = 6;
+    ex17(argc, argv, buf);
+
+    argv[2] = &modes[1];
+    argc = 4;
+    ex17(argc, argv, buf);
+    EXPECT_STREQ(buf, "0 Red red@blue.mail\n");
+}

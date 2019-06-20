@@ -50,7 +50,7 @@ int LCTHW_EXPORT ex7(FILE* out);
 ///
 /// \return 0 for success
 ///         otherwise any other number.
-int LCTHW_EXPORT ex8(int argc, char *argv[], FILE* out);
+int LCTHW_EXPORT ex8(int argc, const char *argv[], FILE* out);
 
 /// ex9 while loop and boolean expression
 /// prints out in aloop
@@ -71,7 +71,7 @@ int LCTHW_EXPORT ex9(FILE* out);
 ///
 /// \return 0 for success,
 ///         otherwise some other number
-int LCTHW_EXPORT ex10(int argc,char *argv[], FILE* out);
+int LCTHW_EXPORT ex10(int argc,const char *argv[], FILE* out);
 
 /// ex11 strings
 ///
@@ -94,7 +94,7 @@ int LCTHW_EXPORT ex12(FILE* out);
 /// \param out FILE pointer
 ///
 /// \return 0 for success
-int LCTHW_EXPORT ex13(int argc, char *argv[], FILE* out);
+int LCTHW_EXPORT ex13(int argc,const char *argv[], FILE* out);
 
 /// functions demo
 ///
@@ -103,7 +103,7 @@ int LCTHW_EXPORT ex13(int argc, char *argv[], FILE* out);
 /// \param out FILE pointer
 ///
 /// \return 0 for success
-int LCTHW_EXPORT ex14(int argc, char *argv[], FILE* out);
+int LCTHW_EXPORT ex14(int argc,const char *argv[], FILE* out);
 
 /// demo on pointers and their relation to arrays
 ///
@@ -140,7 +140,7 @@ void LCTHW_EXPORT PrintPerson(FILE* out, struct Person* p);
 /*!
  * \brief ex17 heap and stack memory.
  */
-int LCTHW_EXPORT ex17(int argc, const char *argv[]);
+    int LCTHW_EXPORT ex17(int argc, const char *argv[], char* buf);
 int LCTHW_EXPORT ex18(int argc, char *argv[]);
 int LCTHW_EXPORT ex19(int argc, char *argv[]);
 int LCTHW_EXPORT ex22(int argc, char* argv[]);
