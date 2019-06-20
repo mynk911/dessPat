@@ -45,7 +45,7 @@ public:
     /** Room constructor
      * @param roomNo to uniquely identify a room
      */
-    Room(int roomNo);
+    explicit Room(int roomNo);
     Room();
     Room(Room&& other);
     Room& operator=(Room&& other);
@@ -210,7 +210,7 @@ private:
 class Bomb
 {
 public:
-    Bomb (int n);
+    explicit Bomb (int n);
     virtual ~Bomb ();
     /** Get Detonation Time
      * @return detonation time

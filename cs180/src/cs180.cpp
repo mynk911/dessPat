@@ -7,7 +7,7 @@
 #include <string>
 #include <set>
 #include <list>
-
+#include <memory>
 #include "dbg.h"
 #include "util.hpp"
 #include "cs180.h"
@@ -32,34 +32,23 @@ StableMatching::StableMatching(std::istream& in)
     std::cout << std::endl;
 #endif
     
-    preferences1 = new SizeType[n*n];
-    preferences2 = new SizeType[n*n];
-    rankings1 = new SizeType[n*n];
-    rankings2 = new SizeType[n*n];
+    preferences1 = std::shared_ptr<SizeType>(new SizeType[n*n], std::default_delete<SizeType[]>());
+    preferences2 = std::shared_ptr<SizeType>(new SizeType[n*n], std::default_delete<SizeType[]>());
+    rankings1 = std::shared_ptr<SizeType>(new SizeType[n*n], std::default_delete<SizeType[]>());
+    rankings2 = std::shared_ptr<SizeType>(new SizeType[n*n], std::default_delete<SizeType[]>());
 
-    populatePreferenceList(in, preferences1, group1, group2);
-    populatePreferenceList(in, preferences2, group2, group1);
+    populatePreferenceList(in, preferences1.get(), group1, group2);
+    populatePreferenceList(in, preferences2.get(), group2, group1);
 
 #ifdef debugPrints
     printPreferenceList(menPref, men , women);
     printPreferenceList(womenPref, women, men);
 #endif
 
-    calculateRankings(rankings1, preferences2, n);
-    calculateRankings(rankings2, preferences1, n);
+    calculateRankings(rankings1.get(), preferences2.get(), n);
+    calculateRankings(rankings2.get(), preferences1.get(), n);
 }
 
-StableMatching::~StableMatching()
-{
-    if (preferences1 != nullptr)
-        delete[] preferences1;
-    if (preferences2 != nullptr)
-        delete[] preferences2;
-    if (rankings1 != nullptr)
-        delete[] rankings1;
-    if (rankings2 != nullptr)
-        delete[] rankings2;
-}
 void printPreferenceList(std::vector<std::string>::size_type *pref,
         std::vector < std::string>& preferer,
         std::vector < std::string>& preferee)
@@ -89,15 +78,15 @@ StableMatching& StableMatching::operator()(std::ostream& out, bool proposerIsGro
     
     if(proposerIsGroup1)
     {
-        pref = preferences1;
-        ranking = rankings1;
+        pref = preferences1.get();
+        ranking = rankings1.get();
         proposees = &group2;
         proposers = &group1;
     }
     else
     {
-	pref = preferences2;
-	ranking = rankings2;
+    pref = preferences2.get();
+    ranking = rankings2.get();
 	proposees = &group1;
 	proposers = &group2;
     }

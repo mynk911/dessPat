@@ -56,3 +56,38 @@ TEST(cs180, stableMatchingComplex)
     
     EXPECT_EQ(s, out.str());
 }
+
+TEST(cs180, priorityQueueTest1)
+{
+    cs180::heap<int> pq(25);
+    pq.insert(5, 1);
+    pq.insert(4, 8);
+    pq.insert(2, 2);
+    pq.insert(1, 4);
+    pq.insert(3, 3);
+    pq.insert(7, 5);
+    EXPECT_EQ(5, pq.extractmin());
+    EXPECT_EQ(2, pq.extractmin());
+    EXPECT_EQ(3, pq.extractmin());
+    EXPECT_EQ(1, pq.extractmin());
+    EXPECT_EQ(7, pq.extractmin());
+    EXPECT_EQ(4, pq.extractmin());
+}
+
+TEST(cs180, priorityQueueTest2)
+{
+    cs180::heap<int> pq(25);
+    pq.insert(5, 1);
+    pq.insert(4, 8);
+    pq.insert(2, 2);
+    pq.insert(1, 4);
+    pq.insert(3, 3);
+    pq.insert(7, 5);
+    pq.changeKey(0, 25);
+    EXPECT_EQ(2, pq.extractmin());
+    EXPECT_EQ(3, pq.extractmin());
+    EXPECT_EQ(1, pq.extractmin());
+    EXPECT_EQ(7, pq.extractmin());
+    EXPECT_EQ(4, pq.extractmin());
+    EXPECT_EQ(5, pq.extractmin());
+}

@@ -3,7 +3,9 @@
 // Gets n tokens of input from stream in and inserts in seq. Checks 
 // that all tokens are unique and returns sorted sequence if true.
 template <typename SequenceContainer>
-void SortUniqueRange(std::istream& in, int n, SequenceContainer& seq)
+void SortUniqueRange(std::istream& in,
+                     typename SequenceContainer::size_type n,
+                     SequenceContainer& seq)
 {
     seq.clear();
     typename SequenceContainer::value_type name;

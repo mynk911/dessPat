@@ -15,7 +15,7 @@ namespace cs180 {
  *other group, finds a stable matching - a matching where no two particular
  *matches can break to form new matches.
  */
-CS180_EXPORT class StableMatching 
+class CS180_EXPORT StableMatching
 {
 public:
     /// size type
@@ -33,17 +33,31 @@ public:
         </ol>
         The order of data should be maintained as above.
      */
-    StableMatching(std::istream& in);
+    explicit StableMatching(std::istream& in);
+
+    /** @name Default implementations
+     * Once initilased the data in StableMatching object is never modified.
+     * Hence default copying and moving strategy for shared pointers works fine.
+     */
+    ///@{
+    StableMatching(const StableMatching& other) = default;
+    StableMatching(StableMatching&& other) = default;
+    StableMatching& operator=(const StableMatching& other) = default;
+    StableMatching& operator=(StableMatching&& other) = default;
+    ~StableMatching() = default;
+    ///@}
+
     /// finds stable matching and streams output to out.
-    ~StableMatching();
     StableMatching& operator()(std::ostream& out, bool proposerIsGroup1 = true);
 private:
     SizeType n;
     std::vector< std::string > group1, group2;
-    SizeType* preferences1, *preferences2, *rankings1, *rankings2;
+    std::shared_ptr<SizeType> preferences1, preferences2, rankings1, rankings2;
 };
-    
-namespace pq {
+
+/** Provides priority queue functionality using heap data structure.
+ * @tparam T element type to be stored in queue
+ */
 template <typename T>
 class heap
 {
@@ -135,25 +149,31 @@ class heap
         }
     }
 public:
+    /// create a heap of given size
     explicit heap(heap_size_type size = Size)
+        :counter(0)
     {
         buf.reserve(size);
         pos.reserve(size);
     }
-    //impl
+
+    /** @name Default implementations
+     */
+    ///@{
     heap(const heap& other) = default;
-    //default
     heap(heap&& other) = default;
     ~heap() = default;
-    //impl
     heap& operator=(const heap& other) = default;
-    //default
     heap& operator=(heap&& other) = default;
+    ///@}
+
     void swap(heap& other) noexcept
     {
         swap(buf, other.buf);
         swap(pos, other.pos);
     }
+
+    /// insert an element with key k
     heap_size_type insert(T t, int k)
     {
         node n(k, counter++, t);
@@ -162,10 +182,13 @@ public:
         heapifyUp(buf.size()-1);
         return n.id;
     }
+
     T findmin()
     {
         return buf[0].elem;
     }
+
+    /// remove an entry from queue and return it's element
     T remove(heap_size_type i)
     {
         buf[i].swap(buf[buf.size()-1]);
@@ -176,10 +199,14 @@ public:
         pos[el.id] = std::numeric_limits<unsigned>::max();
         return *el.elem;
     }
+
+
     T extractmin()
     {
         return remove(0);
     }
+
+    /// change key value for an entry.
     void changeKey(heap_size_type id, unsigned int val)
     {
         buf[pos[id]].key = val;
@@ -194,8 +221,6 @@ void swap(heap<T>& a, heap<T>& b) noexcept
     a.swap(b);
 }
 
-//template <typename T> typename heap<T>::heap_size_type heap<T>::counter = 0;
-
-}}
+}
 
 #endif
