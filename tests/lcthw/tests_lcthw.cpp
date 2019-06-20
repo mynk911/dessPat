@@ -24,6 +24,7 @@ public:
     static std::unique_ptr<LibcService> _libc;
 };
 
+std::unique_ptr<LibcService> LcthwServiceMockTest::_libc;
 #endif // C_SERVICE_MOCK_TESTS
 
 
@@ -50,7 +51,6 @@ TEST_F(LcthwTest, ex1)
     int a = ex1(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "You are 100 miles away.\n");
 }
@@ -60,7 +60,6 @@ TEST_F(LcthwTest, ex3)
     int a = ex3(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "I am 23 years old.\n");
     fgets(buf, 255, out_test);
@@ -72,7 +71,6 @@ TEST_F(LcthwTest, ex7)
     int a = ex7(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "You are 100 miles away.\n");
     fgets(buf, 255, out_test);
@@ -106,7 +104,6 @@ TEST_F(LcthwTest, ex8NoArg)
     int a = ex8(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "You only have one argument. You suck.\n");
 }
@@ -118,7 +115,6 @@ TEST_F(LcthwTest, ex8Arg)
     int a = ex8(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "Here's your arguments:\n");
     fgets(buf, 255, out_test);
@@ -132,7 +128,6 @@ TEST_F(LcthwTest, ex8TooManyArgs)
     int a = ex8(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "You have too many arguments. You suck.\n");
 }
@@ -142,7 +137,6 @@ TEST_F(LcthwTest, ex9)
     int a = ex9(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 \n");
 }
@@ -154,7 +148,6 @@ TEST_F(LcthwTest, ex10NoArgs)
     int a = ex10(argc, argv, out_test);
     EXPECT_EQ(a, 1);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "ERROR: You need one argument.\n" );
 }
@@ -166,7 +159,6 @@ TEST_F(LcthwTest, ex10Args)
     int a = ex10(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "0: 'U'\n" );
     fgets(buf, 255, out_test);
@@ -202,7 +194,6 @@ TEST_F(LcthwTest, ex11)
     int a = ex11(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "numbers: 0 0 0 0\n" );
     fgets(buf, 255, out_test);
@@ -230,7 +221,7 @@ TEST_F(LcthwTest, ex12)
     int a = ex12(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255], buf2[255];
+    char buf2[255];
     fgets(buf, 255, out_test);
     sprintf(buf2, "The size of an int: %zu\n", sizeof(int));
     EXPECT_STREQ(buf, buf2);
@@ -265,7 +256,6 @@ TEST_F(LcthwTest, ex13)
     int a = ex13(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "arg 1: hey\n" );
     fgets(buf, 255, out_test);
@@ -287,7 +277,6 @@ TEST_F(LcthwTest, ex14)
     int a = ex14(argc, argv, out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "test\n" );
     fgets(buf, 255, out_test);
@@ -301,7 +290,6 @@ TEST_F(LcthwTest, ex15)
     int a = ex15(out_test);
     EXPECT_EQ(a, 0);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "Alan has 23 years alive.\n");
     fgets(buf, 255, out_test);
@@ -357,7 +345,6 @@ TEST_F(LcthwTest, ex16)
     EXPECT_NE(joe, nullptr);
     PrintPerson(out_test, joe);
     fseek(out_test, 0, SEEK_SET);
-    char buf[255];
     fgets(buf, 255, out_test);
     EXPECT_STREQ(buf, "Name : Joe Frank\n");
     fgets(buf, 255, out_test);
@@ -374,7 +361,6 @@ using LcthwDeathTest = LcthwTest;
 
 TEST_F(LcthwDeathTest, ex17InSufficientArguments)
 {
-    char buf[1040];
     errno = 0;
     int argc = 2;
     const char *argv[] = {"ex17", "test_dbFile"};
@@ -400,7 +386,6 @@ TEST_F(LcthwServiceMockDeathTest, ex17MallocFail1)
 
 TEST_F(LcthwDeathTest, ex17TryingToReadNonExistentDatabaseFile)
 {
-    char buf[1040];
     errno = 0;
     int argc = 4;
     const char *argv[] = {"ex17", "test_gtsgserufldfjnaku", "g"};
@@ -410,7 +395,6 @@ TEST_F(LcthwDeathTest, ex17TryingToReadNonExistentDatabaseFile)
 
 TEST_F(LcthwDeathTest, ex17InvalidRecordNumber)
 {
-    char buf[1040];
     errno = 0;
     int argc = 4;
     auto s = std::to_string(MAX_ROWS);
@@ -421,7 +405,6 @@ TEST_F(LcthwDeathTest, ex17InvalidRecordNumber)
 
 TEST_F(LcthwDeathTest, databaseFileDoesNotExist)
 {
-    char buf[1040];
     errno = 0;
     int argc = 4;
     const char *argv[] = {"ex17", "aslifghwgwhwgrwn", "g", "1"};

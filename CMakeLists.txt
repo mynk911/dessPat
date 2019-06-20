@@ -102,8 +102,6 @@ set( SRC_FILES ${SRC_FILES} dessPat.cpp
                             tests/gfg/test_gfg.cpp
                             tests/gof/tests_gof.cpp
                             tests/lcthw/tests_lcthw.cpp
-                            tests/lcthw/Fixture.h
-                            tests/lcthw/Fixture.cpp
                             tests/mcpp/tests_mcpp.cpp)
 
 if(C_SERVICE_MOCK_TESTS)
