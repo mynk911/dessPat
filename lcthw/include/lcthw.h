@@ -140,7 +140,7 @@ void LCTHW_EXPORT PrintPerson(FILE* out, struct Person* p);
 /*!
  * \brief ex17 heap and stack memory.
  */
-    int LCTHW_EXPORT ex17(int argc, const char *argv[], char* buf);
+int LCTHW_EXPORT ex17(int argc, const char *argv[], char* buf);
 int LCTHW_EXPORT ex18(int argc, char *argv[]);
 int LCTHW_EXPORT ex19(int argc, char *argv[]);
 int LCTHW_EXPORT ex22(int argc, char* argv[]);

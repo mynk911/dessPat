@@ -376,7 +376,6 @@ TEST_F(LcthwServiceMockDeathTest, ex17MallocFail1)
 				       .WillRepeatedly(::testing::Return(nullptr));
     errno = ENOMEM;
     ::testing::Mock::AllowLeak((Fixture::_libc).get());
-    char buf[1040];
     int argc = 3;
     const char *argv[] = {"ex17", "test_dbFile", "c"};
     EXPECT_EXIT(ex17(argc, argv, buf), ::testing::ExitedWithCode(1),
@@ -435,4 +434,42 @@ TEST_F(LcthwTest, ex17CRUDTest)
     argc = 4;
     ex17(argc, argv, buf);
     EXPECT_STREQ(buf, "0 Red red@blue.mail\n");
+
+    argv[2] = &modes[2];
+    argv[3] = "1";
+    argv[4] = "Black";
+    argv[5] = "black@blue.mail";
+    argc = 6;
+    ex17(argc, argv, buf);
+
+    argv[2] = &modes[1];
+    argc = 4;
+    ex17(argc, argv, buf);
+    EXPECT_STREQ(buf, "1 Black black@blue.mail\n");
+
+    argv[2] = &modes[4];
+    argc = 3;
+    ex17(argc, argv, buf);
+    EXPECT_STREQ(buf, "0 Red red@blue.mail\n1 Black black@blue.mail\n");
+
+    argv[2] = &modes[3];
+    argv[3] = "0";
+    argc = 4;
+    ex17(argc, argv, buf);
+    argv[2] = &modes[4];
+    argc = 3;
+    ex17(argc, argv, buf);
+    EXPECT_STREQ(buf, "1 Black black@blue.mail\n");
+
+    argv[2] = &modes[2];
+    argv[3] = "0";
+    argv[4] = "Yellow";
+    argv[5] = "yellow@blue.mail";
+    argc = 6;
+    ex17(argc, argv, buf);
+
+    argv[2] = &modes[4];
+    argc = 3;
+    ex17(argc, argv, buf);
+    EXPECT_STREQ(buf, "0 Yellow yellow@blue.mail\n1 Black black@blue.mail\n");
 }
