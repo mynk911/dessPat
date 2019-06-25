@@ -602,13 +602,10 @@ int ex17(int argc,const char *argv[], char* buf)
     return 0;
 }
 
-typedef int (*compare_cb) (int a, int b);
-typedef int* (*sort_cb) (int* numbers, int count, compare_cb cmp);
+//void swap(int a, int b)
+//{
 
-void swap(int a, int b)
-{
-
-}
+//}
 
 int* bubble_sort(int *numbers, int count, compare_cb cmp)
 {
@@ -676,50 +673,46 @@ int strange_order(int a, int b)
 	return a % b;
 }
 
-void test_sorted(int *numbers, int count, sort_cb sort, compare_cb cmp)
-{
-    int i = 0;
-    int *sorted = sort(numbers, count, cmp);
-
-    if (!sorted) die("Failed to sort");
-
-    for (i = 0; i < count; i++)
-	printf("%d ", sorted[i]);
-    printf("\n");
-
-    free(sorted);
-
-    unsigned char* data = (unsigned char*) cmp;
-
-    for (int i = 0; i < 25; i++)
-    {
-	printf("%02x:", data[i]);
-    }
-    printf("\n");
-}
-
-int ex18(int argc, char** argv)
+int ex18(int argc, char** argv, char* buf, sort_cb sort, compare_cb cmp)
 {
     if (argc < 2) die("USAGE: dessPat 1 2 4 3 5 ..");
 
     int count = argc - 1;
     char** inputs = argv + 1;
-    int* numbers = malloc(sizeof(int) * count);
 
+    int* numbers = malloc(sizeof(int) * count);
     if (!numbers) die("Memory Error");
 
     for (int i = 0; i < count; i++)
 	numbers[i] = atoi(inputs[i]);
 
-    printf("Bubble Sort:\n");
-    test_sorted(numbers, count, bubble_sort, sorted_order);
-    test_sorted(numbers, count, bubble_sort, reversed_order);
-    test_sorted(numbers, count, bubble_sort, strange_order);
+    int *sorted = sort(numbers, count, cmp);
+    if (!sorted) die("Failed to sort");
 
-    printf("Selection Sort:\n");
-    test_sorted(numbers, count, selection_sort, sorted_order);
-    test_sorted(numbers, count, selection_sort, reversed_order);
-    test_sorted(numbers, count, selection_sort, strange_order);
+    int length  = 0;
+    for (int i = 0; i < count; i++)
+        length += sprintf(buf + length, "%d ", sorted[i]);
+    length += sprintf(buf + length, "\n");
+
+    free(sorted);
+// Prints out cmp function from read only memory
+//    unsigned char* data = (unsigned char*) cmp;
+
+//    for (int i = 0; i < 25; i++)
+//    {
+//    printf("%02x:", data[i]);
+//    }
+//    printf("\n");
+
+//    printf("Bubble Sort:\n");
+//    test_sorted(numbers, count, bubble_sort, sorted_order);
+//    test_sorted(numbers, count, bubble_sort, reversed_order);
+//    test_sorted(numbers, count, bubble_sort, strange_order);
+
+//    printf("Selection Sort:\n");
+//    test_sorted(numbers, count, selection_sort, sorted_order);
+//    test_sorted(numbers, count, selection_sort, reversed_order);
+//    test_sorted(numbers, count, selection_sort, strange_order);
 
     free(numbers);
 

@@ -107,8 +107,6 @@ set( SRC_FILES ${SRC_FILES} dessPat.cpp
 if(C_SERVICE_MOCK_TESTS)
     set( SRC_FILES ${SRC_FILES}
         tests/lcthw/ServicesMocks.h
-        tests/lcthw/ServicesMocks.cpp
-        tests/lcthw/FakeServices.cpp
         tests/lcthw/FakeServices.h)
 endif(C_SERVICE_MOCK_TESTS)
 #add the executable

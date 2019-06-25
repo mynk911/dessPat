@@ -137,11 +137,36 @@ void LCTHW_EXPORT DestroyPerson(struct Person** p);
 /// \param out FILE pointer
 void LCTHW_EXPORT PrintPerson(FILE* out, struct Person* p);
 
-/*!
- * \brief ex17 heap and stack memory.
+/*! ex17 heap and stack memory.
+ * \param argc argument count
+ * \param argv an array of argc c string pointers
+ * \param buf output buffer
  */
 int LCTHW_EXPORT ex17(int argc, const char *argv[], char* buf);
-int LCTHW_EXPORT ex18(int argc, char *argv[]);
+
+/// compare and sort function typedefs
+/// @{
+typedef int (*compare_cb) (int a, int b);
+typedef int* (*sort_cb) (int* numbers, int count, compare_cb cmp);
+/// @}
+
+int sorted_order(int a, int b);
+int reversed_order(int a, int b);
+int strange_order(int a, int b);
+int* bubble_sort(int *numbers, int count, compare_cb cmp);
+int* selection_sort(int *numbers, int count, compare_cb cmp);
+
+/// ex18 function pointers via sorting examples.
+/// \param argc count of arguments
+/// \param argv an array of argc c string pointers
+/// \param buf output buffer
+/// \param sort sorting function
+/// \param cmp comparison function
+/// \return 0 for success.
+///
+int LCTHW_EXPORT ex18(int argc, char *argv[],
+                      char* buf, sort_cb sort, compare_cb cmp);
+
 int LCTHW_EXPORT ex19(int argc, char *argv[]);
 int LCTHW_EXPORT ex22(int argc, char* argv[]);
 int LCTHW_EXPORT ex23(int argc, char* argv[]);

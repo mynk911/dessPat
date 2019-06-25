@@ -5,9 +5,11 @@
 #include "gtest/gtest.h"
 #include "lcthw.h"
 #include "ex17_ds.h"
+#include "dessPatConfig.h"
 
 #ifdef C_SERVICE_MOCK_TESTS
 #include "ServicesMocks.h"
+#include "FakeServices.h"
 
 class LcthwServiceMockTest : public ::testing::Test
 {
@@ -25,6 +27,21 @@ public:
 };
 
 std::unique_ptr<LibcService> LcthwServiceMockTest::_libc;
+
+LibcService::~LibcService()
+{
+
+}
+
+extern "C" void* my_malloc(size_t size)
+{
+    return LcthwServiceMockTest::_libc->malloc(size);
+}
+
+extern "C" FILE* my_fopen(const char* filename, const char* modes)
+{
+    return LcthwServiceMockTest::_libc->fopen(filename, modes);
+}
 #endif // C_SERVICE_MOCK_TESTS
 
 
@@ -369,15 +386,16 @@ TEST_F(LcthwDeathTest, ex17InSufficientArguments)
 }
 
 #ifdef C_SERVICE_MOCK_TESTS
-using LcthwServiceMockDeathTest = LcthwServiceMockTest
+using LcthwServiceMockDeathTest = LcthwServiceMockTest;
 TEST_F(LcthwServiceMockDeathTest, ex17MallocFail1)
 {
-    EXPECT_CALL(*(Fixture::_libc), malloc(::testing::_))
+    EXPECT_CALL(*(LcthwServiceMockTest::_libc), malloc(::testing::_))
 				       .WillRepeatedly(::testing::Return(nullptr));
     errno = ENOMEM;
-    ::testing::Mock::AllowLeak((Fixture::_libc).get());
+    ::testing::Mock::AllowLeak((LcthwServiceMockTest::_libc).get());
     int argc = 3;
     const char *argv[] = {"ex17", "test_dbFile", "c"};
+    char buf[100];
     EXPECT_EXIT(ex17(argc, argv, buf), ::testing::ExitedWithCode(1),
 		"Cannot create Connection");
 }
