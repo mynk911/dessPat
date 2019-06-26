@@ -519,3 +519,19 @@ TEST_F(LcthwTest, ex18SelectionSort)
     ex18(argc, argv, buf, selection_sort, strange_order);
     EXPECT_STREQ(buf, "2 4 5 3 1 \n");
 }
+
+TEST_F(LcthwTest, ex19)
+{
+    int argc = 3;
+    const char* argv[] = {"dessPat", "trumper", "t"};
+    int ret = ex19(argc, argv);
+    EXPECT_EQ(ret, 0);
+}
+
+TEST_F(LcthwTest, ex22)
+{
+    int argc = 3;
+    const char* argv[] = {"dessPat", "trumper", "t"};
+    int ret = ex19(argc, argv);
+    EXPECT_EQ(ret, 0);
+}

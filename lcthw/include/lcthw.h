@@ -150,11 +150,11 @@ typedef int (*compare_cb) (int a, int b);
 typedef int* (*sort_cb) (int* numbers, int count, compare_cb cmp);
 /// @}
 
-int sorted_order(int a, int b);
-int reversed_order(int a, int b);
-int strange_order(int a, int b);
-int* bubble_sort(int *numbers, int count, compare_cb cmp);
-int* selection_sort(int *numbers, int count, compare_cb cmp);
+LCTHW_EXPORT int sorted_order(int a, int b);
+LCTHW_EXPORT int reversed_order(int a, int b);
+LCTHW_EXPORT int strange_order(int a, int b);
+LCTHW_EXPORT int* bubble_sort(int *numbers, int count, compare_cb cmp);
+LCTHW_EXPORT int* selection_sort(int *numbers, int count, compare_cb cmp);
 
 /// ex18 function pointers via sorting examples.
 /// \param argc count of arguments
@@ -167,7 +167,7 @@ int* selection_sort(int *numbers, int count, compare_cb cmp);
 int LCTHW_EXPORT ex18(int argc,const char **argv,
                       char* buf, sort_cb sort, compare_cb cmp);
 
-int LCTHW_EXPORT ex19(int argc, char *argv[]);
+int LCTHW_EXPORT ex19(int argc, const char *argv[]);
 int LCTHW_EXPORT ex22(int argc, char* argv[]);
 int LCTHW_EXPORT ex23(int argc, char* argv[]);
 int LCTHW_EXPORT ex24(int argc, char* argv[]);

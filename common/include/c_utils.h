@@ -4,7 +4,7 @@
 extern "C"
 #endif
 
-void swap(int A[], size_t a, size_t b);
+void swap(int* a, int* b);
 
 #ifdef __cplusplus
 }

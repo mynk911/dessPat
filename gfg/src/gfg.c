@@ -111,7 +111,7 @@ int sort_012(int A[], size_t n)
     {
         if (A[m] == 0)
         {
-            if (b != m) swap(A, b, m);
+            if (b != m) swap(A+b, A+m);
             b++; m++;
         }
         else if (A[m] == 1)
@@ -121,7 +121,7 @@ int sort_012(int A[], size_t n)
         else if (A[m] == 2)
         {
             e--;
-            swap(A, m, e);
+            swap(A+m, A+e);
         }
     }
     return 0;

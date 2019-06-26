@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.5) 
+cmake_minimum_required(VERSION 3.12) 
 project(GFG VERSION 1.0 LANGUAGES C) 
 
-add_library (gfg src/gfg.c)
+add_library (gfg src/gfg.c $<TARGET_OBJECTS:common>)
 add_library (GFG::gfg ALIAS gfg)
-target_link_libraries(gfg PRIVATE common)
+
 include(GenerateExportHeader)
 generate_export_header(gfg)
 target_include_directories(gfg
@@ -13,6 +13,7 @@ target_include_directories(gfg
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
+    $<TARGET_PROPERTY:common,INCLUDE_DIRECTORIES>
     )
 
 if(UNIX)

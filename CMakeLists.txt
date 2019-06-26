@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.5)
+cmake_minimum_required (VERSION 3.12)
 project (dessPat)
 
 #use CXX 14 (for gcc)

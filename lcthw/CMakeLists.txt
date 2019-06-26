@@ -1,18 +1,20 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.12)
 project(LCTHW VERSION 1.0 LANGUAGES C)
 
-add_library (lcthw include/lcthw.h src/lcthw.c src/ex22.c)
+add_library (lcthw include/lcthw.h src/lcthw.c src/ex22.c $<TARGET_OBJECTS:common>)
 add_library (LCTHW::lcthw ALIAS lcthw)
-target_link_libraries(lcthw PRIVATE common)
+
 include(GenerateExportHeader)
 generate_export_header(lcthw)
 target_include_directories(lcthw
-    PUBLIC
+PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/LCTHW>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+PRIVATE
+    $<TARGET_PROPERTY:common,INCLUDE_DIRECTORIES>
     )
 
 if(C_SERVICE_MOCK_TESTS)

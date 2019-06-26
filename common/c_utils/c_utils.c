@@ -1,8 +1,8 @@
 #include "c_utils.h"
 
-void swap(int A[], size_t a, size_t b)
+void swap(int* a, int* b)
 {
-    int temp = A[a];
-    A[a] = A[b];
-    A[b] = temp;
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }

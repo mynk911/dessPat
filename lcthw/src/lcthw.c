@@ -11,10 +11,12 @@
 #include <ctype.h>
 #include <stdarg.h>
 
+#include "dessPatConfig.h"
 #include "dbg.h"
+#include "c_utils.h"
+
 #include "lcthw.h"
 #include "ex17_ds.h"
-#include "dessPatConfig.h"
 
 #ifdef C_SERVICE_MOCK_TESTS
 #include "FakeServices.h"
@@ -613,15 +615,11 @@ int* bubble_sort(int *numbers, int count, compare_cb cmp)
 
     for (i = 0; i < count - 1; i++)
     {
-	for (j = 0; j < count - 1 - i; j++)
-	{
-	    if (cmp(target[j], target[j + 1]) > 0)
-	    {
-		temp = target[j];
-		target[j] = target[j + 1];
-		target[j + 1] = temp;
-	    }
-	}
+        for (j = 0; j < count - 1 - i; j++)
+        {
+            if (cmp(target[j], target[j + 1]) > 0)
+                swap(target+j,target+j+1);
+        }
     }
     return target;
 }
@@ -637,15 +635,13 @@ int* selection_sort(int* numbers, int count, compare_cb cmp)
 
     for (i = 0; i < count - 1; i++)
     {
-	mindex = i;
-	for (j = i + 1; j < count; j++)
-	{
-	    if (cmp(target[mindex], target[j]) > 0)
-		mindex = j;
-	}
-	temp = target[i];
-	target[i] = target[mindex];
-	target[mindex] = temp;
+        mindex = i;
+        for (j = i + 1; j < count; j++)
+        {
+            if (cmp(target[mindex], target[j]) > 0)
+                mindex = j;
+        }
+        swap(target+i,target+mindex);
     }
     return target;
 }
@@ -690,6 +686,7 @@ int ex18(int argc,const char** argv, char* buf, sort_cb sort, compare_cb cmp)
     length += sprintf(buf + length, "\n");
 
     free(sorted);
+
 // Prints out cmp function from read only memory
 //    unsigned char* data = (unsigned char*) cmp;
 
@@ -698,17 +695,6 @@ int ex18(int argc,const char** argv, char* buf, sort_cb sort, compare_cb cmp)
 //    printf("%02x:", data[i]);
 //    }
 //    printf("\n");
-
-//    printf("Bubble Sort:\n");
-//    test_sorted(numbers, count, bubble_sort, sorted_order);
-//    test_sorted(numbers, count, bubble_sort, reversed_order);
-//    test_sorted(numbers, count, bubble_sort, strange_order);
-
-//    printf("Selection Sort:\n");
-//    test_sorted(numbers, count, selection_sort, sorted_order);
-//    test_sorted(numbers, count, selection_sort, reversed_order);
-//    test_sorted(numbers, count, selection_sort, strange_order);
-
     free(numbers);
 
     return 0;
@@ -778,7 +764,7 @@ error:
     return -1;
 }
 
-int ex19(int argc, char *argv[])
+int ex19(int argc, const char *argv[])
 {
     check(argc > 2, "Need an argument.");
 
@@ -819,7 +805,7 @@ void scope_demo(int count)
     log_info("count after assign: %d", count);
 }
 
-int ex22(int argc, char* argv[])
+int ex22()
 {
     //extra
     int* x = age();
