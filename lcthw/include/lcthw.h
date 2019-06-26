@@ -164,7 +164,7 @@ int* selection_sort(int *numbers, int count, compare_cb cmp);
 /// \param cmp comparison function
 /// \return 0 for success.
 ///
-int LCTHW_EXPORT ex18(int argc, char *argv[],
+int LCTHW_EXPORT ex18(int argc,const char **argv,
                       char* buf, sort_cb sort, compare_cb cmp);
 
 int LCTHW_EXPORT ex19(int argc, char *argv[]);

@@ -1,17 +1,15 @@
-cmake_minimum_required(VERSION 3.5) 
-project(LCTHW VERSION 1.0 LANGUAGES C) 
+cmake_minimum_required(VERSION 3.5)
+project(LCTHW VERSION 1.0 LANGUAGES C)
 
-add_library (lcthw include/lcthw.h
-				   src/lcthw.c
-				   src/ex22.c)
+add_library (lcthw include/lcthw.h src/lcthw.c src/ex22.c)
 add_library (LCTHW::lcthw ALIAS lcthw)
+target_link_libraries(lcthw PRIVATE common)
 include(GenerateExportHeader)
 generate_export_header(lcthw)
 target_include_directories(lcthw
     PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/LCTHW>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/common/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
@@ -35,9 +33,9 @@ set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/LCTHW)
 
 install(
     TARGETS
-        lcthw
+	lcthw
     EXPORT
-        LCTHWTargets
+	LCTHWTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -46,7 +44,7 @@ install(
 install(EXPORT LCTHWTargets
     FILE LCTHWTargets.cmake
     NAMESPACE LCTHW::
-    DESTINATION ${INSTALL_CONFIGDIR} 
+    DESTINATION ${INSTALL_CONFIGDIR}
     )
 
 install(DIRECTORY include/

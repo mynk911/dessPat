@@ -5,10 +5,12 @@
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "gfg.h"
-#include "string.h"
+#include <string.h>
 
+#include "c_utils.h"
 #include "dbg.h"
+
+#include "gfg.h"
 
 static int loc[1010];
 static int aux[1010];
@@ -31,13 +33,6 @@ int cus_cmp(const void* a, const void* b)
         return x - y;
     else
         return aux[y] - aux[x];
-}
-
-void swap(int A[], size_t a, size_t b)
-{
-    int temp = A[a];
-    A[a] = A[b];
-    A[b] = temp;
 }
 
 int maximum_subarray(int A[], size_t n, int* res)

@@ -491,3 +491,31 @@ TEST_F(LcthwTest, ex17CRUDTest)
     ex17(argc, argv, buf);
     EXPECT_STREQ(buf, "0 Yellow yellow@blue.mail\n1 Black black@blue.mail\n");
 }
+
+TEST_F(LcthwTest, ex18BubbleSort)
+{
+    int argc = 6;
+    const char* argv[] = {"dessPat", "4", "1", "3", "5", "2"};
+    ex18(argc, argv, buf, bubble_sort, sorted_order);
+    EXPECT_STREQ(buf, "1 2 3 4 5 \n");
+
+    ex18(argc, argv, buf, bubble_sort, reversed_order);
+    EXPECT_STREQ(buf, "5 4 3 2 1 \n");
+
+    ex18(argc, argv, buf, bubble_sort, strange_order);
+    EXPECT_STREQ(buf, "4 5 3 2 1 \n");
+}
+
+TEST_F(LcthwTest, ex18SelectionSort)
+{
+    int argc = 6;
+    const char* argv[] = {"dessPat", "4", "1", "3", "5", "2"};
+    ex18(argc, argv, buf, selection_sort, sorted_order);
+    EXPECT_STREQ(buf, "1 2 3 4 5 \n");
+
+    ex18(argc, argv, buf, selection_sort, reversed_order);
+    EXPECT_STREQ(buf, "5 4 3 2 1 \n");
+
+    ex18(argc, argv, buf, selection_sort, strange_order);
+    EXPECT_STREQ(buf, "2 4 5 3 1 \n");
+}

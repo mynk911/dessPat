@@ -602,11 +602,6 @@ int ex17(int argc,const char *argv[], char* buf)
     return 0;
 }
 
-//void swap(int a, int b)
-//{
-
-//}
-
 int* bubble_sort(int *numbers, int count, compare_cb cmp)
 {
     int temp = 0, i = 0, j = 0;
@@ -673,12 +668,12 @@ int strange_order(int a, int b)
 	return a % b;
 }
 
-int ex18(int argc, char** argv, char* buf, sort_cb sort, compare_cb cmp)
+int ex18(int argc,const char** argv, char* buf, sort_cb sort, compare_cb cmp)
 {
     if (argc < 2) die("USAGE: dessPat 1 2 4 3 5 ..");
 
     int count = argc - 1;
-    char** inputs = argv + 1;
+    const char** inputs = argv + 1;
 
     int* numbers = malloc(sizeof(int) * count);
     if (!numbers) die("Memory Error");

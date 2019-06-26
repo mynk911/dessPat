@@ -29,6 +29,8 @@ endif()
 find_package(Boost)
 find_package(Threads)
 
+add_subdirectory(common)
+
 if(Boost_FOUND)
 add_subdirectory (GoF)
 set (EXTRA_LIBS ${EXTRA_LIBS} GOF::gof)
