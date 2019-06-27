@@ -165,11 +165,20 @@ LCTHW_EXPORT int* selection_sort(int *numbers, int count, compare_cb cmp);
 /// \return 0 for success.
 ///
 int LCTHW_EXPORT ex18(int argc,const char **argv,
-                      char* buf, sort_cb sort, compare_cb cmp);
+		      char* buf, sort_cb sort, compare_cb cmp);
 
 int LCTHW_EXPORT ex19(int argc, const char *argv[]);
-int LCTHW_EXPORT ex22(int argc, char* argv[]);
-int LCTHW_EXPORT ex23(int argc, char* argv[]);
+
+extern int THE_SIZE;
+LCTHW_EXPORT int get_age();
+LCTHW_EXPORT int* age();
+LCTHW_EXPORT void set_age(int age);
+LCTHW_EXPORT double update_ratio(double ratio);
+LCTHW_EXPORT int get_size();
+LCTHW_EXPORT void scope_demo(int count);
+
+LCTHW_EXPORT int normal_copy(char* from, char* to, int count);
+LCTHW_EXPORT int duffs_device(char* from, char* to, int count);
 int LCTHW_EXPORT ex24(int argc, char* argv[]);
 int LCTHW_EXPORT ex25(int argc, char* argv[]);
 

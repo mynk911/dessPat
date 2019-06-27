@@ -3,9 +3,12 @@
 #endif
 
 #include "gtest/gtest.h"
+
+#include "dessPatConfig.h"
+#include "dbg.h"
+
 #include "lcthw.h"
 #include "ex17_ds.h"
-#include "dessPatConfig.h"
 
 #ifdef C_SERVICE_MOCK_TESTS
 #include "ServicesMocks.h"
@@ -530,8 +533,71 @@ TEST_F(LcthwTest, ex19)
 
 TEST_F(LcthwTest, ex22)
 {
-    int argc = 3;
-    const char* argv[] = {"dessPat", "trumper", "t"};
-    int ret = ex19(argc, argv);
-    EXPECT_EQ(ret, 0);
+    // get pointer to static variable THE_AGE in ex22.h
+    // and modify it
+    int* x = age();
+    *x = 25000;
+    EXPECT_EQ(25000, get_age());
+
+    // change static global variable THE_AGE via exposed API
+    set_age(100);
+    EXPECT_EQ(100, get_age());
+
+    // can set global variable THE_SIZE directly
+    EXPECT_EQ(get_size(), 1000);
+    THE_SIZE = 9;
+    EXPECT_EQ(get_size(), 9);
+
+    // local static variable ratio  retain values even when function
+    // exits
+    EXPECT_EQ(update_ratio(2.0), 1.0);
+    EXPECT_EQ(update_ratio(10.0), 2.0);
+
+    int count = 4;
+    scope_demo(count * 20);
+    //pass by value hence count should not change
+    EXPECT_EQ(count, 4);
+}
+
+int valid_copy(char* data, int count, int expects)
+{
+    int i = 0;
+    for(i = 0; i < count; i++)
+    {
+	if (data[i] != expects) {
+	    log_err("[%d] %c != %c", i, data[i], expects);
+	    return -1;
+	}
+    }
+    return 0;
+}
+
+TEST_F(LcthwTest, ex23NormalCopy)
+{
+    char from[1000] = { 'a' };
+    char to[1000] = { 'c' };
+    int rc = 0;
+
+    memset(from, 'x', 1000);
+    memset(to, 'y', 1000);
+
+    EXPECT_EQ(valid_copy(to, 1000, 'y'), 0);
+    rc = normal_copy(from, to, 1000);
+    EXPECT_EQ(rc , 1000);
+    EXPECT_EQ(valid_copy(to, 1000, 'x'), 0);
+}
+
+TEST_F(LcthwTest, ex23DuffsDevice)
+{
+    char from[1000] = { 'a' };
+    char to[1000] = { 'c' };
+    int rc = 0;
+
+    memset(from, 'x', 1000);
+    memset(to, 'y', 1000);
+
+    EXPECT_EQ(valid_copy(to, 1000, 'y'), 0);
+    rc = duffs_device(from, to, 1000);
+    EXPECT_EQ(rc , 1000);
+    EXPECT_EQ(valid_copy(to, 1000, 'x'), 0);
 }

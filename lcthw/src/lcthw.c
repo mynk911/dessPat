@@ -606,7 +606,7 @@ int ex17(int argc,const char *argv[], char* buf)
 
 int* bubble_sort(int *numbers, int count, compare_cb cmp)
 {
-    int temp = 0, i = 0, j = 0;
+    int i = 0, j = 0;
 
     int *target = malloc(count * sizeof(int));
     if (!target) die("Memory Error!");
@@ -615,18 +615,18 @@ int* bubble_sort(int *numbers, int count, compare_cb cmp)
 
     for (i = 0; i < count - 1; i++)
     {
-        for (j = 0; j < count - 1 - i; j++)
-        {
-            if (cmp(target[j], target[j + 1]) > 0)
-                swap(target+j,target+j+1);
-        }
+	for (j = 0; j < count - 1 - i; j++)
+	{
+	    if (cmp(target[j], target[j + 1]) > 0)
+		swap(target+j,target+j+1);
+	}
     }
     return target;
 }
 
 int* selection_sort(int* numbers, int count, compare_cb cmp)
 {
-    int temp = 0, i = 0, j = 0, mindex = 0;
+    int i = 0, j = 0, mindex = 0;
 
     int* target = malloc(count * sizeof(int));
     if (!target) die("Memory Error!");
@@ -635,13 +635,13 @@ int* selection_sort(int* numbers, int count, compare_cb cmp)
 
     for (i = 0; i < count - 1; i++)
     {
-        mindex = i;
-        for (j = i + 1; j < count; j++)
-        {
-            if (cmp(target[mindex], target[j]) > 0)
-                mindex = j;
-        }
-        swap(target+i,target+mindex);
+	mindex = i;
+	for (j = i + 1; j < count; j++)
+	{
+	    if (cmp(target[mindex], target[j]) > 0)
+		mindex = j;
+	}
+	swap(target+i,target+mindex);
     }
     return target;
 }
@@ -682,7 +682,7 @@ int ex18(int argc,const char** argv, char* buf, sort_cb sort, compare_cb cmp)
 
     int length  = 0;
     for (int i = 0; i < count; i++)
-        length += sprintf(buf + length, "%d ", sorted[i]);
+	length += sprintf(buf + length, "%d ", sorted[i]);
     length += sprintf(buf + length, "\n");
 
     free(sorted);
@@ -700,7 +700,7 @@ int ex18(int argc,const char** argv, char* buf, sort_cb sort, compare_cb cmp)
     return 0;
 }
 
-int test_check(char* file_name)
+int test_check(const char* file_name)
 {
     FILE* input = NULL;
     char* block = NULL;
@@ -789,9 +789,39 @@ error:
     return 1;
 }
 
-#include "ex22.h"
+int THE_SIZE = 1000;
 
-const char* MY_NAME = "Mayank Bansal";
+static int THE_AGE = 24;
+
+int get_age()
+{
+    return THE_AGE;
+}
+
+int * age()
+{
+    return &THE_AGE;
+}
+
+void set_age(int age)
+{
+    THE_AGE = age;
+}
+
+double update_ratio(double new_ratio)
+{
+    static double ratio = 1.0;
+
+    double old_ratio = ratio;
+    ratio = new_ratio;
+
+    return old_ratio;
+}
+
+int get_size()
+{
+    return THE_SIZE;
+}
 
 void scope_demo(int count)
 {
@@ -803,31 +833,6 @@ void scope_demo(int count)
     log_info("count is at exit : %d", count);
     count = 3000;
     log_info("count after assign: %d", count);
-}
-
-int ex22()
-{
-    //extra
-    int* x = age();
-    *x = 25000;
-    log_info("My name: %s age: %d", MY_NAME, get_age());
-    set_age(100);
-    log_info("My age is now: %d", get_age());
-    log_info("The size is now: %d", THE_SIZE);
-    print_size();
-    THE_SIZE = 9;
-    log_info("The size is now: %d", THE_SIZE);
-    print_size();
-    log_info("Ratio at first: %f", update_ratio(2.0));
-    log_info("Ratio again: %f", update_ratio(10.0));
-    log_info("Ratio once more: %f", update_ratio(300.0));
-
-    int count = 4;
-    scope_demo(count);
-    scope_demo(count * 20);
-    log_info("count after calling scope_demo: %d", count);
-
-    return 0;
 }
 
 int normal_copy(char* from, char* to, int count)
@@ -864,42 +869,6 @@ int duffs_device(char* from, char* to, int count)
 	}  while (--n > 0);
     }
     return count;
-}
-
-int valid_copy(char* data, int count, int expects)
-{
-    int i = 0;
-    for(i = 0; i < count; i++)
-    {
-	if (data[i] != expects) {
-	    log_err("[%d] %c != %c", i, data[i], expects);
-	    return 0;
-	}
-    }
-    return 1;
-}
-
-int ex23(int argc, char* argv[])
-{
-    char from[1000] = { 'a' };
-    char to[1000] = { 'c' };
-    int rc = 0;
-
-    memset(from, 'x', 1000);
-    memset(to, 'y', 1000);
-    check(valid_copy(to, 1000, 'y'), "Not initialized correctly.");
-    rc = normal_copy(from, to, 1000);
-    check(rc == 1000, "Normal copy failed.");
-    check(valid_copy(to, 1000, 'x'), "Normal copy failed");
-    memset(to, 'y', 1000);
-    rc = duffs_device(from, to, 1000);
-    check(rc == 1000, "Duffs device failed");
-    check(valid_copy(to, 1000, 'x'), "Duffs Device failed");
-
-    return 0;
-
-error:
-    return 1;
 }
 
 
