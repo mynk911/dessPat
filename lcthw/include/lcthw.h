@@ -167,7 +167,10 @@ LCTHW_EXPORT int* selection_sort(int *numbers, int count, compare_cb cmp);
 int LCTHW_EXPORT ex18(int argc,const char **argv,
 		      char* buf, sort_cb sort, compare_cb cmp);
 
-int LCTHW_EXPORT ex19(int argc, const char *argv[]);
+LCTHW_EXPORT int test_check(const char* file_name);
+LCTHW_EXPORT int test_sentinel(int code);
+LCTHW_EXPORT int test_check_mem();
+LCTHW_EXPORT int test_check_debug();
 
 extern int THE_SIZE;
 LCTHW_EXPORT int get_age();

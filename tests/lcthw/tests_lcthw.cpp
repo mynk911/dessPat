@@ -525,10 +525,12 @@ TEST_F(LcthwTest, ex18SelectionSort)
 
 TEST_F(LcthwTest, ex19)
 {
-    int argc = 3;
-    const char* argv[] = {"dessPat", "trumper", "t"};
-    int ret = ex19(argc, argv);
-    EXPECT_EQ(ret, 0);
+    EXPECT_EQ(test_check("CMakeCache.txt"), 0);
+    EXPECT_EQ(test_check("TRUMPER") , -1);
+    EXPECT_EQ(test_sentinel(1) , 0);
+    EXPECT_EQ(test_sentinel(100) , -1);
+    EXPECT_EQ(test_check_mem() , -1);
+    EXPECT_EQ(test_check_debug() , -1);
 }
 
 TEST_F(LcthwTest, ex22)
