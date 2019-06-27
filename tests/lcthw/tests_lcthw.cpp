@@ -612,6 +612,7 @@ TEST_F(LcthwTest, ex24Test)
     in = fopen("ex24_input.txt","r");
     ex24(in, out_test);
     fseek(out_test, 0, SEEK_SET);
+
     char* res = fgets(buf, 512, out_test);
     ASSERT_NE(res, nullptr);
     EXPECT_STREQ(buf, "you : Derek\n");
@@ -623,6 +624,39 @@ TEST_F(LcthwTest, ex24Test)
     res = fgets(buf, 512, out_test);
     ASSERT_NE(res, nullptr);
     EXPECT_STREQ(buf, " 27 Green 35000.000000\n");
+
+    fclose(in);
+}
+
+TEST_F(LcthwTest, ex25Test)
+{
+    FILE* in = fopen("ex24_input.txt", "w");
+    fprintf(in, "Derek\nOBrian\n27235000\n");
+    fclose(in);
+    in = fopen("ex24_input.txt","r");
+    char* first_name = NULL;
+    char initial = ' ';
+    char* last_name = NULL;
+    int age = 0;
+
+    int rc = read_scan(in, "%s", MAX_DATA, &first_name);
+    ASSERT_EQ(rc, 0);
+    EXPECT_STREQ(first_name, "Derek\n");
+
+    rc = read_scan(in, "%c", &initial);
+    ASSERT_EQ(rc, 0);
+    EXPECT_EQ(initial, 'O');
+
+    rc = read_scan(in, "%s", MAX_DATA, &last_name);
+    ASSERT_EQ(rc, 0);
+    EXPECT_STREQ(last_name, "Brian\n");
+
+    rc = read_scan(in, "%d", &age);
+    ASSERT_EQ(rc, 0);
+    EXPECT_EQ(age, 27235000);
+
+    free(first_name);
+    free(last_name);
 
     fclose(in);
 }

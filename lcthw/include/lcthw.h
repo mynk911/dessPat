@@ -144,19 +144,19 @@ void LCTHW_EXPORT PrintPerson(FILE* out, struct Person* p);
  */
 int LCTHW_EXPORT ex17(int argc, const char *argv[], char* buf);
 
-/// compare and sort function typedefs
+/// ex18 function pointers via sorting examples.
 /// @{
+/// prototype for integer comparison functions
 typedef int (*compare_cb) (int a, int b);
+/// prototype for integer sorting functions
 typedef int* (*sort_cb) (int* numbers, int count, compare_cb cmp);
-/// @}
-
 LCTHW_EXPORT int sorted_order(int a, int b);
 LCTHW_EXPORT int reversed_order(int a, int b);
+/// returns a % b (diffeent results for different algos)
 LCTHW_EXPORT int strange_order(int a, int b);
 LCTHW_EXPORT int* bubble_sort(int *numbers, int count, compare_cb cmp);
 LCTHW_EXPORT int* selection_sort(int *numbers, int count, compare_cb cmp);
-
-/// ex18 function pointers via sorting examples.
+/// main interface for ex18.
 /// \param argc count of arguments
 /// \param argv an array of argc c string pointers
 /// \param buf output buffer
@@ -166,25 +166,46 @@ LCTHW_EXPORT int* selection_sort(int *numbers, int count, compare_cb cmp);
 ///
 int LCTHW_EXPORT ex18(int argc,const char **argv,
 		      char* buf, sort_cb sort, compare_cb cmp);
+/// @}
 
+/// ex19 debug macros demonstration
+/// @{
 LCTHW_EXPORT int test_check(const char* file_name);
 LCTHW_EXPORT int test_sentinel(int code);
 LCTHW_EXPORT int test_check_mem();
 LCTHW_EXPORT int test_check_debug();
+/// @}
 
-extern int THE_SIZE;
+/// ex22 scope in C demo
+/// @(
+LCTHW_EXPORT extern int THE_SIZE;
 LCTHW_EXPORT int get_age();
 LCTHW_EXPORT int* age();
 LCTHW_EXPORT void set_age(int age);
 LCTHW_EXPORT double update_ratio(double ratio);
 LCTHW_EXPORT int get_size();
 LCTHW_EXPORT void scope_demo(int count);
+/// @}
 
+/// ex23 duffs device
+/// @{
 LCTHW_EXPORT int normal_copy(char* from, char* to, int count);
 LCTHW_EXPORT int duffs_device(char* from, char* to, int count);
+/// @}
 
+/// ex24 reading stream input
+/// \param in input FILE
+/// \param out output FILE
 LCTHW_EXPORT int ex24(FILE* in, FILE* out);
-LCTHW_EXPORT int ex25(int argc, char* argv[]);
+
+/// ex25 reads inpute from in according to fmt
+/// fmt is similar to printf fmt accept it's restricted to c,d and s without
+/// any modifiers. for s you provide two inputs int and char**.
+/// \param in
+/// \param fmt
+/// \return
+///
+LCTHW_EXPORT int read_scan(FILE* in, const char* fmt, ...);
 
 #ifdef __cplusplus
 }
