@@ -182,8 +182,9 @@ LCTHW_EXPORT void scope_demo(int count);
 
 LCTHW_EXPORT int normal_copy(char* from, char* to, int count);
 LCTHW_EXPORT int duffs_device(char* from, char* to, int count);
-int LCTHW_EXPORT ex24(int argc, char* argv[]);
-int LCTHW_EXPORT ex25(int argc, char* argv[]);
+
+LCTHW_EXPORT int ex24(FILE* in, FILE* out);
+LCTHW_EXPORT int ex25(int argc, char* argv[]);
 
 #ifdef __cplusplus
 }

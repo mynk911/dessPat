@@ -603,3 +603,26 @@ TEST_F(LcthwTest, ex23DuffsDevice)
     EXPECT_EQ(rc , 1000);
     EXPECT_EQ(valid_copy(to, 1000, 'x'), 0);
 }
+
+TEST_F(LcthwTest, ex24Test)
+{
+    FILE* in = fopen("ex24_input.txt", "w");
+    fprintf(in, "Derek\nBrian\n27 2 35000");
+    fclose(in);
+    in = fopen("ex24_input.txt","r");
+    ex24(in, out_test);
+    fseek(out_test, 0, SEEK_SET);
+    char* res = fgets(buf, 512, out_test);
+    ASSERT_NE(res, nullptr);
+    EXPECT_STREQ(buf, "you : Derek\n");
+
+    res = fgets(buf, 512, out_test);
+    ASSERT_NE(res, nullptr);
+    EXPECT_STREQ(buf, " Brian\n");
+
+    res = fgets(buf, 512, out_test);
+    ASSERT_NE(res, nullptr);
+    EXPECT_STREQ(buf, " 27 Green 35000.000000\n");
+
+    fclose(in);
+}
