@@ -664,42 +664,6 @@ int strange_order(int a, int b)
 	return a % b;
 }
 
-int ex18(int argc,const char** argv, char* buf, sort_cb sort, compare_cb cmp)
-{
-    if (argc < 2) die("USAGE: dessPat 1 2 4 3 5 ..");
-
-    int count = argc - 1;
-    const char** inputs = argv + 1;
-
-    int* numbers = malloc(sizeof(int) * count);
-    if (!numbers) die("Memory Error");
-
-    for (int i = 0; i < count; i++)
-	numbers[i] = atoi(inputs[i]);
-
-    int *sorted = sort(numbers, count, cmp);
-    if (!sorted) die("Failed to sort");
-
-    int length  = 0;
-    for (int i = 0; i < count; i++)
-	length += sprintf(buf + length, "%d ", sorted[i]);
-    length += sprintf(buf + length, "\n");
-
-    free(sorted);
-
-// Prints out cmp function from read only memory
-//    unsigned char* data = (unsigned char*) cmp;
-
-//    for (int i = 0; i < 25; i++)
-//    {
-//    printf("%02x:", data[i]);
-//    }
-//    printf("\n");
-    free(numbers);
-
-    return 0;
-}
-
 int test_check(const char* file_name)
 {
     FILE* input = NULL;

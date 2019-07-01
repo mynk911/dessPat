@@ -156,16 +156,6 @@ LCTHW_EXPORT int reversed_order(int a, int b);
 LCTHW_EXPORT int strange_order(int a, int b);
 LCTHW_EXPORT int* bubble_sort(int *numbers, int count, compare_cb cmp);
 LCTHW_EXPORT int* selection_sort(int *numbers, int count, compare_cb cmp);
-/// main interface for ex18.
-/// \param argc count of arguments
-/// \param argv an array of argc c string pointers
-/// \param buf output buffer
-/// \param sort sorting function
-/// \param cmp comparison function
-/// \return 0 for success.
-///
-int LCTHW_EXPORT ex18(int argc,const char **argv,
-		      char* buf, sort_cb sort, compare_cb cmp);
 /// @}
 
 /// ex19 debug macros demonstration
