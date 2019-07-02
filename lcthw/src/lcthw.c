@@ -866,7 +866,7 @@ int ex24(FILE* inp, FILE* out)
     rc = fscanf(inp, "%f", &you.income);
     check(rc > 0, "income failed : enter floating point number");
 
-    fprintf(out, "you : %s %s %d %s %f\n", you.first_name, you.last_name, you.age, 
+    fprintf(out, "you : %s %s %d %s %f\n", you.first_name, you.last_name, you.age,
 	    EYE_COLOR_NAMES[you.eyes], you.income);
 
     return 0;
@@ -916,32 +916,32 @@ int read_scan(FILE* in, const char* fmt, ...)
     va_start(argp, fmt);
     for (i = 0; fmt[i] != '\0'; i++)
     {
-        if (fmt[i] == '%')
-        {
-            i++;
-            switch (fmt[i])
-            {
-            case '\0':sentinel("Invalid format. you ended with %%");
-                break;
-            case 'd': out_int = va_arg(argp, int*);
-                rc = read_int(in, out_int);
-                check(rc == 0, "Failed to read int");
-                break;
-            case 'c': out_char = va_arg(argp, char*);
-                *out_char = fgetc(in);
-                break;
-            case's': max_buffer = va_arg(argp, int);
-                out_string = va_arg(argp, char**);
-                rc = read_string(in, out_string, max_buffer);
-                check(rc == 0, "failed to read string");
-                break;
-            default: sentinel("Invalid format");
-            }
-        }
-        else {
-            fgetc(in);
-        }
-        check(!feof(in) && !ferror(in), "Input error");
+	if (fmt[i] == '%')
+	{
+	    i++;
+	    switch (fmt[i])
+	    {
+	    case '\0':sentinel("Invalid format. you ended with %%");
+		break;
+	    case 'd': out_int = va_arg(argp, int*);
+		rc = read_int(in, out_int);
+		check(rc == 0, "Failed to read int");
+		break;
+	    case 'c': out_char = va_arg(argp, char*);
+		*out_char = fgetc(in);
+		break;
+	    case's': max_buffer = va_arg(argp, int);
+		out_string = va_arg(argp, char**);
+		rc = read_string(in, out_string, max_buffer);
+		check(rc == 0, "failed to read string");
+		break;
+	    default: sentinel("Invalid format");
+	    }
+	}
+	else {
+	    fgetc(in);
+	}
+	check(!feof(in) && !ferror(in), "Input error");
     }
     va_end(argp);
     return 0;
@@ -958,8 +958,8 @@ List *List_create()
 void List_destroy(List* list)
 {
     LIST_FOREACH(list,first,next,cur)
-        if(cur->prev)
-            free(cur->prev);
+	if(cur->prev)
+	    free(cur->prev);
     free(list->last);
     free(list);
 }
@@ -967,7 +967,7 @@ void List_destroy(List* list)
 void List_clear(List *list)
 {
     LIST_FOREACH(list, first, next, cur)
-            free(cur->value);
+	    free(cur->value);
 }
 
 void List_clear_destroy(List *list)
@@ -983,6 +983,82 @@ void List_push(List *list, void* value)
 
     node->value = value;
 
+    if(list->last == NULL)
+    {
+	list->first = node;
+	list->last = node;
+    } else {
+	list->last->next = node;
+	node->prev = list->last;
+	list->last = node;
+    }
+    list->count++;
 error:
     return;
+}
+
+void* List_pop(List* list)
+{
+    ListNode* node = list->last;
+    return node != NULL ? List_remove(list, node) : NULL;
+}
+
+void  List_unshift(List* list, void* value)
+{
+    ListNode* node = calloc(1, sizeof(ListNode));
+    check_mem(node);
+    node->value = value;
+
+    if(list->first == NULL)
+    {
+	list->first = node;
+	list->last = node;
+    } else {
+	list->first->prev = node;
+	node->next = list->first;
+	list->first = node;
+    }
+    list->count++;
+error:
+    return;
+}
+
+void* List_shift(List* list)
+{
+    ListNode* node = list->last;
+    return node != NULL ? List_remove(list, node) : NULL;
+}
+
+void* List_remove(List* list, ListNode* node)
+{
+    ListNode* result = NULL;
+
+    check(list->first && list->last, "list is empty");
+    check(node, "node can't be null");
+
+    if(node == list->first)
+    {
+	if(node == list->last)
+	{
+	    list->first = NULL;
+	    list->last = NULL;
+	} else {
+	    list->first = node->next;
+	    check(list->first != NULL, "invalid list");
+	    list->first->prev = NULL;
+	}
+    } else if(node == list->last)
+    {
+	list->last = node->prev;
+	check(list->last != NULL , "invalid list");
+	list->last->next = NULL;
+    } else {
+	node->next->prev = node->prev;
+	node->prev->next = node->next;
+    }
+    list->count--;
+    result = node->value;
+    free(node);
+error:
+    return NULL;
 }
