@@ -492,6 +492,19 @@ int GFG_EXPORT largest_number_formed_by_array(struct arr As[], size_t n,
 ///
 int GFG_EXPORT reverse_words_in_a_given_string(char *S, char *res);
 
+/// \addtogroup Strings
+/// \{
+
+/// finds next permutation of agiven string.
+/// uses c++ next_permutation algorithm to solve in \f$O(n)\f$ time using
+/// \f$O(1)\f$ auxiliury space.
+///
+/// \param str [in] c string modified on every call to hold next permutation.
+///
+/// \return 0 when a next permutation exists, -1 otherwise.
+///
+int GFG_EXPORT permutations_of_a_given_string(char* str);
+
 /// /}
 
 #ifdef __cplusplus

@@ -764,3 +764,30 @@ int reverse_words_in_a_given_string(char *S, char* res)
     res[skip - 1] = '\0';
     return 0;
 }
+
+int permutations_of_a_given_string(char* str)
+{
+    size_t len = strlen(str);
+       if(len == 0 || len == 1) return -1;
+
+       char* i, *f, *b, *last;
+       i = str + len;
+       last = i - 1;
+       while(1)
+       {
+           f = i;
+           if(*--i < *f)
+           {
+               b = str + len;
+               while(!(*i < *--b));
+               swap_char(i, b);
+               reverse_string(f, last);
+               return 0;
+           }
+           if(*i == str[0])
+           {
+               reverse_string(i, last);
+               return -1;
+           }
+       }
+}

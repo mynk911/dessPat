@@ -248,3 +248,14 @@ TEST(gfgStrings, reverseWordsInAGivenString)
     EXPECT_STREQ(str2, res);
 }
 
+TEST(gfgStrings, permutationsOfString)
+{
+    char str[4] = "ACB";
+    std::sort(str, str + 3);
+    std::stringstream s;
+    s << str;
+    while(permutations_of_a_given_string(str))
+        s << str;
+    EXPECT_STREQ(s.str().c_str(), "ABC\0ACB\0BAC\0BCA\0CAB\0CBA\0");
+}
+
