@@ -1,4 +1,5 @@
 #include <iostream>
+#include <set>
 
 // Gets n tokens of input from stream in and inserts in seq. Checks 
 // that all tokens are unique and returns sorted sequence if true.

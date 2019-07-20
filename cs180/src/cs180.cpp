@@ -1,13 +1,12 @@
 #include <iostream>
 #include <algorithm>
 #include <numeric>
-#include <cassert>
 #include <limits>
 #include <vector>
 #include <string>
-#include <set>
 #include <list>
 #include <memory>
+#include <cassert>
 #include "dbg.h"
 #include "util.hpp"
 #include "cs180.h"

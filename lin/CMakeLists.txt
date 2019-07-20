@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
-project(LIN VERSION 0.1 LANGUAGES CXX)
+project(LIN VERSION 0.1 LANGUAGES C)
 
-add_library(lin src/lin.cpp
+add_library(lin src/lin.c
                 include/lin.h)
 add_library(LIN::lin ALIAS lin)
 
