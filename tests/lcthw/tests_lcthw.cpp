@@ -774,3 +774,74 @@ TEST_F(LcthwTest, ex25Test)
 
     fclose(in);
 }
+
+class ListTest : public ::testing::Test
+{
+protected:
+    ListTest();
+    ~ListTest();
+
+    List* list;
+};
+
+ListTest::ListTest()
+{
+    list = List_create();
+}
+
+ListTest::~ListTest()
+{
+    List_destroy(list);
+}
+
+using LcthwListTest = ListTest;
+
+TEST_F(LcthwListTest, pushPopTest)
+{
+    const char *s1 = "test 1";
+    List_push(list, s1);
+    EXPECT_STREQ((char*)List_last(list), s1);
+    const char *s2 = "test 2";
+    List_push(list,s2);
+    EXPECT_STREQ((char*)List_last(list), s2);
+    const char *s3 = "test 3";
+    List_push(list,s3);
+    EXPECT_STREQ((char*)List_last(list), s3);
+    EXPECT_EQ(List_count(list), 3);
+
+    const char* val = (const char *)List_pop(list);
+    EXPECT_STREQ(val, s3) << "wrong value on pop";
+    val = (const char *)List_pop(list);
+    EXPECT_STREQ(val, s2) << "wrong value on pop";
+    val = (const char *)List_pop(list);
+    EXPECT_STREQ(val, s1) << "wrong value on pop";
+    EXPECT_EQ(List_count(list), 0);
+}
+
+TEST_F(LcthwListTest, shiftRemoveUnshiftTest)
+{
+    const char *s1 = "test 1";
+    List_unshift(list, s1);
+    EXPECT_STREQ((char*)List_first(list), s1);
+    const char *s2 = "test 2";
+    List_unshift(list,s2);
+    EXPECT_STREQ((char*)List_first(list), s2);
+    const char *s3 = "test 3";
+    List_unshift(list,s3);
+    EXPECT_STREQ((char*)List_first(list), s3);
+    EXPECT_EQ(List_count(list), 3);
+
+    const char* val = (const char *)List_remove(list, list->first->next);
+    EXPECT_STREQ(val, s2) << "wrong value on remove";
+    EXPECT_EQ(List_count(list), 2);
+    EXPECT_STREQ((char*)List_first(list), s3);
+    EXPECT_STREQ((char*)List_last(list), s1);
+
+    val = (const char *)List_shift(list);
+    EXPECT_STREQ(val, s3) << "wrong value on shift";
+    val = (const char *)List_shift(list);
+    EXPECT_STREQ(val, s1) << "wrong value on shift";
+    EXPECT_EQ(List_count(list), 0);
+}
+
+

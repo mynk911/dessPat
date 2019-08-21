@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(LCTHW VERSION 1.0 LANGUAGES C)
+project(LCTHW VERSION 0.1 LANGUAGES C)
 
 add_library (lcthw include/lcthw.h src/lcthw.c $<TARGET_OBJECTS:common>)
 add_library (LCTHW::lcthw ALIAS lcthw)

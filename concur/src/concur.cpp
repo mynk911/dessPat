@@ -30,6 +30,51 @@ int oops()
     int sll = 0;
     func my_func(sll);
     std::thread th(my_func);
-    th.detach();
+    th.join();
+    // thread is detached but uses local state,
+    // can cause undefined behavior
+    // th.detach();
+    return 0;
+}
+
+int WaitForFinish()
+{
+    int sll = 0;
+    func my_func(sll);
+    std::thread t(my_func);
+    try {
+        //
+    } catch (...) {
+        t.join();
+        throw;
+    }
+    t.join();
+    return 0;
+}
+
+class ThreadGuard
+{
+    std::thread& _t;
+public:
+    explicit ThreadGuard(std::thread& t)
+        :_t(t)
+    {}
+
+    ~ThreadGuard()
+    {
+        if(_t.joinable())
+            _t.join();
+    }
+
+    ThreadGuard(const ThreadGuard& ) = delete;
+    ThreadGuard& operator=(const ThreadGuard&) = delete;
+};
+
+int WaitForFinishRAII()
+{
+    int sll = 0;
+    func my_func(sll);
+    std::thread th(my_func);
+    ThreadGuard g(th);
     return 0;
 }

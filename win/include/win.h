@@ -1,19 +1,20 @@
 #ifndef WIN_H_
 #define WIN_H_
 
-#include <iostream>
+#include "winConfig.h"
+#include <tchar.h>
 
 #include "win_export.h"
 
-class WIN_EXPORT win
-{
-	int t = 7;
-public:
-    void operator()()
-	{
-        std::cout<<t<<"\n";
-	}
-};
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-int WIN_EXPORT win_hello();
+int WIN_EXPORT WinHello();
+int WIN_EXPORT MessageBoxPrintf(TCHAR *szCaption, TCHAR* szFormat, ...);
+int WIN_EXPORT drawWindow();
+#ifdef __cplusplus
+}
+#endif
+
 #endif // WIN_H_

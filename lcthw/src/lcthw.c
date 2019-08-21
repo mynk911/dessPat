@@ -976,7 +976,7 @@ void List_clear_destroy(List *list)
     List_destroy(list);
 }
 
-void List_push(List *list, void* value)
+void List_push(List *list, const void* value)
 {
     ListNode* node = calloc(1, sizeof(ListNode));
     check_mem(node);
@@ -1003,7 +1003,7 @@ void* List_pop(List* list)
     return node != NULL ? List_remove(list, node) : NULL;
 }
 
-void  List_unshift(List* list, void* value)
+void  List_unshift(List* list, const void* value)
 {
     ListNode* node = calloc(1, sizeof(ListNode));
     check_mem(node);
@@ -1025,13 +1025,13 @@ error:
 
 void* List_shift(List* list)
 {
-    ListNode* node = list->last;
+    ListNode* node = list->first;
     return node != NULL ? List_remove(list, node) : NULL;
 }
 
 void* List_remove(List* list, ListNode* node)
 {
-    ListNode* result = NULL;
+    void* result = NULL;
 
     check(list->first && list->last, "list is empty");
     check(node, "node can't be null");
@@ -1060,5 +1060,5 @@ void* List_remove(List* list, ListNode* node)
     result = node->value;
     free(node);
 error:
-    return NULL;
+    return result;
 }

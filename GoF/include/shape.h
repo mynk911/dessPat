@@ -3,33 +3,11 @@
 
 #include <memory>
 #include "gof_export.h"
+#include "foundation.h"
 
 namespace gof {
 
 class Shape;
-
-/// represents a point in 2D cartesian plane.
-class GOF_EXPORT Point
-{
-    struct pImpl;
-    std::unique_ptr<pImpl> pimpl;
-public:
-    /** Point constructor
-     * @param x distance from origin on x axis.
-     * @param y distance from origin on y axis.
-     */
-    Point(double x, double y);
-    /// destroy a point.
-    virtual ~Point();
-    /// makes a deep copy of private data.
-    Point& operator=(const Point& other);
-    /// sets point to values x and y.
-    void set(double x, double y);
-    /// get x.
-    double getX();
-    /// get y.
-    double getY();
-};
 
 /// takes a shape object and peerforms a generic action on it.
 class GOF_EXPORT Manipulator {

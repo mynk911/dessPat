@@ -8,6 +8,8 @@
 #include "shape.h"
 #include "textview.h"
 #include "textshape.h"
+#include "composite.h"
+#include "decorator.h"
 
 void testCommonWalls(gof::MazeGame& mg,
                     gof::MazeTestPlayer& mP,
@@ -235,4 +237,31 @@ TEST(gofTests, TextShapeTest)
     EXPECT_EQ(p1.getY(), 4);
     EXPECT_EQ(p2.getX(), 4);
     EXPECT_EQ(p2.getY(), 6);
+}
+
+TEST(gofTests, Composite)
+{
+    auto cabinet = new gof::Cabinet("PC Cabinet");
+    auto chassis = new gof::Chassis("PC Chassis");
+
+    cabinet->Add(chassis);
+    auto bus = new gof::Bus("MCA Bus");
+    auto card = new gof::Card("16 Mbs Token Ring");
+    bus->Add(card);
+    chassis->Add(bus);
+    auto fd = new gof::FloppyDisk("3.5in floppy");
+    chassis->Add(fd);
+    ASSERT_EQ(cabinet->NetPrice(), 37);
+    delete fd; delete card; delete bus; delete chassis;
+    delete cabinet;
+}
+
+TEST(gofTests, Decorator)
+{
+    auto window = new gof::Window();
+    auto textView = new gof::TextV();
+    auto sd = new gof::ScrollDecorator(textView);
+    auto bd = new gof::BorderDecorator(sd,1);
+    window->SetContents(bd);
+    delete textView; delete sd; delete bd; delete window;
 }

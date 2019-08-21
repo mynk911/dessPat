@@ -1,20 +1,32 @@
 cmake_minimum_required(VERSION 3.5) 
 project(GOF VERSION 1.0 LANGUAGES CXX)
 
-add_library (gof src/maze.cpp
-                 include/maze.h
-                 src/mazegame.cpp
-                 include/mazegame.h
-                 src/mazefactory.cpp
-                 include/mazefactory.h
-                 src/mazebuilder.cpp
-                 include/mazebuilder.h
-                 src/shape.cpp
-                 include/shape.h
-                 src/textview.cpp
-                 include/textview.h
-                 src/textshape.cpp
-                 include/textshape.h)
+add_library (gof
+    include/foundation.h
+    src/foundation.cpp
+    src/maze.cpp
+    include/maze.h
+    src/mazegame.cpp
+    include/mazegame.h
+    src/mazefactory.cpp
+    include/mazefactory.h
+    src/mazebuilder.cpp
+    include/mazebuilder.h
+    src/shape.cpp
+    include/shape.h
+    src/textview.cpp
+    include/textview.h
+    src/textshape.cpp
+    include/textshape.h
+    src/window.cpp
+    include/window.h
+    src/windowimp.cpp
+    include/windowimp.h
+    src/composite.cpp
+    include/composite.h
+    src/decorator.cpp
+    include/decorator.h
+    )
 
 add_library (GOF::gof ALIAS gof)
 include(GenerateExportHeader)
@@ -40,9 +52,9 @@ set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/GOF)
 
 install(
     TARGETS
-        gof
+    gof
     EXPORT
-        GOFTargets
+    GOFTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -51,7 +63,7 @@ install(
 install(EXPORT GOFTargets
     FILE GOFTargets.cmake
     NAMESPACE GOF::
-    DESTINATION ${INSTALL_CONFIGDIR} 
+    DESTINATION ${INSTALL_CONFIGDIR}
     )
 
 install(DIRECTORY include/
@@ -70,28 +82,28 @@ write_basic_package_version_file(
     )
 
 configure_package_config_file(
-   ${CMAKE_CURRENT_LIST_DIR}/CMake/GOFConfig.cmake.in
-   ${CMAKE_CURRENT_BINARY_DIR}/GOFConfig.cmake
-   INSTALL_DESTINATION ${INSTALL_CONFIGDIR}
-   )
+    ${CMAKE_CURRENT_LIST_DIR}/CMake/GOFConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/GOFConfig.cmake
+    INSTALL_DESTINATION ${INSTALL_CONFIGDIR}
+    )
 
 install(
-   FILES
-     ${CMAKE_CURRENT_BINARY_DIR}/GOFConfig.cmake
-     ${CMAKE_CURRENT_BINARY_DIR}/GOFConfigVersion.cmake
-     DESTINATION ${INSTALL_CONFIGDIR}
-     )
+    FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/GOFConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/GOFConfigVersion.cmake
+    DESTINATION ${INSTALL_CONFIGDIR}
+    )
 
 if (CMAKE_BUILD_TYPE MATCHES "^[Rr]elease")
-if(Doxygen_FOUND)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in
-    ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY
-)
+    if(Doxygen_FOUND)
+        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in
+            ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY
+            )
 
-add_custom_target(gof_doc_doxygen ALL
-    COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html DESTINATION ${CMAKE_INSTALL_DOCDIR})
-endif(Doxygen_FOUND)
+        add_custom_target(gof_doc_doxygen ALL
+            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            )
+        install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html DESTINATION ${CMAKE_INSTALL_DOCDIR})
+    endif(Doxygen_FOUND)
 endif()

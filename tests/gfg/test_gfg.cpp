@@ -258,4 +258,3 @@ TEST(gfgStrings, permutationsOfString)
         s << str;
     EXPECT_STREQ(s.str().c_str(), "ABC\0ACB\0BAC\0BCA\0CAB\0CBA\0");
 }
-

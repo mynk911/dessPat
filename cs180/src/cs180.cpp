@@ -118,4 +118,167 @@ StableMatching& StableMatching::operator()(std::ostream& out, bool proposerIsGro
     return *this;
 }
 
+GraphImp::GraphImp() {}
+
+GraphImp::~GraphImp() {}
+
+Graph::Graph(GraphImp& imp)
+    :_imp(imp)
+{}
+
+Graph::~Graph() {}
+
+Iter::Iter() {}
+
+Iter::~Iter() {}
+#ifdef DEVEL
+class AdjacencyMatrix : public GraphImp
+{
+public:
+    typedef std::vector<bool> Graph;
+    AdjacencyMatrix(int n);
+    ~AdjacencyMatrix() override;
+    bool add(int i,int j) override;
+    bool remove(int i, int j) override;
+    bool edge(int i, int j) override;
+    virtual std::shared_ptr<Iter> iter(int i) override;
+private:
+    class AdjacencyMatrixIterator : public Iter
+    {
+    public:
+        AdjacencyMatrixIterator(int);
+        ~AdjacencyMatrixIterator() override;
+        bool next() override;
+        int eval() override;
+    private:
+        int node;
+        int index;
+    };
+    Graph::size_type index(int i, int j)
+    {
+        return static_cast<Graph::size_type>(_verticesCount*i+j);
+    }
+    Graph _graph;
+    int _verticesCount;
+};
+
+AdjacencyMatrix::AdjacencyMatrix(int n)
+    :GraphImp (),
+      _graph(static_cast<Graph::size_type>(n*n)),
+      _verticesCount(n)
+{}
+
+AdjacencyMatrix::~AdjacencyMatrix() {}
+
+bool AdjacencyMatrix::add(int i, int j)
+{
+    if(i >= _verticesCount || j >= _verticesCount)
+        return false;
+    return _graph[index(i,j)] = true;
+}
+
+bool AdjacencyMatrix::remove(int i, int j)
+{
+    if(i >= _verticesCount || j >= _verticesCount)
+        return false;
+    _graph[index(i,j)] = false;
+    return true;
+}
+
+bool AdjacencyMatrix::edge(int i, int j)
+{
+    if(i >= _verticesCount || j >= _verticesCount)
+        throw std::logic_error("vertex out of bound");
+    return  _graph[index(i,j)];
+}
+
+std::shared_ptr<Iter> AdjacencyMatrix::iter(int i)
+{
+    return std::make_shared<AdjacencyMatrixIterator>(i);
+}
+
+class AdjacencyList : public GraphImp
+{
+public:
+    typedef std::vector<std::list<int>> Graph;
+    AdjacencyList(int n);
+    ~AdjacencyList() override;
+    bool add(int i,int j) override;
+    bool remove(int i, int j) override;
+    bool edge(int i, int j) override;
+    virtual std::shared_ptr<Iter> iter(int i) override;
+private:
+    class AdjacencyMatrixIterator : public Iter
+    {
+    public:
+        AdjacencyMatrixIterator(int);
+        ~AdjacencyMatrixIterator() override;
+        bool next() override;
+        int eval() override;
+    private:
+        int node;
+        int index;
+    };
+    Graph _graph;
+};
+
+AdjacencyList::~AdjacencyList()
+{}
+
+
+class DirectedGraph : public Graph
+{
+    // Graph interface
+public:
+    bool addEdge(int, int) override;
+    bool removeEdge(int, int) override;
+    bool IsEdge(int, int) override;
+    std::shared_ptr<Iter> iter(int) override;
+};
+
+bool DirectedGraph::addEdge(int, int)
+{
+    return true;
+}
+
+bool DirectedGraph::removeEdge(int, int)
+{ return true;
+}
+
+bool DirectedGraph::IsEdge(int, int)
+{ return true;
+}
+
+std::shared_ptr<Iter> DirectedGraph::iter(int)
+{ return nullptr;
+}
+
+class UnDirectedGraph : public Graph
+{
+
+
+    // Graph interface
+public:
+    bool addEdge(int, int) override;
+    bool removeEdge(int, int) override;
+    bool IsEdge(int, int) override;
+    std::shared_ptr<Iter> iter(int) override;
+};
+
+bool UnDirectedGraph::addEdge(int, int)
+{ return true;
+}
+
+bool UnDirectedGraph::removeEdge(int, int)
+{ return true;
+}
+
+bool UnDirectedGraph::IsEdge(int, int)
+{ return true;
+}
+
+std::shared_ptr<Iter> UnDirectedGraph::iter(int)
+{ return nullptr;
+}
+#endif // DEVEL
 }

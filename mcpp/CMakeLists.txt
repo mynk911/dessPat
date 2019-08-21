@@ -1,20 +1,19 @@
 cmake_minimum_required(VERSION 3.5)
 project(MCPP VERSION 0.1 LANGUAGES CXX)
 
-add_library(mcpp src/mcpp.cpp
-                   include/mcpp.h)
+add_library(mcpp INTERFACE)
 add_library(MCPP::mcpp ALIAS mcpp)
 
-include(GenerateExportHeader)
-generate_export_header(mcpp)
+target_sources(mcpp
+    INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/mcpp.hpp>
+    )
+
 target_include_directories(mcpp
-    PUBLIC
+    INTERFACE
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MCPP>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/common/include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-    PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
 
 include(GNUInstallDirs)

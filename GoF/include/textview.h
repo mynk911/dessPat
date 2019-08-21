@@ -3,10 +3,9 @@
 
 #include <memory>
 #include "gof_export.h"
+#include "foundation.h"
 
 namespace gof {
-
-using Coord = double;
 
 /** Adaptee becomes implementation detail in Adapter.
  * TextView holds a bouding box represented by bottom left corner, height

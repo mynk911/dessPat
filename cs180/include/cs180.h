@@ -221,6 +221,39 @@ void swap(heap<T>& a, heap<T>& b) noexcept
     a.swap(b);
 }
 
-}
+class Iter{
+public:
+    virtual bool next() = 0;
+    virtual int eval() = 0;
+protected:
+    Iter();
+    virtual ~Iter();
+};
 
+class GraphImp{
+public:
+    virtual bool add(int, int) = 0;
+    virtual bool remove(int, int) = 0;
+    virtual bool edge(int, int) = 0;
+    virtual std::shared_ptr<Iter> iter(int) = 0;
+protected:
+    GraphImp();
+    virtual ~GraphImp();
+};
+
+class Graph
+{
+public:
+    virtual bool addEdge(int, int) = 0;
+    virtual bool removeEdge(int, int) = 0;
+    virtual bool IsEdge(int, int) = 0;
+    virtual std::shared_ptr<Iter> iter(int) = 0;
+protected:
+    Graph(GraphImp&);
+    virtual ~Graph();
+private:
+    GraphImp& _imp;
+};
+
+}
 #endif

@@ -14,3 +14,13 @@ TEST(concurtests, oops)
 {
     EXPECT_EQ(oops(), 0);
 }
+
+TEST(concurtests, WaitForFinish)
+{
+    EXPECT_EQ(WaitForFinish(), 0);
+}
+
+TEST(concurtests, WaitForFinishRAII)
+{
+    EXPECT_EQ(WaitForFinishRAII(), 0);
+}

@@ -1,9 +1,18 @@
-cmake_minimum_required(VERSION 3.5)
-project(WIN VERSION 0.1 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.12)
+project(WIN VERSION 0.1 LANGUAGES C)
 
-add_library(win src/win.cpp
-                   include/win.h)
+add_library(win src/win.c include/win.h)
 add_library(WIN::win ALIAS win)
+
+if(UNICODE)
+    set(_UNICODE "ON")
+endif()
+
+#configure a header file to pass some of the cmake settings to the source code
+configure_file (
+                 "${CMAKE_CURRENT_SOURCE_DIR}/winConfig.h.in"
+                 "${CMAKE_CURRENT_BINARY_DIR}/winConfig.h"
+               )
 
 include(GenerateExportHeader)
 generate_export_header(win)
@@ -16,6 +25,9 @@ target_include_directories(win
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
+
+find_library(LIBWMM winmm)
+target_link_libraries(win ${LIBWMM})
 
 include(GNUInstallDirs)
 set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/WIN)
@@ -41,6 +53,7 @@ install(DIRECTORY include/
     )
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/win_export.h
+              ${CMAKE_CURRENT_BINARY_DIR}/winConfig.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/WIN
     )
 
@@ -78,14 +91,15 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html DESTINATION ${CMAKE_INSTA
 endif(DOXYGEN_FOUND)
 endif()
 
-add_executable(wintest WIN32 include/win_test.h
-                        src/win_test.cpp)
-                    target_include_directories(wintest
+add_executable(wintest WIN32 src/win_test.c src/win.c)
+                    
+target_include_directories(wintest
                         PUBLIC
                         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
                         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/common/include>
+                        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
                         PRIVATE
                         ${CMAKE_CURRENT_SOURCE_DIR}/src
                         )
-
-
+target_link_libraries(wintest ${LIBWMM})
+option(UNICODE "use UNICODE" OFF)
