@@ -2,6 +2,7 @@
 #define GOF_COMPOSITE_H_
 
 #include <list>
+#include <functional>
 
 #include "gof_export.h"
 
