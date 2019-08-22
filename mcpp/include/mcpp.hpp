@@ -111,7 +111,7 @@ public:
     {}
     Widget* DoSomething()
     {
-        Widget *wG = Create();
+        Widget *wG = CreationPolicy<Widget>::Create();
         //Gadget *pW = CreationPolicy<Gadget>().Create();
         return wG;
     }
