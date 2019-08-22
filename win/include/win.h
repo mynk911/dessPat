@@ -13,6 +13,7 @@ extern "C" {
 int WIN_EXPORT WinHello();
 int WIN_EXPORT MessageBoxPrintf(TCHAR *szCaption, TCHAR* szFormat, ...);
 int WIN_EXPORT drawWindow();
+
 #ifdef __cplusplus
 }
 #endif
