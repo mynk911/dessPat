@@ -16,4 +16,4 @@ struct func {
 int CONCUR_EXPORT oops();
 int CONCUR_EXPORT WaitForFinish();
 int CONCUR_EXPORT WaitForFinishRAII();
-/// @}[O]
+/// @}
