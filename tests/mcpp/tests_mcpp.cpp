@@ -43,8 +43,32 @@ TEST(mcpp, SwitchPrototypeTest)
 
 TEST(mcpp, staticAssert)
 {
-    //void* somePointer = (void *)"test";
-    //char c = mcpp::safe_reinterpret_cast<char>(somePointer);
     void* somePointer = (void *)"test";
-    char* c = mcpp::safe_reinterpret_cast<char*>(somePointer);
+    //char c = mcpp::safe_reinterpret_cast<char>(somePointer);
+    char* ch = mcpp::safe_reinterpret_cast<char*>(somePointer);
+}
+
+class Arg {
+public:
+    Arg(int a) : value(a) {}
+    int value = 0;
+};
+class caller {
+public:
+    void Call(Arg x)
+    {
+        mem = x.value;
+    }
+    int mem = 0;
+};
+
+TEST(mcpp, localClass)
+{
+    caller c;
+    EXPECT_EQ(c.mem, 0);
+    Arg a(10);
+    EXPECT_EQ(a.value, 10);
+    auto inf = mcpp::MakeAdapter(c, a);
+    inf->Fun();
+    ASSERT_EQ(c.mem, a.value);
 }

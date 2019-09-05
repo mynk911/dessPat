@@ -221,7 +221,7 @@ void swap(heap<T>& a, heap<T>& b) noexcept
     a.swap(b);
 }
 
-class Iter{
+class CS180_EXPORT Iter{
 public:
     virtual bool next() = 0;
     virtual int eval() = 0;
@@ -230,10 +230,10 @@ protected:
     virtual ~Iter();
 };
 
-class GraphImp{
+class CS180_EXPORT GraphImp{
 public:
-    virtual bool add(int, int) = 0;
-    virtual bool remove(int, int) = 0;
+    virtual void add(int, int) = 0;
+    virtual void remove(int, int) = 0;
     virtual bool edge(int, int) = 0;
     virtual std::shared_ptr<Iter> iter(int) = 0;
 protected:
@@ -241,17 +241,16 @@ protected:
     virtual ~GraphImp();
 };
 
-class Graph
+class CS180_EXPORT Graph
 {
 public:
-    virtual bool addEdge(int, int) = 0;
-    virtual bool removeEdge(int, int) = 0;
+    virtual void addEdge(int, int) = 0;
+    virtual void removeEdge(int, int) = 0;
     virtual bool IsEdge(int, int) = 0;
     virtual std::shared_ptr<Iter> iter(int) = 0;
 protected:
     Graph(GraphImp&);
     virtual ~Graph();
-private:
     GraphImp& _imp;
 };
 

@@ -146,6 +146,39 @@ To safe_reinterpret_cast(From from)
     return reinterpret_cast<To>(from);
 }
 
+class Interface
+{
+public:
+    Interface();
+    virtual ~Interface();
+    virtual void Fun() = 0;
+};
 
+Interface::Interface()
+{
+}
+
+Interface::~Interface()
+{
+}
+
+template <class T, class P>
+Interface* MakeAdapter(T& obj, const P& arg)
+{
+    class Local : public Interface
+    {
+    public:
+        Local(T& obj, const P& arg):
+            obj_(obj), arg_(arg) {}
+        virtual void Fun()
+        {
+            obj_.Call(arg_);
+        }
+    private:
+        T& obj_;
+        P arg_;
+    };
+    return new Local(obj, arg);
+}
 }
 #endif // MCPP_MCPP_H_
