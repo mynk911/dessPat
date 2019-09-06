@@ -1,5 +1,3 @@
-#include <thread>
-
 #include "concur.h"
 using namespace std;
 
@@ -88,7 +86,13 @@ void open_document_and_display_gui(std::string const& filename)
 bool done_editing()
 {
     // should return true until the doc is closed.
-    return false;
+    static int x = 1;
+    if(x == 1)
+    {
+	x++;
+	return false;
+    }
+    return true;
 }
 
 enum class user_command {
@@ -99,7 +103,7 @@ enum class user_command {
 
 user_command get_user_input()
 {
-    return user_command::invalid;
+    return user_command::open_new_document;
 }
 
 std::string const get_filename_from_user()
@@ -112,6 +116,7 @@ void process_user_input(user_command cmd)
 {
 
 }
+
 void edit_document(std::string const& filename)
 {
     open_document_and_display_gui(filename);
@@ -127,4 +132,46 @@ void edit_document(std::string const& filename)
 	    process_user_input(cmd);
 	}
     }
+}
+
+class scoped_thread
+{
+    std::thread t;
+public:
+    explicit scoped_thread(std::thread t_):
+	t(std::move(t_))
+    {
+	if(!t.joinable()) throw std::logic_error("No thread");
+    }
+    ~scoped_thread()
+    {
+	t.join();
+    }
+    scoped_thread(scoped_thread const&) = delete;
+    scoped_thread& operator=(scoped_thread const&) = delete;
+};
+
+int StdThreadMove()
+{
+    int sll = 3;
+    func mfn(sll);
+    std::thread th(mfn);
+    scoped_thread t(std::move(th));
+    return 0;
+}
+
+void do_work(unsigned int id)
+{
+    for(int i = 0; i < 10000000; i++);
+}
+
+int threadsinVector()
+{
+    std::vector<std::thread> threads;
+    for(auto i = 0ul;i < 20; i++)
+    {
+	threads.push_back(std::thread(do_work, i));
+    }
+    std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
+    return 0;
 }

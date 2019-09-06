@@ -1,12 +1,13 @@
 #include <iostream>
 #include <set>
+#include <random>
 
-// Gets n tokens of input from stream in and inserts in seq. Checks 
+// Gets n tokens of input from stream in and inserts in seq. Checks
 // that all tokens are unique and returns sorted sequence if true.
 template <typename SequenceContainer>
 void SortUniqueRange(std::istream& in,
-                     typename SequenceContainer::size_type n,
-                     SequenceContainer& seq)
+		     typename SequenceContainer::size_type n,
+		     SequenceContainer& seq)
 {
     seq.clear();
     typename SequenceContainer::value_type name;
@@ -18,9 +19,9 @@ void SortUniqueRange(std::istream& in,
 
     std::set<typename SequenceContainer::value_type> s;
     for( auto& i : seq) s.insert(i);
-    
+
     if(s.size() != seq.size() )
-        throw std::invalid_argument("Not a unique range");
+	throw std::invalid_argument("Not a unique range");
 
     seq.assign(s.begin(), s.end());
 }
@@ -30,10 +31,10 @@ void SortUniqueRange(std::istream& in,
 // to preferee[pref[2][4]]. Expects (n+1)*n tokens where n is the size of proposer
 // and each n+1 token group is some preferer followed by n preferees.
 template <typename RandomAccessContainer>
-void populatePreferenceList(std::istream& in, 
+void populatePreferenceList(std::istream& in,
 			    typename RandomAccessContainer::size_type* pref,
 			    RandomAccessContainer& preferer,
-                            RandomAccessContainer& preferee )
+			    RandomAccessContainer& preferee )
 {
     typename RandomAccessContainer::value_type name;
     auto n = preferer.size();
@@ -43,12 +44,12 @@ void populatePreferenceList(std::istream& in,
 	auto itr = std::lower_bound(preferer.begin(), preferer.end(), name);
 	auto idx =static_cast<decltype(n)>(itr - preferer.begin());
 
-        for(decltype(n) j = 0; j < n; j++)
-        {
-            in >> name;
-            itr = std::lower_bound(preferee.begin(), preferee.end(), name);
-            pref[idx * n + j] = static_cast<decltype(n)>(itr - preferee.begin());
-        }
+	for(decltype(n) j = 0; j < n; j++)
+	{
+	    in >> name;
+	    itr = std::lower_bound(preferee.begin(), preferee.end(), name);
+	    pref[idx * n + j] = static_cast<decltype(n)>(itr - preferee.begin());
+	}
     }
 }
 
@@ -65,3 +66,22 @@ void calculateRankings(T* r, T* p,T n)
 	}
     }
 }
+
+//provide a random number generator function which can be plugged into
+//std algorithms
+template<typename Engine,typename Distribution>
+class RandomNumberBetween
+{
+public:
+    RandomNumberBetween(int low, int high)
+	:random_engine_{std::random_device{}()},
+	 distribution_{low, high}
+    {}
+    int operator()()
+    {
+	return distribution_(random_engine_);
+    }
+private:
+    Engine random_engine_;
+    Distribution distribution_;
+};

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(LIN VERSION 0.1 LANGUAGES C)
 
 add_library(lin src/lin.c
-                include/lin.h)
+		include/lin.h)
 add_library(LIN::lin ALIAS lin)
 
 include(GenerateExportHeader)
@@ -15,16 +15,18 @@ target_include_directories(lin
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CURSES_INCLUDE_DIRS}
     )
 
+target_link_libraries(lin ${CURSES_CURSES_LIBRARY})
 include(GNUInstallDirs)
 set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/LIN)
 
 install(
     TARGETS
-        lin
+	lin
     EXPORT
-        LINTargets
+	LINTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -77,4 +79,3 @@ add_custom_target(lin_doc_doxygen ALL
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html DESTINATION ${CMAKE_INSTALL_DOCDIR})
 endif(DOXYGEN_FOUND)
 endif()
-

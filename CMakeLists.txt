@@ -46,6 +46,7 @@ set (EXTRA_LIBS ${EXTRA_LIBS} MCPP::mcpp)
 
 if(UNIX)
 add_subdirectory (lin)
+find_package(Curses REQUIRED)
 set (EXTRA_LIBS ${EXTRA_LIBS} LIN::lin)
 set( SRC_FILES ${SRC_FILES} tests/lin/tests_lin.cpp)
 endif(UNIX)
@@ -83,7 +84,7 @@ endmacro()
 # the following targets: gtest, gtest_main, gmock
 # and gmock_main
 add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src"
-                 "${CMAKE_BINARY_DIR}/googletest-build")
+		 "${CMAKE_BINARY_DIR}/googletest-build")
 
 # Restore original install() behavior.
 macro(install)
@@ -95,21 +96,21 @@ endmacro()
 # later. Otherwise we have to add them here ourselves.
 if(CMAKE_VERSION VERSION_LESS 2.8.11)
     include_directories("${gtest_SOURCE_DIR}/include"
-                        "${gmock_SOURCE_DIR}/include")
+			"${gmock_SOURCE_DIR}/include")
 endif()
 
 set( SRC_FILES ${SRC_FILES} dessPat.cpp
-                            tests/concur/tests_concur.cpp
-                            tests/cs180/tests_cs180.cpp
-                            tests/gfg/test_gfg.cpp
-                            tests/gof/tests_gof.cpp
-                            tests/lcthw/tests_lcthw.cpp
-                            tests/mcpp/tests_mcpp.cpp)
+			    tests/concur/tests_concur.cpp
+			    tests/cs180/tests_cs180.cpp
+			    tests/gfg/test_gfg.cpp
+			    tests/gof/tests_gof.cpp
+			    tests/lcthw/tests_lcthw.cpp
+			    tests/mcpp/tests_mcpp.cpp)
 
 if(C_SERVICE_MOCK_TESTS)
     set( SRC_FILES ${SRC_FILES}
-        tests/lcthw/ServicesMocks.h
-        tests/lcthw/FakeServices.h)
+	tests/lcthw/ServicesMocks.h
+	tests/lcthw/FakeServices.h)
 endif(C_SERVICE_MOCK_TESTS)
 #add the executable
 add_executable (dessPat ${SRC_FILES})
