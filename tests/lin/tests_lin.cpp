@@ -17,12 +17,12 @@ TEST(lin, kbhitExample)
     ASSERT_EQ(0, kbhit_example());
 }
 
-TEST(lin, simpleCurses)
+TEST(lin, cursesBasic)
 {
-    ASSERT_EQ(0, simple_curses());
+    ASSERT_EQ(0, curses_basic());
 }
 
-TEST(lin, simpleCurses2)
+TEST(lin, cursesCharAttr)
 {
-    ASSERT_EQ(0, simple_curses2());
+    ASSERT_EQ(0, curses_char_attr());
 }
