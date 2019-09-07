@@ -26,6 +26,8 @@ add_library (gof
     include/composite.h
     src/decorator.cpp
     include/decorator.h
+	src/facade.cpp
+	include/facade.h
     )
 
 add_library (GOF::gof ALIAS gof)
