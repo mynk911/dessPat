@@ -12,6 +12,8 @@ int LIN_EXPORT pass_word();
 int LIN_EXPORT kbhit_example();
 int LIN_EXPORT curses_basic();
 int LIN_EXPORT curses_char_attr();
+int LIN_EXPORT curses_keyboard();
+int LIN_EXPORT curses_multiple_windows();
 
 #ifdef __cplusplus
 }

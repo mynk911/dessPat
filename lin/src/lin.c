@@ -208,6 +208,7 @@ int curses_basic()
     printw("%s","Hello World");
     refresh();
     sleep(2);
+    erase();
     endwin();
     return 0;
 }
@@ -243,7 +244,7 @@ int curses_char_attr()
     move(14, 23);
     printw("When the battle's lost and won.");
     refresh();
-    sleep(5);
+    sleep(2);
 
     attron(A_DIM);
     scan_ptr = witch_one + strlen(witch_one) - 1;
@@ -261,6 +262,138 @@ int curses_char_attr()
 
     refresh();
     sleep(1);
+    erase();
+    endwin();
+    return 0;
+}
+
+#define PW_LEN 25
+#define NAME_LEN 256
+
+int curses_keyboard()
+{
+    char name[NAME_LEN];
+    char password[PW_LEN];
+    char* real_password = "xyzzy";
+    int i = 0;
+
+    initscr();
+
+    move(5,10);
+    printw("%s", "Please Login:");
+
+    move(7, 10);
+    printw("%s", "Enter Name:");
+    getstr(name);
+
+    move(9, 10);
+    printw("%s", "Enter Password:");
+    refresh();
+
+    cbreak();
+    noecho();
+
+    memset(password, '\0', sizeof(password));
+    while(i < PW_LEN)
+    {
+	password[i] = getch();
+	move(9, 30+i);
+	addch('*');
+	refresh();
+	if(password[i] == '\n') break;
+	if(strcmp(password, real_password) == 0) break;
+	i++;
+    }
+    echo();
+    nocbreak();
+
+    move(11, 10);
+    if(strcmp(password, real_password) == 0) printw("%s", "Correct");
+    else printw("%s", "Wrong");
+    refresh();
+    sleep(1);
+    erase();
+    endwin();
+    return 0;
+}
+
+int curses_multiple_windows()
+{
+    WINDOW *new_window_ptr;
+    WINDOW *popup_window_ptr;
+    int x_loop;
+    int y_loop;
+    char a_letter = 'a';
+
+    initscr();
+
+    // fill base screen with characters.
+    move(5,5);
+    printw("Testing multiple windows");
+    refresh();
+    sleep(1);
+
+    for(y_loop = 0; y_loop < LINES - 1; y_loop++) {
+	for(x_loop = 0; x_loop < COLS - 1; x_loop++) {
+	    mvwaddch(stdscr, y_loop, x_loop, a_letter);
+	    a_letter++;
+	    if(a_letter > 'z') a_letter = 'a';
+	}
+    }
+    refresh();
+    sleep(2);
+
+    // create a new window, add text and display
+    new_window_ptr = newwin(10, 20, 5, 5);
+    mvwprintw(new_window_ptr, 2, 2, "%s", "Hello World");
+    mvwprintw(new_window_ptr, 5, 2, "%s", "Notice how very long lines wrap inside the box");
+    wrefresh(new_window_ptr);
+    sleep(4);
+
+    // change content of background window, on refresh-screen background window is displayed.
+    a_letter = '0';
+    for(y_loop = 0; y_loop < LINES - 1; y_loop++) {
+	for(x_loop = 0; x_loop < COLS - 1; x_loop++) {
+	    mvwaddch(stdscr, y_loop, x_loop, a_letter);
+	    a_letter++;
+	    if(a_letter > '9') a_letter = '0';
+	}
+    }
+    refresh();
+    sleep(2);
+
+    // refreshing new window has no effect as it has no changes
+    wrefresh(new_window_ptr);
+    sleep(2);
+
+    // touch helps us by tricking curses to think that new window has changed
+    touchwin(new_window_ptr);
+    wrefresh(new_window_ptr);
+    sleep(2);
+
+    // add another overlapping window with a box around it.
+    popup_window_ptr = newwin(10, 20, 8, 8);
+    box(popup_window_ptr, '|', '-');
+    mvwprintw(popup_window_ptr, 5, 2, "%s", "Pop Up Window");
+    wrefresh(popup_window_ptr);
+    sleep(2);
+
+    touchwin(new_window_ptr);
+    wrefresh(new_window_ptr);
+    sleep(2);
+    wclear(new_window_ptr);
+    wrefresh(new_window_ptr);
+    sleep(2);
+    delwin(new_window_ptr);
+
+    touchwin(popup_window_ptr);
+    wrefresh(popup_window_ptr);
+    sleep(2);
+    delwin(popup_window_ptr);
+
+    touchwin(stdscr);
+    refresh();
+    sleep(2);
 
     endwin();
     return 0;

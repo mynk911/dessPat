@@ -26,3 +26,13 @@ TEST(lin, cursesCharAttr)
 {
     ASSERT_EQ(0, curses_char_attr());
 }
+
+TEST(lin, cursesKeyboard)
+{
+    ASSERT_EQ(0, curses_keyboard());
+}
+
+TEST(lin, cursesMultipleWindows)
+{
+    ASSERT_EQ(0, curses_multiple_windows());
+}
