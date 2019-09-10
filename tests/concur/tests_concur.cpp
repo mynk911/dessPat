@@ -35,12 +35,12 @@ TEST(concurtests, detachThread)
 
 TEST(concurtests, StdThreadMove)
 {
-    EXPECT_EQ(StdThreadMove(), 0);
+    EXPECT_EQ(std_thread_move(), 0);
 }
 
 TEST(concurtests, threadsinVector)
 {
-    EXPECT_EQ(threadsinVector(), 0);
+    EXPECT_EQ(threads_in_vector(), 0);
 }
 
 TEST(concurtests, parallelAccumulate)
@@ -63,4 +63,9 @@ TEST(concurtests, parallelAccumulate)
 	std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
     ASSERT_EQ(serial_res, parallel_res);
     EXPECT_GE(serial_dur, parallel_dur);
+}
+
+TEST(concurtests, mutexExample)
+{
+    ASSERT_EQ(true, mutex_example());
 }

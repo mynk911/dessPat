@@ -7,6 +7,8 @@
 #include <functional>
 #include <numeric>
 #include <iostream>
+#include <list>
+#include <mutex>
 
 #include "concur_export.h"
 
@@ -25,8 +27,8 @@ int CONCUR_EXPORT oops();
 int CONCUR_EXPORT WaitForFinish();
 int CONCUR_EXPORT WaitForFinishRAII();
 void CONCUR_EXPORT edit_document(std::string const& filename);
-int CONCUR_EXPORT StdThreadMove();
-int CONCUR_EXPORT threadsinVector();
+int CONCUR_EXPORT std_thread_move();
+int CONCUR_EXPORT threads_in_vector();
 
 template<typename Iterator,typename T>
 struct accumulate_block
@@ -65,6 +67,8 @@ T parallel_accumualate(Iterator first, Iterator last, T init)
     std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
     return std::accumulate(results.begin(), results.end(), init);
 }
+
+bool CONCUR_EXPORT mutex_example();
 /// @}
 
 #endif

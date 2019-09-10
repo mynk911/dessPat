@@ -151,7 +151,7 @@ public:
     scoped_thread& operator=(scoped_thread const&) = delete;
 };
 
-int StdThreadMove()
+int std_thread_move()
 {
     int sll = 3;
     func mfn(sll);
@@ -165,7 +165,7 @@ void do_work(unsigned int id)
     for(int i = 0; i < 10000000; i++);
 }
 
-int threadsinVector()
+int threads_in_vector()
 {
     std::vector<std::thread> threads;
     for(auto i = 0ul;i < 20; i++)
@@ -174,4 +174,28 @@ int threadsinVector()
     }
     std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
     return 0;
+}
+
+// using mutex example
+// Not working on ubuntu 16
+std::list<int> some_list;
+std::mutex some_mutex;
+
+void add_to_list(int some_value)
+{
+    std::lock_guard<std::mutex> guard(some_mutex);
+    some_list.push_back(some_value);
+}
+
+bool list_contains(int value_to_find)
+{
+    std::lock_guard<std::mutex> guard(some_mutex);
+    return std::find(some_list.begin(), some_list.end(), value_to_find)
+	!= some_list.end();
+}
+
+bool mutex_example()
+{
+    scoped_thread st(std::thread(add_to_list, 45));
+    return list_contains(45);
 }
