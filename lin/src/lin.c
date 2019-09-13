@@ -398,3 +398,58 @@ int curses_multiple_windows()
     endwin();
     return 0;
 }
+
+#define NUM_NAMES 14
+
+int curses_subwindows()
+{
+    WINDOW *sub_window_ptr;
+    int x_loop, y_loop, counter;
+    char a_letter = 'A';
+
+    char* names[NUM_NAMES] = {"David Hudson", "Andrew Crolla", "James Jones",
+	"Ciara Loughran", "Peter Bradley", "Nancy Innocenzi", "Charles Cooper",
+	"Rucha Nanavati", "Bob Vyas", "Abdul Hussain", "Anne Pawson", "Alex Hopper",
+	"Russel Thomas", "Nazir Makandra"};
+    initscr();
+
+    //init base window with some text
+
+    for(y_loop = 0; y_loop < LINES - 1; y_loop++) {
+	for(x_loop = 0; x_loop < COLS - 1; x_loop++) {
+	    mvwaddch(stdscr, y_loop, x_loop, a_letter);
+	    a_letter++;
+	    if(a_letter > 'Z') a_letter = 'A';
+	}
+    }
+
+    // create new scrolling subwindow
+    sub_window_ptr = subwin(stdscr, 10, 20, 10, 10);
+    scrollok(sub_window_ptr, 1);
+
+    // touch the parent window and refresh screen
+    touchwin(stdscr);
+    refresh();
+    sleep(1);
+
+    // erase  contents of subwindow, print text to it and refresh it
+    // scrolling text is achieved by a loop
+    werase(sub_window_ptr);
+    mvwprintw(sub_window_ptr, 2, 0, "This window will now scroll as names are added");
+    wrefresh(sub_window_ptr);
+    sleep(1);
+
+    for(counter = 0; counter < NUM_NAMES; counter++) {
+	wprintw(sub_window_ptr, "%s ", names[counter]);
+	wrefresh(sub_window_ptr);
+	sleep(1);
+    }
+
+    // del subwindow and refresh base screen
+    delwin(sub_window_ptr);
+    touchwin(stdscr);
+    refresh();
+    sleep(1);
+    endwin();
+    return 0;
+}

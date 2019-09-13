@@ -36,3 +36,8 @@ TEST(lin, cursesMultipleWindows)
 {
     ASSERT_EQ(0, curses_multiple_windows());
 }
+
+TEST(lin, cursesSubwindows)
+{
+    ASSERT_EQ(0, curses_subwindows());
+}
