@@ -12,6 +12,7 @@
 
 #include "concur_export.h"
 
+namespace concur {
 /// Basic thread demo
 int CONCUR_EXPORT exec(std::ostream& out);
 
@@ -24,12 +25,16 @@ struct func {
     void operator()();
 };
 int CONCUR_EXPORT oops();
+/// @}
 int CONCUR_EXPORT WaitForFinish();
 int CONCUR_EXPORT WaitForFinishRAII();
 void CONCUR_EXPORT edit_document(std::string const& filename);
 int CONCUR_EXPORT std_thread_move();
 int CONCUR_EXPORT threads_in_vector();
 
+
+// a naive parallel implementation of std::accumulate. Makes use of hardware_concurrency
+// to find threads supported by system.
 template<typename Iterator,typename T>
 struct accumulate_block
 {
@@ -69,6 +74,31 @@ T parallel_accumualate(Iterator first, Iterator last, T init)
 }
 
 bool CONCUR_EXPORT mutex_example();
-/// @}
+
+class some_data
+{
+    int a;
+    std::string b;
+public:
+    void do_something();
+};
+
+class data_wrapper
+{
+    some_data data;
+    std::mutex m;
+public:
+    template < typename Function >
+    void process_data(Function func)
+    {
+        std::lock_guard<std::mutex> l(m);
+        func(data);
+    }
+};
+
+void CONCUR_EXPORT unprotected_shared_data();
+
+}
+
 
 #endif

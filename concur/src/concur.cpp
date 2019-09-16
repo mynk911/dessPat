@@ -1,6 +1,6 @@
 #include "concur.h"
-using namespace std;
 
+namespace concur {
 void hello(std::ostream& out)
 {
     out << "Hello concur World!";
@@ -8,7 +8,7 @@ void hello(std::ostream& out)
 
 int exec(std::ostream& out)
 {
-    thread t(hello, std::ref(out));
+    std::thread t(hello, std::ref(out));
     t.join();
     return 0;
 }
@@ -35,6 +35,8 @@ int oops()
     return 0;
 }
 
+// demo of waiting for threads. We have to take care of all possible
+// execution branches including the possiblility of exception
 int WaitForFinish()
 {
     int sll = 0;
@@ -68,6 +70,8 @@ public:
     ThreadGuard& operator=(const ThreadGuard&) = delete;
 };
 
+// RAII wait for finish demo. With RAII all execution branches are automatically taken care
+// of
 int WaitForFinishRAII()
 {
     int sll = 0;
@@ -117,6 +121,8 @@ void process_user_input(user_command cmd)
 
 }
 
+// an example of not waiting for thread to finish. edit_dociument opens new docs
+// in a new thread and each thread individually handles document editing using common code.
 void edit_document(std::string const& filename)
 {
     open_document_and_display_gui(filename);
@@ -151,6 +157,9 @@ public:
     scoped_thread& operator=(scoped_thread const&) = delete;
 };
 
+// threads are move only objects. scoped_thread is an alternative to ThreadGuard
+// which moves thread to an internal thread object instead of maintaining reference
+// to external object.
 int std_thread_move()
 {
     int sll = 3;
@@ -165,6 +174,7 @@ void do_work(unsigned int id)
     for(int i = 0; i < 10000000; i++);
 }
 
+// an example of threads stored in container.
 int threads_in_vector()
 {
     std::vector<std::thread> threads;
@@ -194,8 +204,36 @@ bool list_contains(int value_to_find)
 	!= some_list.end();
 }
 
+// mutex are used for "mutually exclusive" access to shared data by running threads.
 bool mutex_example()
 {
     scoped_thread st(std::thread(add_to_list, 45));
     return list_contains(45);
+}
+
+void some_data::do_something()
+{
+
+}
+
+some_data* unprotected;
+
+void malicious_function(some_data& protected_data)
+{
+    unprotected = &protected_data;
+}
+
+data_wrapper x;
+
+// protection provided by mutex can become meaningless if reference to
+// protected data is passed outside the scope of mutex. Here malicious function
+// stores pointer to some_data object which is protected in data_wrapper in a
+// global object. User then makes a call to unprotected->do_something() without
+// mutx protection.
+void unprotected_shared_data()
+{
+    x.process_data(malicious_function);
+    unprotected->do_something();
+}
+
 }

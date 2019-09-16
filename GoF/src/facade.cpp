@@ -1,5 +1,5 @@
 #include "facade.h"
-
+namespace gof {
 Token::Token()
 {
 }
@@ -105,4 +105,5 @@ void CodeGenerator::Visit(StatementNode *)
 
 void CodeGenerator::Visit(ExpressionNode *)
 {
+}
 }

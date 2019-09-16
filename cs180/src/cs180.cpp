@@ -118,7 +118,19 @@ StableMatching& StableMatching::operator()(std::ostream& out, bool proposerIsGro
     return *this;
 }
 
-GraphImp::GraphImp() {}
+class GraphImp {
+public:
+    virtual void add(int, int) = 0;
+    virtual void remove(int, int) = 0;
+    virtual bool edge(int, int) = 0;
+    virtual std::shared_ptr<Iter> iter(int) = 0;
+protected:
+    explicit GraphImp(int);
+    virtual ~GraphImp();
+    int _verticesCount;
+};
+
+GraphImp::GraphImp(int vertices) : _verticesCount(vertices) {}
 
 GraphImp::~GraphImp() {}
 
@@ -149,24 +161,21 @@ private:
         return static_cast<Graph::size_type>(_verticesCount*i+j);
     }
     Graph _graph;
-    int _verticesCount;
 };
 
 class AdjacencyMatrixIterator : public Iter
 {
 public:
     AdjacencyMatrixIterator(AdjacencyMatrix* m, int i)
-        : Iter(), index(i), node(-1), graph(m) {
-        next();
-    }
+        : Iter(), index(i), node(-1), graph(m) {}
     ~AdjacencyMatrixIterator() override {}
     bool next() override
     {
-        if (node > graph->_verticesCount) return false;
+        if (node >= graph->_verticesCount) return false;
         node++;
-        while (graph->_graph[graph->index(index,node)] == false &&
-            node < graph->_verticesCount) node++;
-        if (node > graph->_verticesCount) return false;
+        while (node < graph->_verticesCount
+            && graph->_graph[graph->index(index,node)] == false) node++;
+        if (node >= graph->_verticesCount) return false;
         return true;
     }
     int eval() override
@@ -182,9 +191,8 @@ private:
 };
 
 AdjacencyMatrix::AdjacencyMatrix(int n)
-    :GraphImp (),
-      _graph(static_cast<Graph::size_type>(n*n)),
-      _verticesCount(n)
+    :GraphImp (n),
+      _graph(static_cast<Graph::size_type>(n*n))
 {}
 
 AdjacencyMatrix::~AdjacencyMatrix() {}
@@ -228,7 +236,6 @@ public:
     virtual std::shared_ptr<Iter> iter(int i) override;
 private:
     Graph _graph;
-    int _verticesCount;
 };
 
 class AdjacencyListIterator : public Iter
@@ -257,7 +264,7 @@ private:
 };
 
 AdjacencyList::AdjacencyList(int n)
-    : GraphImp(), _graph(n)
+    : GraphImp(n), _graph(n)
 {
 }
 
@@ -283,7 +290,7 @@ bool AdjacencyList::edge(int i, int j)
 {
     if (i >= _verticesCount || j >= _verticesCount)
         throw std::logic_error("vertex out of bound");
-    if (std::find(_graph[i].begin(), _graph[i].end(), j) == _graph[i].end())
+    if (std::find(_graph[i].begin(), _graph[i].end(), j) != _graph[i].end())
         return true;
     return false;
 }
@@ -295,13 +302,17 @@ std::shared_ptr<Iter> AdjacencyList::iter(int i)
 
 class DirectedGraph : public Graph
 {
-    // Graph interface
 public:
+    DirectedGraph(GraphImp&);
     void addEdge(int, int) override;
     void removeEdge(int, int) override;
     bool IsEdge(int, int) override;
     std::shared_ptr<Iter> iter(int) override;
 };
+
+DirectedGraph::DirectedGraph(GraphImp& imp)
+    :Graph(imp)
+{}
 
 void DirectedGraph::addEdge(int i, int j)
 {
@@ -325,15 +336,18 @@ std::shared_ptr<Iter> DirectedGraph::iter(int i)
 
 class UnDirectedGraph : public Graph
 {
-
-
     // Graph interface
 public:
+    UnDirectedGraph(GraphImp&);
     void addEdge(int, int) override;
     void removeEdge(int, int) override;
     bool IsEdge(int, int) override;
     std::shared_ptr<Iter> iter(int) override;
 };
+
+UnDirectedGraph::UnDirectedGraph(GraphImp &imp)
+    : Graph(imp)
+{}
 
 void UnDirectedGraph::addEdge(int i, int j)
 {
@@ -355,6 +369,21 @@ bool UnDirectedGraph::IsEdge(int i, int j)
 std::shared_ptr<Iter> UnDirectedGraph::iter(int i)
 {
     return _imp.iter(i);
+}
+
+Graph & CreateGraph(GraphType gr, GraphImpType gimp, int n)
+{
+    GraphImp* gi;
+    if (gimp == GraphImpType::AdjacencyMatrix)
+        gi = new AdjacencyMatrix(n);
+    else
+        gi = new AdjacencyList(n);
+    Graph* g;
+    if (gr == GraphType::Directed)
+        g = new DirectedGraph(*gi);
+    else
+        g = new UnDirectedGraph(*gi);
+    return *g;
 }
 
 }

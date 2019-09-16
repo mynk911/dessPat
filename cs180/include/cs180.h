@@ -221,6 +221,18 @@ void swap(heap<T>& a, heap<T>& b) noexcept
     a.swap(b);
 }
 
+class GraphImp;
+
+enum class GraphType {
+    Directed,
+    UnDirected
+};
+
+enum class GraphImpType {
+    AdjacencyMatrix,
+    AdjacencyList
+};
+
 class CS180_EXPORT Iter{
 public:
     virtual bool next() = 0;
@@ -228,17 +240,6 @@ public:
 protected:
     Iter();
     virtual ~Iter();
-};
-
-class CS180_EXPORT GraphImp{
-public:
-    virtual void add(int, int) = 0;
-    virtual void remove(int, int) = 0;
-    virtual bool edge(int, int) = 0;
-    virtual std::shared_ptr<Iter> iter(int) = 0;
-protected:
-    GraphImp();
-    virtual ~GraphImp();
 };
 
 class CS180_EXPORT Graph
@@ -253,6 +254,9 @@ protected:
     virtual ~Graph();
     GraphImp& _imp;
 };
+
+CS180_EXPORT
+Graph& CreateGraph(GraphType, GraphImpType, int);
 
 }
 #endif

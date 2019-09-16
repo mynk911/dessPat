@@ -91,3 +91,52 @@ TEST(cs180, priorityQueueTest2)
     EXPECT_EQ(4, pq.extractmin());
     EXPECT_EQ(5, pq.extractmin());
 }
+
+void print(cs180::Graph& g, int n)
+{
+    std::cout << "=== graph print ===" << std::endl;
+    for (int i = 0; i < n; i++)
+    {
+        auto itr = g.iter(i);
+        std::cout << i  << " ";
+        while (itr->next()) std::cout << itr->eval() << " ";
+        std::cout << std::endl;
+    }
+    std::cout << "===================" << std::endl;
+}
+
+void graphAPITest(cs180::Graph& g, cs180::GraphType t)
+{
+    print(g, 5);
+    g.addEdge(2, 3);
+    ASSERT_EQ(g.IsEdge(2, 3), true);
+    if(t == cs180::GraphType::UnDirected)
+        ASSERT_EQ(g.IsEdge(3, 2), true);
+    g.addEdge(4, 1);
+    g.addEdge(2, 4);
+    print(g, 5);
+    g.removeEdge(2, 3);
+    ASSERT_EQ(g.IsEdge(2, 3), false);
+    if (t == cs180::GraphType::UnDirected)
+        ASSERT_EQ(g.IsEdge(3, 2), false);
+    g.removeEdge(4, 1);
+    g.removeEdge(2, 4);
+    print(g, 5);
+}
+
+TEST(cs180, UnDirectedGraphAdjacencyMatrix)
+{
+    auto& graph = cs180::CreateGraph(
+        cs180::GraphType::UnDirected,
+        cs180::GraphImpType::AdjacencyMatrix,
+        5);
+    graphAPITest(graph, cs180::GraphType::UnDirected);
+}
+TEST(cs180, UnDirectedGraphAdjacencyList)
+{
+    auto& graph = cs180::CreateGraph(
+        cs180::GraphType::UnDirected,
+        cs180::GraphImpType::AdjacencyList,
+        5);
+    graphAPITest(graph, cs180::GraphType::UnDirected);
+}

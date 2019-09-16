@@ -1,5 +1,7 @@
 #include "gtest/gtest.h"
 
+#include <type_traits>
+
 #include "mcpp.hpp"
 
 TEST(mcpp, OpNewCreatorPolicyTest)
@@ -71,4 +73,88 @@ TEST(mcpp, localClass)
     auto inf = mcpp::MakeAdapter(c, a);
     inf->Fun();
     ASSERT_EQ(c.mem, a.value);
+}
+
+class polymorph {
+public:
+    polymorph() {}
+    virtual polymorph* clone() { return nullptr; }
+protected:
+    polymorph(const polymorph&) {}
+};
+
+class nonpolymorph {
+public:
+    nonpolymorph() {}
+    nonpolymorph(const nonpolymorph& other) {}
+};
+TEST(mcpp, ConstantToType)
+{
+    auto p = new polymorph();
+    //Below line should not compile. Compiler should complain about not being
+    //able to access polymorph copy constructor
+    //mcpp::UnNiftyContainer<polymorph, true> n;
+    mcpp::NiftyContainer<polymorph, true> n;
+    n.someFunc(p);
+
+    auto np = new nonpolymorph();
+    //Below line should not compile. Compiler should complain about not being
+    // to find nonpolymorph::clone
+    //mcpp::UnNiftyContainer<nonpolymorph, false> n2;
+    mcpp::NiftyContainer<nonpolymorph, false> n2;
+    n2.someFunc(np);
+}
+
+TEST(mcpp, Type2Type)
+{
+    auto x = mcpp::Create("Hello", mcpp::Type2Type < std::string >());
+    mcpp::Widget2* y = mcpp::Create('a', mcpp::Type2Type< mcpp::Widget2 >());
+    delete x, y;
+}
+
+TEST(mcpp, TypeSelection)
+{
+    ASSERT_EQ(true, (std::is_same< mcpp::UnNiftyContainer2<int, true>::ValueType, int* >::value));
+    ASSERT_EQ(true, (std::is_same< mcpp::UnNiftyContainer2<int, false>::ValueType, int >::value));
+    ASSERT_EQ(true, (std::is_same< mcpp::NiftyContainer2<int, true>::ValueType, int* >::value));
+    ASSERT_EQ(true, (std::is_same< mcpp::NiftyContainer2<int, false>::ValueType, int >::value));
+}
+
+TEST(mcpp, IsConvertible)
+{
+    ASSERT_EQ(true, (mcpp::Conversion< int, double >::exists));
+    ASSERT_EQ(false, (mcpp::Conversion< char, char* >::exists));
+    ASSERT_EQ(false, (mcpp::Conversion< size_t, std::vector<int> >::exists));
+}
+
+TEST(mcpp, IsSame)
+{
+    ASSERT_EQ(false, (mcpp::Conversion< int, double >::sameType));
+    ASSERT_EQ(true, (mcpp::Conversion< double, double >::sameType));
+}
+
+class polymorphderivative : public polymorph {
+public:
+    polymorphderivative() : polymorph() {}
+    virtual polymorphderivative* clone() override { return nullptr; }
+    polymorphderivative(const polymorphderivative& other) : polymorph(other) {}
+};
+
+TEST(mcpp, InheritsFrom)
+{
+    ASSERT_EQ(false, SUPERSUBCLASS(polymorph, nonpolymorph));
+    ASSERT_EQ(true, SUPERSUBCLASS(polymorph, polymorphderivative));
+}
+
+/* TEST(mcpp, TypeInfo)
+{
+    mcpp::TypeInfo info = typeid(polymorphderivative);
+    polymorph *obj = new polymorphderivative();
+    ASSERT_EQ(info, typeid(*obj));
+} */
+
+TEST(mcpp, TypeTraitsPointerTraits)
+{
+    ASSERT_EQ(false, mcpp::TypeTraits<std::vector<int>::iterator>::isPointer);
+    ASSERT_EQ(false, (std::is_same<std::vector<int>::iterator, int*>::value));
 }
