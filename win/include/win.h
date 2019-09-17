@@ -1,8 +1,9 @@
-#ifndef WIN_H_
+﻿#ifndef WIN_H_
 #define WIN_H_
 
 #include "winConfig.h"
 #include <tchar.h>
+#include <Windows.h>
 
 #include "win_export.h"
 
@@ -13,7 +14,7 @@ extern "C" {
 int WIN_EXPORT WinHello();
 int WIN_EXPORT MessageBoxPrintf(TCHAR *szCaption, TCHAR* szFormat, ...);
 int WIN_EXPORT drawWindow();
-
+int WIN_EXPORT sysmets();
 #ifdef __cplusplus
 }
 #endif

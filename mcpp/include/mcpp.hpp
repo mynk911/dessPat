@@ -371,9 +371,52 @@ private:
         enum { result = true };
         typedef U PointeeType;
     };
-public:
-    enum { isPointer = PointerTraits<T>::result };
+
+    template < typename U >
+    struct ReferenceTraits
+    {
+        enum { result = false };
+        typedef NullType ReferencedType;
+    };
+
+    template < typename U >
+    struct ReferenceTraits < U& >
+    {
+        enum { result = true };
+        typedef U ReferencedType;
+    };
+
+    template < typename U >
+    struct PToMTraits
+    {
+        enum { result = false};
+    };
+
+    template < typename U, typename V >
+    struct PToMTraits < U V::* >
+    {
+        enum { result = true };
+    };
+
+    /*typedef TypeList_4(unsigned char, unsigned short int, unsigned int, unsigned long int) UnsignedInts;
+    typedef TypeList_4(signed char, signed short int, signed int, signed long int) SignedInts;
+    typedef TypeList_3(bool, char, wchar_t) OtherInts;
+    typedef TypeList_3(float, double, long double) Floats;
+    */
+    public:
+    enum {
+        isPointer = PointerTraits< T >::result,
+        isReference = ReferenceTraits< T >::result,
+        isMemberPointer = PToMTraits< T >::result
+        /*isStdUnsignedInt = TL::IndexOf< T, UnsignedInts >::value >= 0,
+        isStdSignedInt = TL::IndexOf< T, SignedInts >::value >= 0,
+        isStdIntegral = isStdUnsignedInt || isStdSignedInt || TL::IndexOf< T, OtherInts >::value >= 0,
+        isStdFloat = TL::IndexOf< T, Floats >::value >= 0,
+        isStdArith = isStdIntegral || isStdFloat,
+        isStdFundamental = isStdArith || Conversion< T, void >::sameType*/
+    };
     typedef typename PointerTraits<T>::PointeeType PointeeType;
+    typedef typename ReferenceTraits<T>::ReferencedType ReferencedType;
 };
 
 }

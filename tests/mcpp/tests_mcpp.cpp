@@ -158,3 +158,14 @@ TEST(mcpp, TypeTraitsPointerTraits)
     ASSERT_EQ(false, mcpp::TypeTraits<std::vector<int>::iterator>::isPointer);
     ASSERT_EQ(false, (std::is_same<std::vector<int>::iterator, int*>::value));
 }
+
+TEST(mcpp, TypeTraitsReferenceTraits)
+{
+    ASSERT_EQ(false, mcpp::TypeTraits<std::vector<int>::iterator>::isReference);
+    ASSERT_EQ(false, (std::is_same<std::vector<int>::iterator, int&>::value));
+}
+
+/*TEST(mcpp, TypeTraitsPtoMTraits)
+{
+    // implement after PToM discussion in chapter 5
+}*/

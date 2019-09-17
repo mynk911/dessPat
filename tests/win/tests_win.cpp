@@ -20,4 +20,9 @@ TEST(win, drawWindow){
     EXPECT_EQ(a, 0);
 }
 
+TEST(win, sysMetrics)
+{
+    EXPECT_EQ(sysmets(), 0);
+}
+
 
