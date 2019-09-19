@@ -15,6 +15,9 @@ int LIN_EXPORT curses_char_attr();
 int LIN_EXPORT curses_keyboard();
 int LIN_EXPORT curses_multiple_windows();
 int LIN_EXPORT curses_subwindows();
+int LIN_EXPORT curses_keypad();
+int LIN_EXPORT curses_color();
+int LIN_EXPORT  curses_pad();
 #ifdef __cplusplus
 }
 #endif

@@ -432,7 +432,7 @@ int curses_subwindows()
     refresh();
     sleep(1);
 
-    // erase  contents of subwindow, print text to it and refresh it
+    // erase contents of subwindow, print text to it and refresh it
     // scrolling text is achieved by a loop
     werase(sub_window_ptr);
     mvwprintw(sub_window_ptr, 2, 0, "This window will now scroll as names are added");
@@ -452,4 +452,138 @@ int curses_subwindows()
     sleep(1);
     endwin();
     return 0;
+}
+
+#define LOCAL_ESCAPE_KEY 27
+
+int curses_keypad()
+{
+    // initialize program and curses library, set keypad mode TRUE
+    int key;
+
+    initscr();
+    crmode();
+    keypad(stdscr, TRUE);
+
+    // prevents cursor from moving when a key is pressed.
+    noecho();
+
+    clear();
+    mvprintw(5, 5, "Keypad demonstration. Press 'q' to quit");
+    move(7,5);
+    refresh();
+    key=getch();
+
+    while(key != ERR && key != 'q') {
+	move(7, 5);
+	clrtoeol();
+
+	if((key >= 'A' && key <= 'Z') ||
+	   (key >= 'a' && key <= 'z'))
+	{
+	    printw("Key was %c", (char)key);
+	} else {
+	    switch (key) {
+	    case LOCAL_ESCAPE_KEY: printw("%s", "Escape Key"); break;
+	    case KEY_END: printw("%s", "END KEY"); break;
+	    case KEY_BEG: printw("%s", "BEGINNING KEY"); break;
+	    case KEY_RIGHT: printw("%s", "RIGHT KEY"); break;
+	    case KEY_LEFT: printw("%s", "LEFT KEY"); break;
+	    case KEY_UP: printw("%s", "UP KEY"); break;
+	    case KEY_DOWN: printw("%s", "DOWN KEY"); break;
+	    default: printw("Unmatched - %d", key ); break;
+	    } /* else */
+	} /* switch */
+
+	refresh();
+	key=getch();
+    } /* while */
+
+    endwin();
+    return EXIT_SUCCESS;
+}
+
+
+int curses_color()
+{
+    // check wether program's display terminal supports color. If it does, start
+    // the color display.
+    int i;
+    initscr();
+
+    if(!has_colors())
+    {
+	endwin();
+	fprintf(stderr, "Error - no color support on this terminal");
+	return EXIT_FAILURE;
+    }
+
+    if(start_color() != OK)
+    {
+	endwin();
+	fprintf(stderr, "Could - not initialize colors\n");
+	return EXIT_FAILURE;
+    }
+
+    // print out allowed number of colors and color pairs.
+    clear();
+    mvprintw(5, 5, "There are %d colors and %d color pairs available.", COLORS, COLOR_PAIRS);
+    refresh();
+
+    // create seven color pairs and display them one at a time.
+    init_pair(1, COLOR_RED, COLOR_BLACK);
+    init_pair(2, COLOR_RED, COLOR_GREEN);
+    init_pair(3, COLOR_GREEN, COLOR_RED);
+    init_pair(4, COLOR_YELLOW, COLOR_BLUE);
+    init_pair(5, COLOR_BLACK, COLOR_WHITE);
+    init_pair(6, COLOR_MAGENTA, COLOR_BLUE);
+    init_pair(7, COLOR_CYAN, COLOR_WHITE);
+
+    for(i = 1; i <= 7; i++)
+    {
+	attroff(A_BOLD);
+	attrset(COLOR_PAIR(i));
+	mvprintw(5+i, 5, "Color pair %d", i);
+	attrset(COLOR_PAIR(i) | A_BOLD);
+	mvprintw(5+i, 25, "Bold color pair %d", i);
+	refresh();
+	sleep(1);
+    }
+
+    endwin();
+    return EXIT_SUCCESS;
+}
+
+int curses_pad()
+{
+    // create pad
+    WINDOW* pad_ptr;
+    int x, y;
+    int pad_lines;
+    int pad_cols;
+    char disp_char;
+
+    initscr();
+    pad_lines = LINES + 50;
+    pad_cols = COLS + 50;
+    pad_ptr = newpad(pad_lines, pad_cols);
+    disp_char = 'a';
+
+    // fill pad structure
+    for(y = 0; y < pad_lines; y++) {
+	for(x = 0; x < pad_cols; x++) {
+	    mvwaddch(pad_ptr, y, x, disp_char);
+	    if( disp_char == 'z') disp_char = 'a';
+	    else disp_char++;
+	}
+    }
+
+    // display pad at different locations on screen
+    prefresh(pad_ptr, 5, 7, 2, 2, 9, 9);
+    sleep(1);
+    prefresh(pad_ptr, LINES+5, COLS+5, 5, 5, 21, 19);
+    sleep(1);
+    delwin(pad_ptr);
+    endwin();
+    return EXIT_SUCCESS;
 }

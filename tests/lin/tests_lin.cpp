@@ -41,3 +41,18 @@ TEST(lin, cursesSubwindows)
 {
     ASSERT_EQ(0, curses_subwindows());
 }
+
+TEST(lin, cursesKeypad)
+{
+    ASSERT_EQ(EXIT_SUCCESS, curses_keypad());
+}
+
+TEST(lin, cursesColor)
+{
+    ASSERT_EQ(EXIT_SUCCESS, curses_color());
+}
+
+TEST(lin, cursesPad)
+{
+    ASSERT_EQ(EXIT_SUCCESS, curses_pad());
+}
