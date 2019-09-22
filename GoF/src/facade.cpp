@@ -1,5 +1,22 @@
 #include "facade.h"
 namespace gof {
+
+ByteCode::ByteCode()
+{
+}
+
+ByteCode::~ByteCode()
+{
+}
+
+ByteCodeStream::ByteCodeStream()
+{
+}
+
+ByteCodeStream::~ByteCodeStream()
+{
+}
+
 Token::Token()
 {
 }
@@ -99,6 +116,15 @@ CodeGenerator::~CodeGenerator()
 {
 }
 
+RISCCodeGenerator::RISCCodeGenerator(ByteCodeStream& out)
+    : CodeGenerator(out)
+{
+}
+
+RISCCodeGenerator::~RISCCodeGenerator()
+{
+}
+
 void CodeGenerator::Visit(StatementNode *)
 {
 }
@@ -106,4 +132,23 @@ void CodeGenerator::Visit(StatementNode *)
 void CodeGenerator::Visit(ExpressionNode *)
 {
 }
+
+Compiler::Compiler()
+{
+}
+
+Compiler::~Compiler()
+{
+}
+
+void Compiler::Compile(std::istream& input, ByteCodeStream& output) {
+    Scanner scanner(input);
+    ProgramNodeBuilder builder;
+    Parser parser;
+    parser.Parse(scanner, builder);
+    RISCCodeGenerator generator(output);
+    ProgramNode* parseTree = builder.GetRootNode();
+    parseTree->Traverse(generator);
+}
+
 }

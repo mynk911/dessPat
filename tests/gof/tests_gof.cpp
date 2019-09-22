@@ -1,13 +1,8 @@
 #include "cstdlib"
 
 #include "gtest/gtest.h"
-#include "mazefactory.h"
-#include "mazebuilder.h"
-#include "mazegame.h"
-#include "maze.h"
-#include "shape.h"
-#include "textview.h"
-#include "textshape.h"
+#include "creational.h"
+#include "adapter.h"
 #include "composite.h"
 #include "decorator.h"
 

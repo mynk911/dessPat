@@ -237,7 +237,7 @@ LRESULT CALLBACK sysmetsWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
     {
     case WM_CREATE:
         hdc = GetDC(hwnd);
-        GetTextMetrics(hwnd, &tm);
+        GetTextMetrics(hdc, &tm);
         cxChar = tm.tmAveCharWidth;
         cxCaps = (tm.tmPitchAndFamily & 1 ? 3 : 2) * cxChar / 2;
         cyChar = tm.tmHeight + tm.tmExternalLeading;
@@ -245,7 +245,7 @@ LRESULT CALLBACK sysmetsWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
         return 0;
     case WM_PAINT:
         hdc = BeginPaint(hwnd, &ps);
-        for (i = 0; i < 1; i++)
+        for (i = 0; i < NUMLINES; i++)
         {
             TextOut(hdc, 0, cyChar * i, sysmetrics[i].szLabel, lstrlen(sysmetrics[i].szLabel));
             TextOut(hdc, 22 * cxCaps, cyChar * i, sysmetrics[i].szDesc, lstrlen(sysmetrics[i].szDesc));

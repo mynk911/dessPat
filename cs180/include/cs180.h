@@ -222,6 +222,7 @@ void swap(heap<T>& a, heap<T>& b) noexcept
 }
 
 class GraphImp;
+class Iter;
 
 enum class GraphType {
     Directed,
@@ -233,15 +234,8 @@ enum class GraphImpType {
     AdjacencyList
 };
 
-class CS180_EXPORT Iter{
-public:
-    virtual bool next() = 0;
-    virtual int eval() = 0;
-protected:
-    Iter();
-    virtual ~Iter();
-};
-
+/** base class for different graphs such asdirected, undirecte
+ */
 class CS180_EXPORT Graph
 {
 public:
@@ -255,8 +249,19 @@ protected:
     GraphImp& _imp;
 };
 
-CS180_EXPORT
-Graph& CreateGraph(GraphType, GraphImpType, int);
+/** Iterator over all nodes that are connected a particular vertex
+ */
+class CS180_EXPORT Iter {
+public:
+    virtual bool next() = 0;
+    virtual int eval() = 0;
+protected:
+    Iter();
+    virtual ~Iter();
+};
 
+CS180_EXPORT Graph& CreateGraph(GraphType, GraphImpType, int);
+
+CS180_EXPORT void bfs(int , int);
 }
 #endif

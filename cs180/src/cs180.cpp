@@ -118,6 +118,19 @@ StableMatching& StableMatching::operator()(std::ostream& out, bool proposerIsGro
     return *this;
 }
 
+Graph::Graph(GraphImp& imp)
+    :_imp(imp)
+{}
+
+Graph::~Graph() {}
+
+Iter::Iter() {}
+
+Iter::~Iter() {}
+
+/** base class for underlying graph implementations such as adjacency list 
+    and adjacency matrix
+ */
 class GraphImp {
 public:
     virtual void add(int, int) = 0;
@@ -134,16 +147,6 @@ GraphImp::GraphImp(int vertices) : _verticesCount(vertices) {}
 
 GraphImp::~GraphImp() {}
 
-Graph::Graph(GraphImp& imp)
-    :_imp(imp)
-{}
-
-Graph::~Graph() {}
-
-Iter::Iter() {}
-
-Iter::~Iter() {}
-
 class AdjacencyMatrix : public GraphImp
 {
 public:
@@ -158,7 +161,7 @@ public:
 private:
     Graph::size_type index(int i, int j)
     {
-        return static_cast<Graph::size_type>(_verticesCount*i+j);
+        return static_cast<Graph::size_type>(_verticesCount)*i+j;
     }
     Graph _graph;
 };
@@ -192,7 +195,7 @@ private:
 
 AdjacencyMatrix::AdjacencyMatrix(int n)
     :GraphImp (n),
-      _graph(static_cast<Graph::size_type>(n*n))
+      _graph(static_cast<Graph::size_type>(n)*n)
 {}
 
 AdjacencyMatrix::~AdjacencyMatrix() {}
@@ -242,11 +245,12 @@ class AdjacencyListIterator : public Iter
 {
 public:
     AdjacencyListIterator(AdjacencyList* m, int i)
-        : Iter(), itr(m->_graph[i].begin()), index(i), graph(m) {}
+        : Iter(), itr(m->_graph[i].begin()), first_element(true), index(i), graph(m) {}
     ~AdjacencyListIterator() override {}
     bool next() override
     {
         if (itr == graph->_graph[index].end()) return false;
+        if (first_element) { first_element = false; return true; }
         itr++;
         if (itr == graph->_graph[index].end()) return false;
         return true;
@@ -259,6 +263,7 @@ public:
     }
 private:
     std::list<int>::iterator itr;
+    bool first_element;
     int index;
     AdjacencyList* graph;
 };
@@ -384,6 +389,11 @@ Graph & CreateGraph(GraphType gr, GraphImpType gimp, int n)
     else
         g = new UnDirectedGraph(*gi);
     return *g;
+}
+
+void bfs(int s,int n)
+{
+    std::vector<int> discovered(n);
 }
 
 }

@@ -1,5 +1,5 @@
-#ifndef GOF_WINDOW_H_
-#define GOF_WINDOW_H_
+#ifndef GOF_BRIDGE_H_
+#define GOF_BRIDGE_H_
 
 #include "gof_export.h"
 
@@ -15,7 +15,7 @@ class View;
 class Point;
 class WindowImp;
 
-class GOF_EXPORT Window {
+class Window {
 public:
     Window(View* contents);
     virtual ~Window();

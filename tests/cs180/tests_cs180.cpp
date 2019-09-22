@@ -117,8 +117,7 @@ void graphAPITest(cs180::Graph& g, cs180::GraphType t)
     print(g, 5);
     g.removeEdge(2, 3);
     ASSERT_EQ(g.IsEdge(2, 3), false);
-    if (t == cs180::GraphType::UnDirected)
-        ASSERT_EQ(g.IsEdge(3, 2), false);
+    ASSERT_EQ(g.IsEdge(3, 2), false);
     g.removeEdge(4, 1);
     g.removeEdge(2, 4);
     print(g, 5);
@@ -140,3 +139,21 @@ TEST(cs180, UnDirectedGraphAdjacencyList)
         5);
     graphAPITest(graph, cs180::GraphType::UnDirected);
 }
+
+TEST(cs180, DirectedGraphAdjacencyMatrix)
+{
+    auto& graph = cs180::CreateGraph(
+        cs180::GraphType::Directed,
+        cs180::GraphImpType::AdjacencyMatrix,
+        5);
+    graphAPITest(graph, cs180::GraphType::Directed);
+}
+TEST(cs180, DirectedGraphAdjacencyList)
+{
+    auto& graph = cs180::CreateGraph(
+        cs180::GraphType::Directed,
+        cs180::GraphImpType::AdjacencyList,
+        5);
+    graphAPITest(graph, cs180::GraphType::Directed);
+}
+

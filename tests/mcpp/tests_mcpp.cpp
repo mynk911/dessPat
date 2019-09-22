@@ -169,3 +169,95 @@ TEST(mcpp, TypeTraitsReferenceTraits)
 {
     // implement after PToM discussion in chapter 5
 }*/
+
+/*TEST(mcpp, TypeTraitsFundamental)
+{
+    // implement after TypeLists discussion in chapter 5
+}*/
+
+/*TEST(mcpp, TypeTraitsParameterType)
+{
+    // implement after TypeLists discussion in chapter 5
+}*/
+
+TEST(mcpp, TypeTraitsNonConst)
+{
+    ASSERT_EQ(true, (std::is_same< mcpp::TypeTraits< const int >::NonConstType, int >::value));
+}
+
+// enum class doesn't work without an extra parameter of class name
+enum CopyAlgoSelector {Conservative, Fast};
+
+template < typename InIt, typename OutIt >
+int CopyImp(InIt first, InIt last, OutIt result, mcpp::Int2Type<Conservative>)
+{
+    for (; first != last; ++first, ++result)
+        *result = *first;
+    return 0;
+}
+
+template < typename InIt, typename OutIt >
+int CopyImp(InIt first, InIt last, OutIt result, mcpp::Int2Type<Fast>)
+{
+    for (; first != last; ++first, ++result)
+        *result = *first;
+    return 1;
+}
+
+template < typename InIt, typename OutIt >
+int Copy(InIt first, InIt last, OutIt result)
+{
+    typedef mcpp::TypeTraits<InIt>::PointeeType SrcPointee;
+    typedef mcpp::TypeTraits<OutIt>::PointeeType DstPointee;
+    enum {
+        copyAlgo = mcpp::TypeTraits<InIt>::isPointer &&
+        mcpp::TypeTraits<OutIt>::isPointer &&
+        //mcpp::TypeTraits<SrcPointee>::IsFundamental &&
+        //mcpp::TypeTraits<DstPointee>::IsFundamental &&
+        //mcpp::SupportsBitwiseCopy<SrcPointee>::result &&
+        //mcpp::SupportsBitwiseCopy<DstPointee>::result &&
+        sizeof(SrcPointee) == sizeof(DstPointee) ? Fast : Conservative
+    };
+    return CopyImp(first, last, result, mcpp::Int2Type<copyAlgo>());
+}
+
+class POD
+{
+public:
+    int x;
+};
+
+class NPOD
+{
+public:
+    int x;
+    NPOD() {};
+    NPOD(int a) { x = a; }
+    virtual ~NPOD() {}
+};
+
+template<> struct mcpp::SupportsBitwiseCopy<POD>
+{
+    enum { result = true };
+};
+
+// implement after TypeLists discussion in chapter 5
+TEST(mcpp, TypeTraitsUsage)
+{
+    int arr[10] = { 5 };
+    int dst[10] = { 0 };
+
+//    ASSERT_EQ(1, Copy(arr, arr + 10, dst));
+
+    std::vector<int> v(10, 5),d;
+//    ASSERT_EQ(0, Copy(v.begin(), v.end(), std::back_inserter(d)));
+
+    POD arr2[10] = { 5 };
+    POD dst2[10] = { 0 };
+
+//    ASSERT_EQ(1, Copy(arr2, arr2 + 10, dst2));
+    NPOD arr3[10] = { 5 };
+    NPOD dst3[10] = { 0 };
+
+//    ASSERT_EQ(1, Copy(arr3, arr3 + 10, dst3));
+}

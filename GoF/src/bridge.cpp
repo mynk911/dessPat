@@ -1,7 +1,5 @@
-#ifndef GOF_WINDOWIMP_H_
-#define GOF_WINDOWIMP_H_
-
 #include "foundation.h"
+#include "bridge.h"
 
 namespace gof {
 
@@ -20,9 +18,6 @@ public:
 protected:
     WindowImp();
     virtual ~WindowImp();
-
 };
-
 //inherited by xwindow manager etc
 }
-#endif

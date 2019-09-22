@@ -20,8 +20,27 @@ class CodeGenerator;
 class ByteCodeStream;
 class ExpressionNode;
 class StatementNode;
+class ByteCode;
 
-//class ByteCode, ByteCodeStream and Token definition
+// encapsulates a machine instruction
+class ByteCode
+{
+public:
+    ByteCode();
+    ~ByteCode();
+private:
+};
+
+// stream for bytecode
+class ByteCodeStream
+{
+public:
+    ByteCodeStream();
+    ~ByteCodeStream();
+
+private:
+
+};
 
 // Tokens in the programming language
 class Token
@@ -115,7 +134,25 @@ private:
     // commented to allow compilation
     //ByteCodeStream& _output;
 };
+
+class RISCCodeGenerator : public CodeGenerator
+{
+public:
+    RISCCodeGenerator(ByteCodeStream&);
+    ~RISCCodeGenerator();
+};
+
 // inherited by StackMachineCodeGenerator, RISCCodeGenerator ...
+
+
+// Facade over compiler subsystem
+class Compiler
+{
+public:
+    Compiler();
+    ~Compiler();
+    virtual void Compile(std::istream&, ByteCodeStream&);
+};
 
 }
 #endif // _GOF_FACADE_H_

@@ -376,7 +376,7 @@ private:
     struct ReferenceTraits
     {
         enum { result = false };
-        typedef NullType ReferencedType;
+        typedef U ReferencedType;
     };
 
     template < typename U >
@@ -403,6 +403,19 @@ private:
     typedef TypeList_3(bool, char, wchar_t) OtherInts;
     typedef TypeList_3(float, double, long double) Floats;
     */
+
+    template <  typename U >
+    struct Unconst
+    {
+        typedef U Result;
+    };
+
+    template < typename U >
+    struct Unconst < const U >
+    {
+        typedef U Result;
+    };
+
     public:
     enum {
         isPointer = PointerTraits< T >::result,
@@ -417,7 +430,14 @@ private:
     };
     typedef typename PointerTraits<T>::PointeeType PointeeType;
     typedef typename ReferenceTraits<T>::ReferencedType ReferencedType;
+    //typedef typename Select< isStdArith || isPointer || isMemberPointer, T, ReferencedType&>::Result ParameterType;
+    typedef typename Unconst<T>::Result NonConstType;
 };
 
+template < typename T >
+struct SupportsBitwiseCopy
+{
+//    enum { result = TypeTraits<T>::isStdFundamental };
+};
 }
 #endif // MCPP_MCPP_H_

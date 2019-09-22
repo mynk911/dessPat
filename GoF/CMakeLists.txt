@@ -4,24 +4,12 @@ project(GOF VERSION 1.0 LANGUAGES CXX)
 add_library (gof
     include/foundation.h
     src/foundation.cpp
-    src/maze.cpp
-    include/maze.h
-    src/mazegame.cpp
-    include/mazegame.h
-    src/mazefactory.cpp
-    include/mazefactory.h
-    src/mazebuilder.cpp
-    include/mazebuilder.h
-    src/shape.cpp
-    include/shape.h
-    src/textview.cpp
-    include/textview.h
-    src/textshape.cpp
-    include/textshape.h
-    src/window.cpp
-    include/window.h
-    src/windowimp.cpp
-    include/windowimp.h
+    src/creational.cpp
+    include/creational.h
+    src/adapter.cpp
+    include/adapter.h
+    src/bridge.cpp
+    include/bridge.h
     src/composite.cpp
     include/composite.h
     src/decorator.cpp
