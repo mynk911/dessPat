@@ -35,6 +35,40 @@ void CONCUR_EXPORT edit_document(std::string const& filename);
 int CONCUR_EXPORT std_thread_move();
 int CONCUR_EXPORT threads_in_vector();
 
+class ThreadGuard
+{
+    std::thread& _t;
+public:
+    explicit ThreadGuard(std::thread& t)
+	:_t(t)
+    {}
+
+    ~ThreadGuard()
+    {
+	if(_t.joinable())
+	    _t.join();
+    }
+
+    ThreadGuard(const ThreadGuard& ) = delete;
+    ThreadGuard& operator=(const ThreadGuard&) = delete;
+};
+
+class scoped_thread
+{
+    std::thread t;
+public:
+    explicit scoped_thread(std::thread t_):
+	t(std::move(t_))
+    {
+	if(!t.joinable()) throw std::logic_error("No thread");
+    }
+    ~scoped_thread()
+    {
+	t.join();
+    }
+    scoped_thread(scoped_thread const&) = delete;
+    scoped_thread& operator=(scoped_thread const&) = delete;
+};
 
 // a naive parallel implementation of std::accumulate. Makes use of hardware_concurrency
 // to find threads supported by system.
@@ -76,7 +110,7 @@ T parallel_accumualate(Iterator first, Iterator last, T init)
     return std::accumulate(results.begin(), results.end(), init);
 }
 
-bool CONCUR_EXPORT mutex_example();
+int CONCUR_EXPORT mutex_example();
 
 class some_data
 {
@@ -94,8 +128,8 @@ public:
     template < typename Function >
     void process_data(Function func)
     {
-        std::lock_guard<std::mutex> l(m);
-        func(data);
+	std::lock_guard<std::mutex> l(m);
+	func(data);
     }
 };
 
@@ -106,7 +140,10 @@ void CONCUR_EXPORT unprotected_shared_data();
 
 struct empty_stack : std::exception
 {
-    const char* what() const throw();
+public:
+    virtual char const * what() const noexcept {
+	return "stack empty";
+    }
 };
 
 template < typename T>
@@ -116,41 +153,80 @@ public:
     threadsafe_stack() {}
     threadsafe_stack(const threadsafe_stack& other)
     {
-        std::lock_guard<std::mutex> lock(other.m);
-        data = other.data;
-
+	std::lock_guard<std::mutex> lock(other.m);
+	data = other.data;
     }
     threadsafe_stack& operator=(const threadsafe_stack&) = delete;
 
     void push(T new_value)
     {
-        std::lock_guard<std::mutex> lock(m);
-        data.push(new_value);
+	std::lock_guard<std::mutex> lock(m);
+	data.push(new_value);
     }
     std::shared_ptr<T> pop()
     {
-        std::lock_guard<std::mutex> lock(m);
-        if (data.empty()) throw empty_stack();
-        auto res = std::make_shared<T>(data.top());
-        data.pop();
-        return res;
+	std::lock_guard<std::mutex> lock(m);
+	if (data.empty()) throw empty_stack();
+	auto res = std::make_shared<T>(data.top());
+	data.pop();
+	return res;
     }
     void pop(T& value)
     {
-        std::lock_guard<std::mutex> lock(m);
-        if (data.empty()) throw empty_stack();
-        value = data.top();
-        data.pop();
+	std::lock_guard<std::mutex> lock(m);
+	if (data.empty()) throw empty_stack();
+	value = data.top();
+	data.pop();
     }
     bool empty() const
     {
-        std::lock_guard<std::mutex> lock(m);
-        return data.empty();
+	std::lock_guard<std::mutex> lock(m);
+	return data.empty();
     }
 private:
     std::stack<T> data;
     mutable std::mutex m;
 };
-}
 
+class CONCUR_EXPORT some_big_object
+{
+    int a;
+public:
+    int getA() { return a;}
+    void setA(int x) { a=x; }
+};
+
+// demo of std::lock facility to lock two or mutex with deadlock
+//    avoidance
+class CONCUR_EXPORT  safelock_swapper
+{
+    some_big_object some_detail;
+    mutable std::mutex m;
+public:
+    safelock_swapper(some_big_object const& sd) : some_detail(sd) {}
+    friend void swap(safelock_swapper& lhs, safelock_swapper& rhs);
+    friend bool operator==(safelock_swapper const& lhs, safelock_swapper const& rhs);
+};
+
+bool CONCUR_EXPORT operator==(safelock_swapper const& lhs, safelock_swapper const& rhs);
+void CONCUR_EXPORT swap(safelock_swapper& lhs, safelock_swapper& rhs);
+
+// a mutex which can be obtained by a thread if the mutex held already has higher
+// hierarchy value(implying a higher level code protection)
+class CONCUR_EXPORT hierarchical_mutex
+{
+    std::mutex internal_mutex;
+    unsigned long const hierarchy_value;
+    unsigned long previous_heirarchy_value;
+    static thread_local unsigned long this_thread_hierarchy_value;
+    void check_for_hierarchy_violation();
+    void update_hierarchy_value();
+public:
+    explicit hierarchical_mutex(unsigned long);
+    void lock();
+    void unlock();
+    bool try_lock();
+};
+
+}
 #endif

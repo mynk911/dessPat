@@ -207,8 +207,8 @@ int CopyImp(InIt first, InIt last, OutIt result, mcpp::Int2Type<Fast>)
 template < typename InIt, typename OutIt >
 int Copy(InIt first, InIt last, OutIt result)
 {
-    typedef mcpp::TypeTraits<InIt>::PointeeType SrcPointee;
-    typedef mcpp::TypeTraits<OutIt>::PointeeType DstPointee;
+    typedef typename mcpp::TypeTraits<InIt>::PointeeType SrcPointee;
+    typedef typename mcpp::TypeTraits<OutIt>::PointeeType DstPointee;
     enum {
         copyAlgo = mcpp::TypeTraits<InIt>::isPointer &&
         mcpp::TypeTraits<OutIt>::isPointer &&
@@ -236,10 +236,12 @@ public:
     virtual ~NPOD() {}
 };
 
-template<> struct mcpp::SupportsBitwiseCopy<POD>
+namespace mcpp {
+template<> struct SupportsBitwiseCopy<POD>
 {
     enum { result = true };
 };
+}
 
 // implement after TypeLists discussion in chapter 5
 TEST(mcpp, TypeTraitsUsage)

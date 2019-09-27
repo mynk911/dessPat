@@ -67,10 +67,63 @@ TEST(concurtests, parallelAccumulate)
 
 TEST(concurtests, mutexExample)
 {
-    ASSERT_EQ(true, concur::mutex_example());
+    auto ret = concur::mutex_example();
+    std::cout << "45 in list : " << ret;
 }
 
-TEST(concurTests, unProtectedSharedData)
+TEST(concurtests, unProtectedSharedData)
 {
     concur::unprotected_shared_data();
+}
+
+TEST(concurtests, threadSafeStack)
+{
+    concur::threadsafe_stack<int> ts;
+    std::thread th1([&ts](){
+	 ts.push(5);
+    });
+
+    std::thread th2([&ts](){
+	try {
+	    ts.pop();
+	} catch(const std::exception& e){
+	    std::cout << e.what() << std::endl;
+	}
+    });
+    if(th1.joinable()) th1.join();
+    if(th2.joinable()) th2.join();
+}
+
+TEST(concurtests, safeLockWrapper)
+{
+    concur::some_big_object a,b;
+    a.setA(1); b.setA(2);
+    concur::safelock_swapper s1(a);
+    concur::safelock_swapper s2(b);
+    std::thread th1([&s1,&s2](){
+	concur::swap(s1, s2);
+    });
+
+    std::thread th2([&s1,&s2](){
+	concur::swap(s2, s1);
+    });
+    if(th1.joinable()) th1.join();
+    if(th2.joinable()) th2.join();
+}
+
+concur::hierarchical_mutex hlm(1000);
+concur::hierarchical_mutex llm(500);
+
+TEST(concurtests, hierarchicalMutexCorrectUsage)
+{
+    {
+	std::lock_guard<concur::hierarchical_mutex> a(hlm);
+	std::lock_guard<concur::hierarchical_mutex> b(llm);
+    }
+
+    {
+	std::lock_guard<concur::hierarchical_mutex> a(llm);
+	ASSERT_THROW(std::lock_guard<concur::hierarchical_mutex> b(hlm),
+		     std::logic_error);
+    }
 }

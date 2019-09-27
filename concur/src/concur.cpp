@@ -1,3 +1,5 @@
+#include <limits>
+
 #include "concur.h"
 
 namespace concur {
@@ -51,24 +53,6 @@ int WaitForFinish()
     t.join();
     return 0;
 }
-
-class ThreadGuard
-{
-    std::thread& _t;
-public:
-    explicit ThreadGuard(std::thread& t)
-	:_t(t)
-    {}
-
-    ~ThreadGuard()
-    {
-	if(_t.joinable())
-	    _t.join();
-    }
-
-    ThreadGuard(const ThreadGuard& ) = delete;
-    ThreadGuard& operator=(const ThreadGuard&) = delete;
-};
 
 // RAII wait for finish demo. With RAII all execution branches are automatically taken care
 // of
@@ -140,23 +124,6 @@ void edit_document(std::string const& filename)
     }
 }
 
-class scoped_thread
-{
-    std::thread t;
-public:
-    explicit scoped_thread(std::thread t_):
-	t(std::move(t_))
-    {
-	if(!t.joinable()) throw std::logic_error("No thread");
-    }
-    ~scoped_thread()
-    {
-	t.join();
-    }
-    scoped_thread(scoped_thread const&) = delete;
-    scoped_thread& operator=(scoped_thread const&) = delete;
-};
-
 // threads are move only objects. scoped_thread is an alternative to ThreadGuard
 // which moves thread to an internal thread object instead of maintaining reference
 // to external object.
@@ -197,18 +164,20 @@ void add_to_list(int some_value)
     some_list.push_back(some_value);
 }
 
-bool list_contains(int value_to_find)
+void list_contains(int value_to_find, bool& ret)
 {
     std::lock_guard<std::mutex> guard(some_mutex);
-    return std::find(some_list.begin(), some_list.end(), value_to_find)
+    ret = std::find(some_list.begin(), some_list.end(), value_to_find)
 	!= some_list.end();
 }
 
 // mutex are used for "mutually exclusive" access to shared data by running threads.
-bool mutex_example()
+int  mutex_example()
 {
     scoped_thread st(std::thread(add_to_list, 45));
-    return list_contains(45);
+    bool ret;
+    scoped_thread st1(std::thread(list_contains, 45, std::ref(ret)));
+    return ret?1:0;
 }
 
 void some_data::do_something()
@@ -229,11 +198,84 @@ data_wrapper x;
 // protected data is passed outside the scope of mutex. Here malicious function
 // stores pointer to some_data object which is protected in data_wrapper in a
 // global object. User then makes a call to unprotected->do_something() without
-// mutx protection.
+// mutex protection.
 void unprotected_shared_data()
 {
     x.process_data(malicious_function);
     unprotected->do_something();
 }
 
+void swap(some_big_object& lhs, some_big_object& rhs) noexcept
+{
+    std::cout << "moving" << lhs.getA() << "to" << rhs.getA();
+    some_big_object t;
+    t=lhs;
+    lhs=rhs;
+    rhs = t;
+}
+
+void swap(safelock_swapper& lhs, safelock_swapper& rhs)
+{
+    if(&lhs == &rhs) return;
+    std::lock(lhs.m, rhs.m);
+    std::lock_guard<std::mutex> a(lhs.m, std::adopt_lock);
+    //std::lock_guard<std::mutex> b(rhs.m, std::adopt_lock);
+    //std::unique_lock<std::mutex> a(lhs.m, std::defer_lock);
+    std::unique_lock<std::mutex> b(rhs.m, std::defer_lock);
+    //std::lock(a, b);
+    swap(lhs.some_detail, rhs.some_detail);
+}
+
+bool operator==(safelock_swapper const& lhs, safelock_swapper const& rhs)
+{
+    if(&lhs == &rhs) return true;
+    std::unique_lock<std::mutex> a(lhs.m);
+    some_big_object x = lhs.some_detail;
+    a.unlock();
+    std::unique_lock<std::mutex> b(rhs.m);
+    some_big_object y = rhs.some_detail;
+    b.unlock();
+    return x==y;
+}
+
+thread_local unsigned long hierarchical_mutex::this_thread_hierarchy_value
+(std::numeric_limits<unsigned long>::max());
+
+void hierarchical_mutex::check_for_hierarchy_violation()
+{
+    if(this_thread_hierarchy_value <= hierarchy_value)
+	throw std::logic_error("mutex hierarchy violated");
+}
+
+void hierarchical_mutex::update_hierarchy_value()
+{
+    previous_heirarchy_value=this_thread_hierarchy_value;
+    this_thread_hierarchy_value=hierarchy_value;
+}
+
+hierarchical_mutex::hierarchical_mutex(unsigned long value)
+    : hierarchy_value(value)
+{}
+
+void hierarchical_mutex::lock()
+{
+    check_for_hierarchy_violation();
+    internal_mutex.lock();
+    update_hierarchy_value();
+}
+
+void hierarchical_mutex::unlock()
+{
+    this_thread_hierarchy_value = previous_heirarchy_value;
+    internal_mutex.unlock();
+}
+
+bool hierarchical_mutex::try_lock()
+{
+    check_for_hierarchy_violation();
+    if(!internal_mutex.try_lock())
+	return false;
+    update_hierarchy_value();
+    return true;
+}
 }
