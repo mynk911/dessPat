@@ -210,7 +210,7 @@ int sysmets()
     }
 
     hwnd = CreateWindow(szAppName, TEXT("Get System Metrics No 1"),
-        WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+        WS_OVERLAPPEDWINDOW | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
         NULL, NULL, GetModuleHandle(NULL), NULL);
 
     ShowWindow(hwnd, SW_SHOW);
@@ -226,9 +226,9 @@ int sysmets()
 
 LRESULT CALLBACK sysmetsWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static int cxChar, cxCaps, cyChar;
+    static int cxChar, cxCaps, cyChar, cyClient, iVscrollPos;
     HDC hdc;
-    int i;
+    int i, y;
     PAINTSTRUCT ps;
     TCHAR szBuffer[10];
     TEXTMETRIC tm;
@@ -242,15 +242,55 @@ LRESULT CALLBACK sysmetsWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
         cxCaps = (tm.tmPitchAndFamily & 1 ? 3 : 2) * cxChar / 2;
         cyChar = tm.tmHeight + tm.tmExternalLeading;
         ReleaseDC(hwnd, hdc);
+
+        // Set scroll range to number of total lines in text
+        SetScrollRange(hwnd, SB_VERT, 0, NUMLINES - 1, FALSE);
+        // Set scroll pos on initial position
+        SetScrollPos(hwnd, SB_VERT, iVscrollPos, TRUE);
+        return 0;
+    case WM_SIZE:
+        // get height of client area
+        cyClient = HIWORD(lParam);
+        return 0;
+    case WM_VSCROLL:
+        // identify event and change value of iVscrollPos accordingly
+        switch (LOWORD(wParam))
+        {
+        case SB_LINEUP:
+            iVscrollPos -= 1;
+            break;
+        case SB_LINEDOWN:
+            iVscrollPos += 1;
+            break;
+        case SB_PAGEUP:
+            iVscrollPos -= cyClient / cyChar;
+            break;
+        case SB_PAGEDOWN:
+            iVscrollPos += cyClient / cyChar;
+            break;
+        case SB_THUMBPOSITION:
+            iVscrollPos = HIWORD(wParam);
+            break;
+        default:
+            break;
+        }
+        iVscrollPos = max(0, min(iVscrollPos, NUMLINES - 1));
+        if (iVscrollPos != GetScrollPos(hwnd, SB_VERT))
+        {
+            SetScrollPos(hwnd, SB_VERT, iVscrollPos, TRUE);
+            InvalidateRect(hwnd, NULL, TRUE);
+        }
         return 0;
     case WM_PAINT:
         hdc = BeginPaint(hwnd, &ps);
         for (i = 0; i < NUMLINES; i++)
         {
-            TextOut(hdc, 0, cyChar * i, sysmetrics[i].szLabel, lstrlen(sysmetrics[i].szLabel));
-            TextOut(hdc, 22 * cxCaps, cyChar * i, sysmetrics[i].szDesc, lstrlen(sysmetrics[i].szDesc));
+            // calculate y such that line at iVscrollPos is at top
+            y = cyChar * (i - iVscrollPos);
+            TextOut(hdc, 0, y, sysmetrics[i].szLabel, lstrlen(sysmetrics[i].szLabel));
+            TextOut(hdc, 22 * cxCaps, y, sysmetrics[i].szDesc, lstrlen(sysmetrics[i].szDesc));
             SetTextAlign(hdc, TA_RIGHT | TA_TOP);
-            TextOut(hdc, 22 * cxCaps + 40 * cxChar, cyChar * i, szBuffer,
+            TextOut(hdc, 22 * cxCaps + 40 * cxChar, y, szBuffer,
                 wsprintf(szBuffer, TEXT("%5d"), GetSystemMetrics(sysmetrics[i].iIndex)));
             SetTextAlign(hdc, TA_LEFT | TA_TOP);
         }

@@ -16,6 +16,10 @@ add_library (gof
     include/decorator.h
 	src/facade.cpp
 	include/facade.h
+	src/flyweight.cpp
+	include/flyweight.h
+    src/proxy.cpp
+	include/proxy.h
     )
 
 add_library (GOF::gof ALIAS gof)

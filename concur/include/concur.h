@@ -196,6 +196,10 @@ public:
     void setA(int x) { a=x; }
 };
 
+class safelock_swapper;
+
+void CONCUR_EXPORT swap(safelock_swapper& lhs, safelock_swapper& rhs);
+
 // demo of std::lock facility to lock two or mutex with deadlock
 //    avoidance
 class CONCUR_EXPORT  safelock_swapper
@@ -205,27 +209,23 @@ class CONCUR_EXPORT  safelock_swapper
 public:
     safelock_swapper(some_big_object const& sd) : some_detail(sd) {}
     friend void swap(safelock_swapper& lhs, safelock_swapper& rhs);
-    friend bool operator==(safelock_swapper const& lhs, safelock_swapper const& rhs);
+    bool operator==(safelock_swapper const& rhs) const;
 };
-
-bool CONCUR_EXPORT operator==(safelock_swapper const& lhs, safelock_swapper const& rhs);
-void CONCUR_EXPORT swap(safelock_swapper& lhs, safelock_swapper& rhs);
 
 // a mutex which can be obtained by a thread if the mutex held already has higher
 // hierarchy value(implying a higher level code protection)
 class CONCUR_EXPORT hierarchical_mutex
 {
-    std::mutex internal_mutex;
-    unsigned long const hierarchy_value;
-    unsigned long previous_heirarchy_value;
-    static thread_local unsigned long this_thread_hierarchy_value;
+    struct hierarchical_mutex_impl;
+    std::unique_ptr< hierarchical_mutex_impl> pimpl;
     void check_for_hierarchy_violation();
     void update_hierarchy_value();
 public:
+    virtual void lock();
+    virtual void unlock();
+    virtual bool try_lock();
     explicit hierarchical_mutex(unsigned long);
-    void lock();
-    void unlock();
-    bool try_lock();
+    ~hierarchical_mutex();
 };
 
 }

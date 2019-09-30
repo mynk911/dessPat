@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include <list>
+#include <queue>
+#include <stack>
 #include <memory>
 #include <cassert>
 #include "dbg.h"
@@ -391,9 +393,60 @@ Graph & CreateGraph(GraphType gr, GraphImpType gimp, int n)
     return *g;
 }
 
-void bfs(int s,int n)
+std::vector<int> bfs(Graph& g, int s,int n)
 {
-    std::vector<int> discovered(n);
+    std::vector<bool> discovered(n, false);
+    std::vector<int> ret(n);
+    discovered[s] = true;
+    ret[s] = -1;
+    std::queue<int> q;
+    q.push(s);
+    while (!q.empty())
+    {
+        auto u = q.front();
+        q.pop();
+        auto itr = g.iter(u);
+        while (itr->next()) {
+            auto v = itr->eval();
+            if (!discovered[v])
+            {
+                discovered[v] = true;
+                ret[v] = u;
+                q.push(v);
+            }
+        }
+    }
+    return ret;
+}
+
+std::vector<int> dfs(Graph& g, int s, int n)
+{
+    std::vector<bool> explored(n, false);
+    std::vector<int> par(n);
+    par[s] = -1;
+    std::vector<int> ret(n);
+    ret[s] = -1;
+    std::stack<int> st;
+    st.push(s);
+    while (!st.empty())
+    {
+        auto u = st.top();
+        st.pop();
+        if (!explored[u])
+        {
+            explored[u] = true;
+            ret[u] = par[u];
+            auto itr = g.iter(u);
+            while (itr->next())
+            {
+                auto v = itr->eval();
+                st.push(v);
+                par[v] = u;
+                std::cout << v << "->" << u << " ";
+            }
+        }
+    }
+    return ret;
 }
 
 }

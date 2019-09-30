@@ -262,6 +262,7 @@ protected:
 
 CS180_EXPORT Graph& CreateGraph(GraphType, GraphImpType, int);
 
-CS180_EXPORT void bfs(int , int);
+CS180_EXPORT std::vector<int> bfs(Graph&, int, int);
+CS180_EXPORT std::vector<int> dfs(Graph&, int, int);
 }
 #endif

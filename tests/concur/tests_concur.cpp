@@ -107,8 +107,17 @@ TEST(concurtests, safeLockWrapper)
     std::thread th2([&s1,&s2](){
 	concur::swap(s2, s1);
     });
-    if(th1.joinable()) th1.join();
-    if(th2.joinable()) th2.join();
+
+    std::thread th3([&s1, &s2]() {
+        if (s1 == s2)
+            std::cout << "equal ";
+        else
+            std::cout << "unequal ";
+        });
+
+    if (th1.joinable()) th1.join();
+    if (th2.joinable()) th2.join();
+    if (th3.joinable()) th3.join();
 }
 
 concur::hierarchical_mutex hlm(1000);

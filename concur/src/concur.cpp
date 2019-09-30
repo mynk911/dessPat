@@ -207,7 +207,7 @@ void unprotected_shared_data()
 
 void swap(some_big_object& lhs, some_big_object& rhs) noexcept
 {
-    std::cout << "moving" << lhs.getA() << "to" << rhs.getA();
+    std::cout << "moving" << lhs.getA() << "to" << rhs.getA() << " ";
     some_big_object t;
     t=lhs;
     lhs=rhs;
@@ -219,61 +219,75 @@ void swap(safelock_swapper& lhs, safelock_swapper& rhs)
     if(&lhs == &rhs) return;
     std::lock(lhs.m, rhs.m);
     std::lock_guard<std::mutex> a(lhs.m, std::adopt_lock);
-    //std::lock_guard<std::mutex> b(rhs.m, std::adopt_lock);
+    std::lock_guard<std::mutex> b(rhs.m, std::adopt_lock);
     //std::unique_lock<std::mutex> a(lhs.m, std::defer_lock);
-    std::unique_lock<std::mutex> b(rhs.m, std::defer_lock);
+    //std::unique_lock<std::mutex> b(rhs.m, std::defer_lock);
     //std::lock(a, b);
     swap(lhs.some_detail, rhs.some_detail);
 }
 
-bool operator==(safelock_swapper const& lhs, safelock_swapper const& rhs)
+bool safelock_swapper::operator==(safelock_swapper const& rhs) const
 {
-    if(&lhs == &rhs) return true;
-    std::unique_lock<std::mutex> a(lhs.m);
-    some_big_object x = lhs.some_detail;
+    if(this == &rhs) return true;
+    std::unique_lock<std::mutex> a(this->m);
+    some_big_object x = this->some_detail;
+    // this is a buggy implementation. Since some_detail is obtained from
+    // lhs and rhs at different points in time with different locks, the
+    // values may change in between and operator == will give wrong results.
+    // striving for minimum granularity should not change the operation 
+    // functionality.
     a.unlock();
     std::unique_lock<std::mutex> b(rhs.m);
     some_big_object y = rhs.some_detail;
     b.unlock();
-    return x==y;
+    return x.getA()==y.getA();
 }
 
-thread_local unsigned long hierarchical_mutex::this_thread_hierarchy_value
+struct hierarchical_mutex::hierarchical_mutex_impl {
+    std::mutex internal_mutex;
+    unsigned long const hierarchy_value;
+    unsigned long previous_heirarchy_value;
+    static thread_local unsigned long this_thread_hierarchy_value;
+    hierarchical_mutex_impl(unsigned long value) : hierarchy_value(value) {}
+};
+
+thread_local unsigned long hierarchical_mutex::hierarchical_mutex_impl::this_thread_hierarchy_value
 (std::numeric_limits<unsigned long>::max());
 
 void hierarchical_mutex::check_for_hierarchy_violation()
 {
-    if(this_thread_hierarchy_value <= hierarchy_value)
+    if(pimpl->this_thread_hierarchy_value <= pimpl->hierarchy_value)
 	throw std::logic_error("mutex hierarchy violated");
 }
 
 void hierarchical_mutex::update_hierarchy_value()
 {
-    previous_heirarchy_value=this_thread_hierarchy_value;
-    this_thread_hierarchy_value=hierarchy_value;
+    pimpl->previous_heirarchy_value= pimpl->this_thread_hierarchy_value;
+    pimpl->this_thread_hierarchy_value= pimpl->hierarchy_value;
 }
 
 hierarchical_mutex::hierarchical_mutex(unsigned long value)
-    : hierarchy_value(value)
+    : pimpl(std::make_unique<hierarchical_mutex::hierarchical_mutex_impl>(value))
 {}
 
+hierarchical_mutex::~hierarchical_mutex() = default;
 void hierarchical_mutex::lock()
 {
     check_for_hierarchy_violation();
-    internal_mutex.lock();
+    pimpl->internal_mutex.lock();
     update_hierarchy_value();
 }
 
 void hierarchical_mutex::unlock()
 {
-    this_thread_hierarchy_value = previous_heirarchy_value;
-    internal_mutex.unlock();
+    pimpl->this_thread_hierarchy_value = pimpl->previous_heirarchy_value;
+    pimpl->internal_mutex.unlock();
 }
 
 bool hierarchical_mutex::try_lock()
 {
     check_for_hierarchy_violation();
-    if(!internal_mutex.try_lock())
+    if(!pimpl->internal_mutex.try_lock())
 	return false;
     update_hierarchy_value();
     return true;
