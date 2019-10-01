@@ -104,16 +104,16 @@ TEST(concurtests, safeLockWrapper)
 	concur::swap(s1, s2);
     });
 
+    std::thread th3([&s1, &s2]() {
+	if (s1 == s2)
+	    std::cout << "equal ";
+	else
+	    std::cout << "unequal ";
+	});
+
     std::thread th2([&s1,&s2](){
 	concur::swap(s2, s1);
     });
-
-    std::thread th3([&s1, &s2]() {
-        if (s1 == s2)
-            std::cout << "equal ";
-        else
-            std::cout << "unequal ";
-        });
 
     if (th1.joinable()) th1.join();
     if (th2.joinable()) th2.join();
@@ -123,7 +123,7 @@ TEST(concurtests, safeLockWrapper)
 concur::hierarchical_mutex hlm(1000);
 concur::hierarchical_mutex llm(500);
 
-TEST(concurtests, hierarchicalMutexCorrectUsage)
+TEST(concurtests, hierarchicalMutexUsage)
 {
     {
 	std::lock_guard<concur::hierarchical_mutex> a(hlm);

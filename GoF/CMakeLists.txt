@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5) 
+cmake_minimum_required(VERSION 3.5)
 project(GOF VERSION 1.0 LANGUAGES CXX)
 
 add_library (gof
@@ -90,14 +90,14 @@ install(
 
 if (CMAKE_BUILD_TYPE MATCHES "^[Rr]elease")
     if(Doxygen_FOUND)
-        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in
-            ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY
-            )
+	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in
+	    ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY
+	    )
 
-        add_custom_target(gof_doc_doxygen ALL
-            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            )
-        install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html DESTINATION ${CMAKE_INSTALL_DOCDIR})
+	add_custom_target(gof_doc_doxygen ALL
+	    COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+	    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	    )
+	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html DESTINATION ${CMAKE_INSTALL_DOCDIR})
     endif(Doxygen_FOUND)
 endif()

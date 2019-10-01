@@ -43,29 +43,29 @@ int drawWindow()
 
     if(!RegisterClass(&wndclass))
     {
-        MessageBox(NULL, TEXT("This program requires windows NT"), szAppName,
-                   MB_ICONERROR);
-        return -1;
+	MessageBox(NULL, TEXT("This program requires windows NT"), szAppName,
+		   MB_ICONERROR);
+	return -1;
     }
     hwnd = CreateWindow(szAppName,
-                        TEXT("The Hello Program"),
-                        WS_OVERLAPPEDWINDOW,
-                        CW_USEDEFAULT,
-                        CW_USEDEFAULT,
-                        CW_USEDEFAULT,
-                        CW_USEDEFAULT,
-                        NULL,
-                        NULL,
-                        GetModuleHandle(NULL),
-                        NULL);
+			TEXT("The Hello Program"),
+			WS_OVERLAPPEDWINDOW,
+			CW_USEDEFAULT,
+			CW_USEDEFAULT,
+			CW_USEDEFAULT,
+			CW_USEDEFAULT,
+			NULL,
+			NULL,
+			GetModuleHandle(NULL),
+			NULL);
 
     ShowWindow(hwnd, SW_SHOW);
     UpdateWindow(hwnd);
 
     while(GetMessage(&msg, NULL, 0, 0))
     {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
+	TranslateMessage(&msg);
+	DispatchMessage(&msg);
     }
     return msg.wParam;
 }
@@ -79,18 +79,18 @@ LRESULT CALLBACK drawWindowWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
     switch(message)
     {
     case WM_CREATE:
-        PlaySound(TEXT("helloWin.wav"), NULL, SND_FILENAME | SND_ASYNC);
-        return 0;
+	PlaySound(TEXT("helloWin.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	return 0;
     case WM_PAINT:
-        hdc = BeginPaint(hwnd, &ps);
-        GetClientRect(hwnd, &rect);
-        DrawText(hdc, TEXT("Hello windows 98!!"), -1, &rect, DT_SINGLELINE |
-                 DT_CENTER | DT_VCENTER);
-        EndPaint(hwnd, &ps);
-        return 0;
+	hdc = BeginPaint(hwnd, &ps);
+	GetClientRect(hwnd, &rect);
+	DrawText(hdc, TEXT("Hello windows 98!!"), -1, &rect, DT_SINGLELINE |
+		 DT_CENTER | DT_VCENTER);
+	EndPaint(hwnd, &ps);
+	return 0;
     case WM_DESTROY:
-        PostQuitMessage(0);
-        return 0;
+	PostQuitMessage(0);
+	return 0;
     }
 
     return DefWindowProc(hwnd, message, wParam, lParam);
@@ -205,20 +205,20 @@ int sysmets()
 
     if (!RegisterClass(&wndclass))
     {
-        MessageBox(NULL, TEXT("This Program requires Windows NT!"), szAppName, MB_ICONERROR);
-        return 0;
+	MessageBox(NULL, TEXT("This Program requires Windows NT!"), szAppName, MB_ICONERROR);
+	return 0;
     }
 
     hwnd = CreateWindow(szAppName, TEXT("Get System Metrics No 1"),
-        WS_OVERLAPPEDWINDOW | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-        NULL, NULL, GetModuleHandle(NULL), NULL);
+	WS_OVERLAPPEDWINDOW | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+	NULL, NULL, GetModuleHandle(NULL), NULL);
 
     ShowWindow(hwnd, SW_SHOW);
     UpdateWindow(hwnd);
     while (GetMessage(&msg, NULL, 0, 0))
     {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
+	TranslateMessage(&msg);
+	DispatchMessage(&msg);
     }
 
     return msg.wParam;
@@ -236,69 +236,69 @@ LRESULT CALLBACK sysmetsWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
     switch (message)
     {
     case WM_CREATE:
-        hdc = GetDC(hwnd);
-        GetTextMetrics(hdc, &tm);
-        cxChar = tm.tmAveCharWidth;
-        cxCaps = (tm.tmPitchAndFamily & 1 ? 3 : 2) * cxChar / 2;
-        cyChar = tm.tmHeight + tm.tmExternalLeading;
-        ReleaseDC(hwnd, hdc);
+	hdc = GetDC(hwnd);
+	GetTextMetrics(hdc, &tm);
+	cxChar = tm.tmAveCharWidth;
+	cxCaps = (tm.tmPitchAndFamily & 1 ? 3 : 2) * cxChar / 2;
+	cyChar = tm.tmHeight + tm.tmExternalLeading;
+	ReleaseDC(hwnd, hdc);
 
-        // Set scroll range to number of total lines in text
-        SetScrollRange(hwnd, SB_VERT, 0, NUMLINES - 1, FALSE);
-        // Set scroll pos on initial position
-        SetScrollPos(hwnd, SB_VERT, iVscrollPos, TRUE);
-        return 0;
+	// Set scroll range to number of total lines in text
+	SetScrollRange(hwnd, SB_VERT, 0, NUMLINES - 1, FALSE);
+	// Set scroll pos on initial position
+	SetScrollPos(hwnd, SB_VERT, iVscrollPos, TRUE);
+	return 0;
     case WM_SIZE:
-        // get height of client area
-        cyClient = HIWORD(lParam);
-        return 0;
+	// get height of client area
+	cyClient = HIWORD(lParam);
+	return 0;
     case WM_VSCROLL:
-        // identify event and change value of iVscrollPos accordingly
-        switch (LOWORD(wParam))
-        {
-        case SB_LINEUP:
-            iVscrollPos -= 1;
-            break;
-        case SB_LINEDOWN:
-            iVscrollPos += 1;
-            break;
-        case SB_PAGEUP:
-            iVscrollPos -= cyClient / cyChar;
-            break;
-        case SB_PAGEDOWN:
-            iVscrollPos += cyClient / cyChar;
-            break;
-        case SB_THUMBPOSITION:
-            iVscrollPos = HIWORD(wParam);
-            break;
-        default:
-            break;
-        }
-        iVscrollPos = max(0, min(iVscrollPos, NUMLINES - 1));
-        if (iVscrollPos != GetScrollPos(hwnd, SB_VERT))
-        {
-            SetScrollPos(hwnd, SB_VERT, iVscrollPos, TRUE);
-            InvalidateRect(hwnd, NULL, TRUE);
-        }
-        return 0;
+	// identify event and change value of iVscrollPos accordingly
+	switch (LOWORD(wParam))
+	{
+	case SB_LINEUP:
+	    iVscrollPos -= 1;
+	    break;
+	case SB_LINEDOWN:
+	    iVscrollPos += 1;
+	    break;
+	case SB_PAGEUP:
+	    iVscrollPos -= cyClient / cyChar;
+	    break;
+	case SB_PAGEDOWN:
+	    iVscrollPos += cyClient / cyChar;
+	    break;
+	case SB_THUMBPOSITION:
+	    iVscrollPos = HIWORD(wParam);
+	    break;
+	default:
+	    break;
+	}
+	iVscrollPos = max(0, min(iVscrollPos, NUMLINES - 1));
+	if (iVscrollPos != GetScrollPos(hwnd, SB_VERT))
+	{
+	    SetScrollPos(hwnd, SB_VERT, iVscrollPos, TRUE);
+	    InvalidateRect(hwnd, NULL, TRUE);
+	}
+	return 0;
     case WM_PAINT:
-        hdc = BeginPaint(hwnd, &ps);
-        for (i = 0; i < NUMLINES; i++)
-        {
-            // calculate y such that line at iVscrollPos is at top
-            y = cyChar * (i - iVscrollPos);
-            TextOut(hdc, 0, y, sysmetrics[i].szLabel, lstrlen(sysmetrics[i].szLabel));
-            TextOut(hdc, 22 * cxCaps, y, sysmetrics[i].szDesc, lstrlen(sysmetrics[i].szDesc));
-            SetTextAlign(hdc, TA_RIGHT | TA_TOP);
-            TextOut(hdc, 22 * cxCaps + 40 * cxChar, y, szBuffer,
-                wsprintf(szBuffer, TEXT("%5d"), GetSystemMetrics(sysmetrics[i].iIndex)));
-            SetTextAlign(hdc, TA_LEFT | TA_TOP);
-        }
-        EndPaint(hwnd, &ps);
-        return 0;
+	hdc = BeginPaint(hwnd, &ps);
+	for (i = 0; i < NUMLINES; i++)
+	{
+	    // calculate y such that line at iVscrollPos is at top
+	    y = cyChar * (i - iVscrollPos);
+	    TextOut(hdc, 0, y, sysmetrics[i].szLabel, lstrlen(sysmetrics[i].szLabel));
+	    TextOut(hdc, 22 * cxCaps, y, sysmetrics[i].szDesc, lstrlen(sysmetrics[i].szDesc));
+	    SetTextAlign(hdc, TA_RIGHT | TA_TOP);
+	    TextOut(hdc, 22 * cxCaps + 40 * cxChar, y, szBuffer,
+		wsprintf(szBuffer, TEXT("%5d"), GetSystemMetrics(sysmetrics[i].iIndex)));
+	    SetTextAlign(hdc, TA_LEFT | TA_TOP);
+	}
+	EndPaint(hwnd, &ps);
+	return 0;
     case WM_DESTROY:
-        PostQuitMessage(0);
-        return 0;
+	PostQuitMessage(0);
+	return 0;
     }
     return DefWindowProc(hwnd, message, wParam, lParam);
 }

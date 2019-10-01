@@ -53,7 +53,7 @@ TEST(cs180, stableMatchingComplex)
 		  "greg\nmary charlie\nsusan fred\n");
     cs180::StableMatching sm(in);
     sm(out);
-    
+
     EXPECT_EQ(s, out.str());
 }
 
@@ -97,10 +97,10 @@ void print(cs180::Graph& g, int n)
     std::cout << "=== graph print ===" << std::endl;
     for (int i = 0; i < n; i++)
     {
-        auto itr = g.iter(i);
-        std::cout << i  << " ";
-        while (itr->next()) std::cout << itr->eval() << " ";
-        std::cout << std::endl;
+	auto itr = g.iter(i);
+	std::cout << i  << " ";
+	while (itr->next()) std::cout << itr->eval() << " ";
+	std::cout << std::endl;
     }
     std::cout << "===================" << std::endl;
 }
@@ -111,7 +111,7 @@ void graphAPITest(cs180::Graph& g, cs180::GraphType t)
     g.addEdge(2, 3);
     ASSERT_EQ(g.IsEdge(2, 3), true);
     if(t == cs180::GraphType::UnDirected)
-        ASSERT_EQ(g.IsEdge(3, 2), true);
+	ASSERT_EQ(g.IsEdge(3, 2), true);
     g.addEdge(4, 1);
     g.addEdge(2, 4);
     print(g, 5);
@@ -126,34 +126,34 @@ void graphAPITest(cs180::Graph& g, cs180::GraphType t)
 TEST(cs180, UnDirectedGraphAdjacencyMatrix)
 {
     auto& graph = cs180::CreateGraph(
-        cs180::GraphType::UnDirected,
-        cs180::GraphImpType::AdjacencyMatrix,
-        5);
+	cs180::GraphType::UnDirected,
+	cs180::GraphImpType::AdjacencyMatrix,
+	5);
     graphAPITest(graph, cs180::GraphType::UnDirected);
 }
 TEST(cs180, UnDirectedGraphAdjacencyList)
 {
     auto& graph = cs180::CreateGraph(
-        cs180::GraphType::UnDirected,
-        cs180::GraphImpType::AdjacencyList,
-        5);
+	cs180::GraphType::UnDirected,
+	cs180::GraphImpType::AdjacencyList,
+	5);
     graphAPITest(graph, cs180::GraphType::UnDirected);
 }
 
 TEST(cs180, DirectedGraphAdjacencyMatrix)
 {
     auto& graph = cs180::CreateGraph(
-        cs180::GraphType::Directed,
-        cs180::GraphImpType::AdjacencyMatrix,
-        5);
+	cs180::GraphType::Directed,
+	cs180::GraphImpType::AdjacencyMatrix,
+	5);
     graphAPITest(graph, cs180::GraphType::Directed);
 }
 TEST(cs180, DirectedGraphAdjacencyList)
 {
     auto& graph = cs180::CreateGraph(
-        cs180::GraphType::Directed,
-        cs180::GraphImpType::AdjacencyList,
-        5);
+	cs180::GraphType::Directed,
+	cs180::GraphImpType::AdjacencyList,
+	5);
     graphAPITest(graph, cs180::GraphType::Directed);
 }
 
@@ -170,7 +170,7 @@ void fillGraph(cs180::Graph& g)
     g.addEdge(3, 4);
     g.addEdge(4, 5);
     g.addEdge(6, 7);
-    
+
     g.addEdge(8, 9);
 
     g.addEdge(10, 11);
@@ -180,9 +180,9 @@ void fillGraph(cs180::Graph& g)
 TEST(cs180, UnDirectedGraphBFS)
 {
     auto& graph = cs180::CreateGraph(
-        cs180::GraphType::UnDirected,
-        cs180::GraphImpType::AdjacencyList,
-        13);
+	cs180::GraphType::UnDirected,
+	cs180::GraphImpType::AdjacencyList,
+	13);
     fillGraph(graph);
     print(graph, 13);
     auto ret = cs180::bfs(graph, 0, 13);
@@ -192,9 +192,9 @@ TEST(cs180, UnDirectedGraphBFS)
 TEST(cs180, UnDirectedGraphDFS)
 {
     auto& graph = cs180::CreateGraph(
-        cs180::GraphType::UnDirected,
-        cs180::GraphImpType::AdjacencyList,
-        13);
+	cs180::GraphType::UnDirected,
+	cs180::GraphImpType::AdjacencyList,
+	13);
     fillGraph(graph);
     print(graph, 13);
     auto ret = cs180::dfs(graph, 0, 13);

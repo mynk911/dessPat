@@ -234,7 +234,7 @@ bool safelock_swapper::operator==(safelock_swapper const& rhs) const
     // this is a buggy implementation. Since some_detail is obtained from
     // lhs and rhs at different points in time with different locks, the
     // values may change in between and operator == will give wrong results.
-    // striving for minimum granularity should not change the operation 
+    // striving for minimum granularity should not change the operation
     // functionality.
     a.unlock();
     std::unique_lock<std::mutex> b(rhs.m);
