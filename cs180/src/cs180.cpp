@@ -172,7 +172,7 @@ class AdjacencyMatrixIterator : public Iter
 {
 public:
     AdjacencyMatrixIterator(AdjacencyMatrix* m, int i)
-	: Iter(), index(i), node(-1), graph(m) {}
+	: Iter(), node(-1), index(i), graph(m) {}
     ~AdjacencyMatrixIterator() override {}
     bool next() override
     {
@@ -449,4 +449,48 @@ std::vector<int> dfs(Graph& g, int s, int n)
     return ret;
 }
 
+bool isBipartite(Graph& g, int s, int n)
+{
+    enum class Color {
+	Red, Blue, Uncolored
+    };
+    std::vector<Color> colored(n, Color::Uncolored);
+    std::queue<int> q;
+    q.push(s);
+    colored[s] = Color::Red;
+    int curr = 1, cnt = 0, layerCnt = 0;
+    while(!q.empty())
+    {
+	layerCnt++;
+	while(curr--)
+	{
+	    auto u = q.front();
+	    q.pop();
+	    auto itr = g.iter(u);
+	    while(itr->next())
+	    {
+		auto v = itr->eval();
+		if(colored[v] == Color::Uncolored)
+		{
+		    colored[v] = layerCnt % 2 == 0 ? Color::Red : Color::Blue;
+		    q.push(v);
+		    cnt++;
+		}
+	    }
+	}
+	curr = cnt;
+	cnt = 0;
+    }
+
+    for(int i = 0; i < n; i++)
+    {
+	auto itr = g.iter(i);
+	while(itr->next())
+	{
+	    auto j = itr->eval();
+	    if(colored[i] == colored[j]) return false;
+	}
+    }
+    return true;
+}
 }

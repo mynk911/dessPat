@@ -157,7 +157,7 @@ TEST(cs180, DirectedGraphAdjacencyList)
     graphAPITest(graph, cs180::GraphType::Directed);
 }
 
-void fillGraph(cs180::Graph& g)
+void fillGraph(cs180::Graph& g, bool connected = false)
 {
     g.addEdge(0, 1);
     g.addEdge(0, 2);
@@ -171,10 +171,13 @@ void fillGraph(cs180::Graph& g)
     g.addEdge(4, 5);
     g.addEdge(6, 7);
 
-    g.addEdge(8, 9);
+    if(!connected)
+    {
+	g.addEdge(8, 9);
 
-    g.addEdge(10, 11);
-    g.addEdge(11, 12);
+	g.addEdge(10, 11);
+	g.addEdge(11, 12);
+    }
 }
 
 TEST(cs180, UnDirectedGraphBFS)
@@ -193,10 +196,24 @@ TEST(cs180, UnDirectedGraphDFS)
 {
     auto& graph = cs180::CreateGraph(
 	cs180::GraphType::UnDirected,
-	cs180::GraphImpType::AdjacencyList,
-	13);
+	cs180::GraphImpType::AdjacencyList, 13);
     fillGraph(graph);
     print(graph, 13);
     auto ret = cs180::dfs(graph, 0, 13);
     for (int i = 0; i < 13; i++) std::cout << ret[i];
+}
+
+TEST(cs180, UnDirectedGraphBipartite)
+{
+    auto& graph = cs180::CreateGraph(cs180::GraphType::UnDirected,
+				     cs180::GraphImpType::AdjacencyList, 8);
+    fillGraph(graph, true);
+    std::cout << cs180::isBipartite(graph, 0, 8);
+
+    auto& graph2 = cs180::CreateGraph(cs180::GraphType::UnDirected, cs180::GraphImpType::AdjacencyList, 6);
+
+    graph2.addEdge(0, 1); graph2.addEdge(1, 2); graph2.addEdge(1, 3); graph2.addEdge(3, 4);
+    graph2.addEdge(2, 4); graph2.addEdge(2, 5);
+
+    std::cout << cs180::isBipartite(graph2, 0, 6);
 }
