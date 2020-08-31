@@ -171,6 +171,11 @@ find_cd() {
     if [ "$ask_list" = "y" ]; then
 	echo -e "View Tracks for this CD ? \c"
 	read x
-	
-	
+	if [ "$x" == "y" ]; then
+	    echo
+	    list_tracks
+	    echo
+	fi
+    fi
+    return 1	
 }

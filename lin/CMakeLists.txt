@@ -18,7 +18,9 @@ target_include_directories(lin
     ${CURSES_INCLUDE_DIRS}
     )
 
-target_link_libraries(lin ${CURSES_CURSES_LIBRARY})
+target_link_libraries(lin
+    PUBLIC
+    ${CURSES_CURSES_LIBRARY})
 include(GNUInstallDirs)
 set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/LIN)
 

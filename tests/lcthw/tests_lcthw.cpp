@@ -2,11 +2,14 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
+#include "cmath"
+
 #include "gtest/gtest.h"
 
 #include "dessPatConfig.h"
 #include "dbg.h"
 
+#include "bstrlib.h"
 #include "lcthw.h"
 #include "ex17_ds.h"
 
@@ -843,5 +846,753 @@ TEST_F(LcthwListTest, shiftRemoveUnshiftTest)
     EXPECT_STREQ(val, s1) << "wrong value on shift";
     EXPECT_EQ(List_count(list), 0);
 }
+
+bool isSorted(List* words)
+{
+    LIST_FOREACH(words, first, next, cur)
+    {
+        if((cur->next != nullptr) &&
+           (strcmp(static_cast<const char *>(cur->value),
+                   static_cast<const char *>(cur->next->value)) > 0))
+        {
+            debug("%s %s", static_cast<const char*>(cur->value),
+                           static_cast<const char*>(cur->next->value));
+            return false;
+        }
+    }
+    return true;
+}
+
+TEST_F(LcthwListTest, listBubbleSortTest)
+{
+    // empty list
+    int rc = List_bubble_sort(list, static_cast<ListCompare>(strcmp));
+    EXPECT_EQ(rc, 0) << "bubble sort failed!!";
+    EXPECT_TRUE(isSorted(list)) << "bubble sort fails to sort empty list";
+
+    const char* values[] = {"XXXX", "1234", "abcd", "xjvef", "NDSS"};
+
+    for (int i = 0; i < 5; i++)
+        List_push(list, values[i]);
+
+    // unsorted list
+    rc = List_bubble_sort(list, static_cast<ListCompare>(strcmp));
+    EXPECT_EQ(rc, 0) << "bubble sort failed!!";
+    EXPECT_TRUE(isSorted(list)) << "list is not sorted after bubble sort";
+
+    // sorted list
+    rc = List_bubble_sort(list, static_cast<ListCompare>(strcmp));
+    EXPECT_EQ(rc, 0) << "bubble sort failed!!";
+    EXPECT_TRUE(isSorted(list)) << "bubble sort fails for already sorted list";
+}
+
+TEST_F(LcthwListTest, listMergeSortTest)
+{
+    // empty list
+    auto res = List_merge_sort(list, static_cast<ListCompare>(strcmp));
+    EXPECT_TRUE(isSorted(res)) << "merge sort fails to sort empty list";
+
+    const char* values[] = {"XXXX", "1234", "abcd", "xjvef", "NDSS"};
+
+    for (int i = 0; i < 5; i++)
+        List_push(list, values[i]);
+
+    // unsorted list
+    auto res2 = List_merge_sort(list, static_cast<ListCompare>(strcmp));
+    EXPECT_TRUE(isSorted(res2)) << "list is not sorted after merge sort";
+
+    // sorted list
+    auto res3 = List_merge_sort(list, static_cast<ListCompare>(strcmp));
+    EXPECT_TRUE(isSorted(res3)) << "merge sort fails for already sorted list";
+}
+
+class DArrayTest : public ::testing::Test
+{
+protected:
+    void SetUp() override;
+    void TearDown() override;
+
+    DArray* _array;
+};
+
+void DArrayTest::SetUp()
+{
+    _array = DArray_create(sizeof (int), 100);
+    ASSERT_NE(_array, nullptr);
+    ASSERT_NE(_array->contents, nullptr);
+    ASSERT_EQ(_array->end, 0);
+    ASSERT_EQ(_array->element_size, sizeof (int));
+    ASSERT_EQ(_array->max, 100);
+}
+
+void DArrayTest::TearDown()
+{
+    DArray_destroy(_array);
+}
+
+using LcthwDArrayTest = DArrayTest;
+
+TEST_F(LcthwDArrayTest, dArrayNewSetGetRemove)
+{
+    int* val1, *val2;
+
+    val1 = static_cast<int *>(DArray_new(_array));
+    ASSERT_NE(val1, nullptr);
+    val2 = static_cast<int *>(DArray_new(_array));
+    ASSERT_NE(val2, nullptr);
+
+    DArray_set(_array, 0, val1);
+    DArray_set(_array, 1, val2);
+
+    ASSERT_EQ(DArray_get(_array, 0), val1);
+    ASSERT_EQ(DArray_get(_array, 1), val2);
+
+    auto checkVal = static_cast<const int *>(DArray_remove(_array, 0));
+    ASSERT_NE(checkVal, nullptr);
+    ASSERT_EQ(*checkVal, *val1);
+    ASSERT_EQ(DArray_get(_array, 0), nullptr);
+    DArray_free(const_cast<int *>(checkVal));
+
+    checkVal = static_cast<const int *>(DArray_remove(_array, 1));
+    ASSERT_NE(checkVal, nullptr);
+    ASSERT_EQ(*checkVal, *val2);
+    ASSERT_EQ(DArray_get(_array, 1), nullptr);
+    DArray_free(const_cast<int *>(checkVal));
+}
+
+TEST_F(LcthwDArrayTest, dArrayExpandContract)
+{
+    size_t old_max = _array->max;
+    DArray_expand(_array);
+    ASSERT_EQ(_array->max, old_max + _array->expand_rate);
+
+    DArray_contract(_array);
+    ASSERT_EQ(_array->max, _array->expand_rate + 1);
+
+    // max should not fall below minimum value which is expand rate
+    DArray_contract(_array);
+    ASSERT_EQ(_array->max, _array->expand_rate + 1);
+}
+
+TEST_F(LcthwDArrayTest, dArrayPushPop)
+{
+    for (int i = 0; i < 1000; i++)
+    {
+        int* val = static_cast<int *>(DArray_new(_array));
+        *val = i * 333;
+        DArray_push(_array, val);
+    }
+
+    ASSERT_EQ(_array->max, 1300);
+
+    for(int i = 999; i >= 0; i--)
+    {
+        auto val = static_cast<const int *>(DArray_pop(_array));
+        ASSERT_NE(val, nullptr);
+        ASSERT_EQ(*val, i * 333);
+        DArray_free(const_cast<int *>(val));
+    }
+}
+
+int test_cmp(char* a, char* b)
+{
+    return strcmp(a, b);
+}
+
+int is_sorted(DArray* array)
+{
+    for(size_t i = 0; i < DArray_count(array)-1; i++) {
+        if(strcmp(static_cast<const char *>(DArray_get(array, i)),
+                  static_cast<const char *>(DArray_get(array, i+1))) > 0)
+            return 0;
+    }
+    return 1;
+}
+
+void test_darray_sort(DArray* array, int(*func)(DArray*, DArray_compare))
+{
+    const char* words[] = {"asdfasfd", "werwar", "13234", "asdfasfd", "oioj"};
+    for(int i = 0; i < 5; i++)
+        DArray_push(array, words[i]);
+
+    int rc = func(array, reinterpret_cast<DArray_compare>(test_cmp));
+    ASSERT_EQ(rc, 0);
+    ASSERT_EQ(is_sorted(array), 1);
+}
+
+TEST_F(LcthwDArrayTest, dArrayQsortTest)
+{
+    test_darray_sort(_array, DArray_qsort);
+}
+
+
+TEST_F(LcthwDArrayTest, dArrayHsortTest)
+{
+    test_darray_sort(_array, DArray_hsort);
+}
+
+TEST_F(LcthwDArrayTest, dArrayMsortTest)
+{
+    test_darray_sort(_array, DArray_msort);
+}
+
+TEST_F(LcthwTest, ex35VAriantTest)
+{
+    Variant a_int; a_int.type = TYPE_INT; a_int.data.as_integer = 100;
+    Variant a_float; a_float.type = TYPE_FLOAT; a_float.data.as_float = 100.34f;
+    Variant a_string; a_string.type = TYPE_STRING; a_string.data.as_string = "Test String!";
+
+    Variant_print(&a_int);
+    Variant_print(&a_float);
+    Variant_print(&a_string);
+}
+
+class RadixMapTest : public ::testing::Test
+{
+protected:
+    void makeRandom();
+    void checkOrder();
+    void SetUp() override;
+    void TearDown() override;
+
+    RadixMap* radixMap = nullptr;
+};
+
+void RadixMapTest::SetUp()
+{
+    size_t N = 200;
+    radixMap = RadixMap_create(N);
+    ASSERT_NE(radixMap, nullptr);
+    makeRandom();
+}
+
+void RadixMapTest::TearDown()
+{
+    RadixMap_destroy(radixMap);
+}
+
+void RadixMapTest::makeRandom()
+{
+    for(size_t i = 0; i < radixMap->max - 1; i++)
+    {
+        uint32_t key = static_cast<uint32_t>(rand() | (rand() << 16));
+        ASSERT_EQ(RadixMap_add(radixMap, key, i), 0) << "failed to add key " << key;
+    }
+}
+
+void RadixMapTest::checkOrder()
+{
+    RMElement d1, d2;
+    unsigned int i = 0;
+
+    for(i = 0; radixMap->end > 0 && i < radixMap->end-1; i++)
+    {
+        d1 = radixMap->contents[i];
+        d2 = radixMap->contents[i+1];
+
+        ASSERT_LE(d1.data.key, d2.data.key);
+    }
+}
+
+using LcthwRadixMapTest = RadixMapTest;
+
+TEST_F(LcthwRadixMapTest, operationsTest)
+{
+    RadixMap_sort(radixMap);
+    size_t lb;
+    checkOrder();
+    RMElement *d = nullptr, *found = nullptr;
+    for(unsigned int i = radixMap->end / 2; i < radixMap->end; i++)
+    {
+        d = &radixMap->contents[i];
+
+        found = RadixMap_find(radixMap, d->data.key, &lb);
+        ASSERT_NE(found, nullptr);
+        ASSERT_EQ(found->data.key, d->data.key);
+    }
+    checkOrder();
+
+    while(radixMap->end > 0)
+    {
+        RMElement *el = RadixMap_find(radixMap, radixMap->contents[radixMap->end/2].data.key, &lb);
+        ASSERT_NE(el, nullptr);
+        size_t old_end = radixMap->end;
+        ASSERT_EQ(RadixMap_delete(radixMap, el), 0);
+        ASSERT_EQ(old_end - 1, radixMap->end);
+        checkOrder();
+    }
+
+}
+
+class HashMapTest : public ::testing::Test
+{
+protected:
+    static int traverse_good_cb(HashmapNode* node)
+    {
+        debug("KEY:%s", bdata((bstring) node->key));
+        traverse_called++;
+        return 0;
+    }
+
+    static int traverse_fail_cb(HashmapNode* node)
+    {
+        debug("KEY:%s", bdata((bstring) node->key));
+        traverse_called++;
+        if(traverse_called == 2) return 1;
+        return 0;
+    }
+
+    static void SetUpTestSuite()
+    {
+        traverse_called = 0;
+        test1 = bsStatic("test data 1");
+        test2 = bsStatic("test data 2");
+        test3 = bsStatic("test data 3");
+        expect1 = bsStatic("THE VALUE 1");
+        expect2 = bsStatic("THE VALUE 2");
+        expect3 = bsStatic("THE VALUE 3");
+    }
+
+    void SetUp() override;
+    void TearDown() override;
+    Hashmap* map = nullptr;
+    static int traverse_called;
+    static struct tagbstring test1,test2, test3,
+                   expect1, expect2, expect3;
+};
+
+
+struct tagbstring HashMapTest::test1, HashMapTest::test2, HashMapTest::test3,
+        HashMapTest::expect1, HashMapTest::expect2, HashMapTest::expect3;
+int HashMapTest::traverse_called;
+using LcthwHashMapTest = HashMapTest;
+
+void HashMapTest::SetUp()
+{
+    map = Hashmap_create(nullptr, nullptr);
+    ASSERT_NE(map, nullptr) << "failed to create hashmap";
+}
+
+void HashMapTest::TearDown()
+{
+    Hashmap_destroy(map);
+}
+
+TEST_F(LcthwHashMapTest, operationsTest)
+{
+    int rc = Hashmap_set(map, &test1, &expect1);
+    ASSERT_EQ(rc, 0) << "failed to set test1";
+    bstring result = static_cast<bstring>(Hashmap_get(map, &test1));
+    ASSERT_EQ(result, &expect1) << "wrong value for test 1";
+
+    rc = Hashmap_set(map, &test2, &expect2);
+    ASSERT_EQ(rc, 0) << "failed to set test2";
+    result = static_cast<bstring>(Hashmap_get(map, &test2));
+    ASSERT_EQ(result, &expect2) << "wrong value for test 2";
+
+    rc = Hashmap_set(map, &test3, &expect3);
+    ASSERT_EQ(rc, 0) << "failed to set test3";
+    result = static_cast<bstring>(Hashmap_get(map, &test3));
+    ASSERT_EQ(result, &expect3) << "wrong value for test 3";
+
+    rc = Hashmap_traverse(map, traverse_good_cb);
+    ASSERT_EQ(rc, 0);
+    ASSERT_EQ(traverse_called, 3);
+
+    traverse_called = 0;
+    rc = Hashmap_traverse(map, traverse_fail_cb);
+    ASSERT_EQ(rc, 1);
+    ASSERT_EQ(traverse_called, 2);
+
+    bstring deleted = static_cast<bstring>(Hashmap_delete(map, &test1));
+    ASSERT_NE(deleted, nullptr);
+    ASSERT_EQ(deleted, &expect1);
+    result = static_cast<bstring>( Hashmap_get(map, &test1));
+    ASSERT_EQ(result, nullptr);
+
+    deleted = static_cast<bstring>( Hashmap_delete(map, &test2));
+    ASSERT_NE(deleted, nullptr);
+    ASSERT_EQ(deleted, &expect2);
+    result = static_cast<bstring>( Hashmap_get(map, &test2));
+    ASSERT_EQ(result, nullptr);
+
+    deleted = static_cast<bstring>( Hashmap_delete(map, &test3));
+    ASSERT_NE(deleted, nullptr);
+    ASSERT_EQ(deleted, &expect3);
+    result = static_cast<bstring>( Hashmap_get(map, &test3));
+    ASSERT_EQ(result, nullptr);
+}
+
+TEST_F(LcthwHashMapTest, distributionsTest)
+{
+#define NUM_BUCKETS 100
+    uint32_t stats[3][NUM_BUCKETS] = {{0}};
+
+    Hashmap_generate_distribution(Hashmap_fnv1a_hash, stats[0], NUM_BUCKETS);
+    Hashmap_generate_distribution(Hashmap_adler32_hash, stats[1], NUM_BUCKETS);
+    Hashmap_generate_distribution(Hashmap_djb_hash, stats[2], NUM_BUCKETS);
+
+    FILE* out = fopen("dist.txt", "w");
+    for(int i = 0; i < NUM_BUCKETS; i++)
+        fprintf(out, "%u %u %u\n", stats[0][i], stats[1][i], stats[2][i]);
+    fclose(out);
+}
+
+TEST_F(LcthwTest, ex39TestFindAndScan)
+{
+    struct tagbstring inputString = bsStatic("I have ALPHA beta ALPHA and orange ALPHA");
+    struct tagbstring alpha = bsStatic("ALPHA");
+
+    StringScanner *scan = StringScanner_create(&inputString);
+    ASSERT_NE(scan, nullptr) << "failed to create scanner";
+
+    int find_i = String_find(&inputString, &alpha);
+    ASSERT_GT(find_i, 0);
+
+    int scan_i = StringScanner_scan(scan, &alpha);
+    ASSERT_GT(scan_i, 0);
+
+    ASSERT_EQ(find_i, scan_i);
+
+    scan_i = StringScanner_scan(scan, &alpha);
+    ASSERT_GT(scan_i, find_i);
+
+    scan_i = StringScanner_scan(scan, &alpha);
+    ASSERT_GT(scan_i, find_i);
+
+    StringScanner_destroy(scan);
+}
+
+class BSTreeTest : public ::testing::Test
+{
+protected:
+    void SetUp() override;
+    void TearDown() override;
+    static void SetUpTestSuite()
+    {
+        traverse_called = 0;
+        test1 = bsStatic("test data 1");
+        test2 = bsStatic("test data 2");
+        test3 = bsStatic("test data 3");
+        expect1 = bsStatic("THE VALUE 1");
+        expect2 = bsStatic("THE VALUE 2");
+        expect3 = bsStatic("THE VALUE 3");
+    }
+    static int traverse_good_cb(BSTreeNode* node)
+    {
+        debug("KEY: %s", bdata((bstring) node->key));
+        traverse_called++;
+        return 0;
+    }
+
+    static int traverse_fail_cb(BSTreeNode* node)
+    {
+        debug("KEY: %s", bdata((bstring) node->key));
+        traverse_called++;
+
+        if(traverse_called == 2) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    BSTree* map = nullptr;
+    static int traverse_called;
+    static struct tagbstring test1,test2, test3,
+                   expect1, expect2, expect3;
+};
+
+int BSTreeTest::traverse_called;
+struct tagbstring BSTreeTest::test1, BSTreeTest::test2, BSTreeTest::test3,
+        BSTreeTest::expect1, BSTreeTest::expect2, BSTreeTest::expect3;
+
+void BSTreeTest::SetUp()
+{
+    map = BSTree_create(NULL);
+    ASSERT_NE(map, nullptr);
+}
+
+void BSTreeTest::TearDown()
+{
+    BSTree_destroy(map);
+}
+
+using LcthwBSTreeTest = BSTreeTest;
+
+TEST_F(LcthwBSTreeTest, OperationsTest)
+{
+    int rc = BSTree_set(map, &test1, &expect1);
+    ASSERT_EQ(rc, 0);
+    bstring result = static_cast<bstring>(BSTree_get(map, &test1));
+    ASSERT_EQ(result, &expect1);
+
+    rc = BSTree_set(map, &test2, &expect2);
+    ASSERT_EQ(rc, 0);
+    result = static_cast<bstring>(BSTree_get(map, &test2));
+    ASSERT_EQ(result, &expect2);
+
+    rc = BSTree_set(map, &test3, &expect3);
+    ASSERT_EQ(rc, 0);
+    result = static_cast<bstring>(BSTree_get(map, &test3));
+    ASSERT_EQ(result, &expect3);
+
+    rc = BSTree_traverse(map, traverse_good_cb);
+    ASSERT_EQ(rc, 0);
+    ASSERT_EQ(traverse_called, 3);
+
+    traverse_called = 0;
+    rc = BSTree_traverse(map, traverse_fail_cb);
+    ASSERT_EQ(rc, 1);
+    ASSERT_EQ(traverse_called, 2);
+
+    bstring deleted = static_cast<bstring>(BSTree_delete(map, &test1));
+    ASSERT_NE(deleted, nullptr);
+    ASSERT_EQ(deleted, &expect1);
+    result = static_cast<bstring>(BSTree_get(map, &test1));
+    ASSERT_EQ(result, nullptr);
+    deleted = static_cast<bstring>(BSTree_delete(map, &test1));
+    ASSERT_EQ(deleted, nullptr);
+
+    deleted = static_cast<bstring>(BSTree_delete(map, &test2));
+    ASSERT_NE(deleted, nullptr);
+    ASSERT_EQ(deleted, &expect2);
+    result = static_cast<bstring>(BSTree_get(map, &test2));
+    ASSERT_EQ(result, nullptr);
+    deleted = static_cast<bstring>(BSTree_delete(map, &test2));
+    ASSERT_EQ(deleted, nullptr);
+
+    deleted = static_cast<bstring>(BSTree_delete(map, &test3));
+    ASSERT_NE(deleted, nullptr);
+    ASSERT_EQ(deleted, &expect3);
+    result = static_cast<bstring>(BSTree_get(map, &test3));
+    ASSERT_EQ(result, nullptr);
+    deleted = static_cast<bstring>(BSTree_delete(map, &test3));
+    ASSERT_EQ(deleted, nullptr);
+}
+
+TEST_F(LcthwBSTreeTest, fuzzingTest)
+{
+    BSTree* store = BSTree_create(nullptr);
+    bstring numbers[100] = {nullptr};
+    bstring data[100] = {nullptr};
+
+    srand(static_cast<unsigned int>(time(nullptr)));
+
+    for(int i = 0; i < 100; i++)
+    {
+        int num = rand();
+        numbers[i] = bformat("%d", num);
+        data[i] = bformat("data %d", num);
+        BSTree_set(store, numbers[i], data[i]);
+    }
+
+    for(int i = 0; i < 100; i++) {
+        bstring value = static_cast<bstring>(BSTree_delete(store, numbers[i]));
+        ASSERT_EQ(value, data[i]);
+        ASSERT_EQ(BSTree_delete(store, numbers[i]), nullptr);
+
+        for(int j = i+1; j < 99-i; j++) {
+            bstring value = static_cast<bstring>(BSTree_get(store, numbers[j]));
+            ASSERT_EQ(value, data[j]) << i << " " << j;
+        }
+
+        bdestroy(value);
+        bdestroy(numbers[i]);
+    }
+
+    BSTree_destroy(store);
+}
+
+class StackTest : public ::testing::Test
+{
+protected:
+    void SetUp() override;
+    void TearDown() override;
+
+    Stack *stack;
+};
+
+void StackTest::SetUp()
+{
+    stack = Stack_create();
+    ASSERT_NE(stack, nullptr);
+}
+
+void StackTest::TearDown()
+{
+    Stack_destroy(stack);
+}
+
+using LcthwStackTest = StackTest;
+
+TEST_F(LcthwStackTest, pushPopTest)
+{
+    constexpr int NUM_TESTS = 3;
+    const char* tests[] = {"test1 data", "test2 data", "test3 data"};
+
+    for(int i = 0; i < NUM_TESTS; i++)
+    {
+        Stack_push(stack, tests[i]);
+        ASSERT_EQ(Stack_peek(stack), tests[i]);
+    }
+
+    ASSERT_EQ(Stack_count(stack), NUM_TESTS);
+
+    for(int i = NUM_TESTS - 1; i >=0; i--) {
+        auto val = static_cast<const char *>(Stack_pop(stack));
+        ASSERT_EQ(val,tests[i]);
+    }
+
+    ASSERT_EQ(Stack_count(stack), 0);
+}
+
+class QueueTest : public ::testing::Test
+{
+protected:
+    void SetUp() override;
+    void TearDown() override;
+
+    Queue *queue;
+};
+
+void QueueTest::SetUp()
+{
+    queue = Queue_create();
+    ASSERT_NE(queue, nullptr);
+}
+
+void QueueTest::TearDown()
+{
+    Queue_destroy(queue);
+}
+
+using LcthwQueueTest = QueueTest;
+
+TEST_F(LcthwQueueTest, enqueueDequeueTest)
+{
+    constexpr int NUM_TESTS = 3;
+    const char* tests[] = {"test1 data", "test2 data", "test3 data"};
+
+    for(int i = 0; i < NUM_TESTS; i++)
+    {
+        Queue_enqueue(queue, tests[i]);
+        ASSERT_EQ(Queue_peek(queue), tests[0]);
+    }
+
+    ASSERT_EQ(Queue_count(queue), NUM_TESTS);
+
+    for(int i = 0; i < NUM_TESTS; i++) {
+        auto val = static_cast<const char *>(Queue_dequeue(queue));
+        ASSERT_EQ(val,tests[i]);
+    }
+
+    ASSERT_EQ(Queue_count(queue), 0);
+}
+
+TEST_F(LcthwTest, ex43)
+{
+    constexpr int NUM_SAMPLES = 10;
+    double samples[] = {
+        6.1061334,
+        9.6783204,
+        1.2747090,
+        8.2395131,
+        0.3333483,
+        6.9755066,
+        1.0626275,
+        7.6587523,
+        4.9382973,
+        9.5788115
+    };
+
+    Stats expect{ 55.84602, 425.1641, 10, 0.333, 9.678 };
+
+    double expect_mean = 5.584602;
+    double expect_stddev = 3.547868;
+
+    auto Eq = [](double x, double y, double n)
+    {
+        return round(x * pow(10, n)) == round(y * pow(10, n));
+    };
+
+    Stats *st = Stats_create();
+    ASSERT_NE(st, nullptr);
+
+    for(int i = 0; i < NUM_SAMPLES; i++){
+        Stats_sample(st, samples[i]);
+    }
+
+    Stats_dump(st);
+
+    EXPECT_TRUE(Eq(st->sumsq, expect.sumsq, 3));
+    EXPECT_TRUE(Eq(st->sum, expect.sum, 3));
+    EXPECT_TRUE(Eq(st->min, expect.min, 3));
+    EXPECT_TRUE(Eq(st->max, expect.max, 3));
+    EXPECT_TRUE(Eq(st->n, expect.n, 3));
+    EXPECT_TRUE(Eq(Stats_mean(st), expect_mean, 3));
+    EXPECT_TRUE(Eq(Stats_stddev(st), expect_stddev, 3));
+
+    Stats* st2 = Stats_recreate(expect.sum, expect.sumsq, expect.n,
+                               expect.min, expect.max);
+
+    EXPECT_EQ(st2->sum, expect.sum);
+    EXPECT_EQ(st2->sumsq, expect.sumsq);
+    EXPECT_EQ(st2->n, expect.n);
+    EXPECT_EQ(st2->min, expect.min);
+    EXPECT_EQ(st2->max, expect.max);
+    EXPECT_TRUE(Eq(Stats_mean(st2), expect_mean, 3));
+    EXPECT_TRUE(Eq(Stats_stddev(st2), expect_stddev, 3));
+}
+
+class RingBufferTest : public ::testing::Test
+{
+protected:
+    void SetUp() override;
+    void TearDown() override;
+
+    RingBuffer *ringbuffer;
+    static constexpr int length = 256;
+};
+
+void RingBufferTest::SetUp()
+{
+    ringbuffer = RingBuffer_create(length);
+    ASSERT_NE(ringbuffer, nullptr);
+}
+
+void RingBufferTest::TearDown()
+{
+    RingBuffer_destroy(ringbuffer);
+}
+
+using LcthwRingBufferTest = RingBufferTest;
+
+TEST_F(LcthwRingBufferTest, writeReadTest)
+{
+    constexpr int NUM_TESTS = 3;
+    const char* tests[] = {"test1 data", "test2 data", "test3 data"};
+    std::vector<int> lengths;
+    for(int i = 0; i < 3; i++)
+        lengths.push_back((int) strlen(tests[i]) + 1);
+    for(size_t i = 0; i < NUM_TESTS; i++)
+    {
+        auto length = RingBuffer_write(ringbuffer,
+                                       (char *) tests[i],
+                                       lengths[i]);
+        ASSERT_EQ(length, lengths[i]);
+    }
+
+    for(int i = 0; i < NUM_TESTS; i++) {
+        char target[255];
+        auto length = RingBuffer_read(ringbuffer, target, lengths[i]);
+        ASSERT_TRUE(strcmp(tests[i], target) == 0);
+    }
+}
+
+
+
+
+
+
 
 

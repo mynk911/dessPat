@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 3.12)
 project(LCTHW VERSION 0.1 LANGUAGES C)
 
-add_library (lcthw include/lcthw.h src/lcthw.c $<TARGET_OBJECTS:common>)
+# lcthw library defs
+add_library (lcthw include/lcthw.h
+                   src/lcthw.c
+                   $<TARGET_OBJECTS:common>)
 add_library (LCTHW::lcthw ALIAS lcthw)
 
 include(GenerateExportHeader)
 generate_export_header(lcthw)
+
 target_include_directories(lcthw
 PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/LCTHW>
@@ -29,6 +33,22 @@ target_compile_features(lcthw
     PUBLIC c_restrict
     )
 endif(UNIX)
+
+# executable target defs
+add_executable(netclient src/netclient.c)
+
+target_include_directories(netclient
+PUBLIC
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/LCTHW>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+PRIVATE
+    $<TARGET_PROPERTY:common,INCLUDE_DIRECTORIES>
+    )
+
+target_link_libraries(netclient LCTHW::lcthw)
 
 include(GNUInstallDirs)
 set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/LCTHW)
